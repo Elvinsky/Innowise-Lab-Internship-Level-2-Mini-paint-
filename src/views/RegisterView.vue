@@ -66,15 +66,14 @@ const submit = (): void => {
           email: user.email,
           password: user.password,
         };
-        localStorage.setItem("user", JSON.stringify(userBackup));
         setItem("users", userBackup).then(() => router.push("/login"));
       }
     });
   } else {
-    (user.name = ""),
-      (user.email = ""),
-      (user.password = ""),
-      (user.repPassword = "");
+    user.name = "";
+    user.email = "";
+    user.password = "";
+    user.repPassword = "";
     error.value = true;
     return;
   }
