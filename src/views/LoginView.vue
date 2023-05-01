@@ -30,7 +30,8 @@
 <script setup lang="ts">
 import router from "@/router";
 import { loginQuery } from "@/scripts/dbScripts/queries";
-import { UserInput, UserWithId } from "@/types/interfaces";
+import { store } from "@/storage/user/userStorage";
+import { Store, UserInput, UserWithId } from "@/types/interfaces";
 import { Ref, reactive, ref } from "vue";
 
 const input: UserInput = reactive({
@@ -40,6 +41,7 @@ const input: UserInput = reactive({
 const error: Ref<boolean> = ref(false);
 
 const submit = (): void => {
+  const { userData, setUserData }: Store = store();
   loginQuery(input.email, input.password).then((data) => {
     if (data.length !== 1) {
       error.value = true;
@@ -53,7 +55,7 @@ const submit = (): void => {
         password: data[0].password,
         id: data[0].id,
       };
-      localStorage.setItem("user", JSON.stringify(dataToSet));
+      setUserData(dataToSet);
       router.push("/home");
     }
   });

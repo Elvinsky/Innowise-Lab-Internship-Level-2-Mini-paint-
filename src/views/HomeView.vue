@@ -18,11 +18,16 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import router from "@/router";
-import { Ref } from "vue";
-const username: Ref<string | null> = localStorage.getItem("user")
-  ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    JSON.parse(localStorage.getItem("user")!).name
-  : null;
+import { store } from "@/storage/user/userStorage";
+import { Ref, ref } from "vue";
+// import { Ref } from "vue";
+// const username: Ref<string | null> = localStorage.getItem("user")
+//   ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//     JSON.parse(localStorage.getItem("user")!).name
+//   : null;
+const { userData } = store();
+console.log(userData);
+const username: Ref<string | null> = ref("");
 const navigate = (path: string): void => {
   router.push(path);
 };
