@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <slot></slot>
+    <h2>Made by Nick Mikhnevich. Mini-Paint Innowise task #9</h2>
   </footer>
 </template>
 

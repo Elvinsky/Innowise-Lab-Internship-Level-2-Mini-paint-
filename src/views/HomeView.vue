@@ -6,11 +6,7 @@
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
       <div @click="navigate('/browser')">Browse images</div>
     </nav>
-    <FooterComponent
-      ><h2>
-        Made by Nick Mikhnevich. Mini-Paint Innowise task #9
-      </h2></FooterComponent
-    >
+    <FooterComponent></FooterComponent>
   </section>
 </template>
 

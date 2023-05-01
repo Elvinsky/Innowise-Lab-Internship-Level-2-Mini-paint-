@@ -1,7 +1,7 @@
 <template>
   <header>
     <h1>Welcome to</h1>
-    <h1><span>OCTODRAW</span></h1>
+    <h1><span>INNODRAW</span></h1>
     <h1><slot></slot></h1>
   </header>
 </template>
