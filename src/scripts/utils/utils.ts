@@ -16,7 +16,6 @@ export const isValidCreds = (data: UserData): boolean => {
     }
   }
   // return true
-  alert("Error");
   return false;
 };
 export const isUniqueUser = async (data: string) => {

@@ -14,8 +14,8 @@ export interface UserInput {
   password: string;
 }
 export interface UserWithId {
-  name: string;
-  email: string;
-  password: string;
-  id: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  id?: string;
 }
