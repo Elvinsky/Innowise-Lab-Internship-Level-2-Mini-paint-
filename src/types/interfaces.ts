@@ -19,3 +19,7 @@ export interface UserWithId {
   password?: string;
   id?: string;
 }
+export interface CanvasSizes {
+  width: number;
+  height: number;
+}

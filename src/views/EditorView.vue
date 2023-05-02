@@ -2,7 +2,21 @@
   <section>
     <HeaderComponent>{{ username }}</HeaderComponent>
     <div class="editor-wrapper">
-      <canvas id="canvas"></canvas>
+      <div class="actions">
+        <img
+          src="@/assets/pen.png"
+          alt="pen"
+          @click="handleDrawFlag"
+          :class="drawFlag ? 'active' : ''"
+        />
+      </div>
+      <canvas
+        id="canvas"
+        @mousedown="startDrawing"
+        @mousemove="draw"
+        @mouseup="stopDrawing"
+        @mouseout="stopDrawing"
+      ></canvas>
     </div>
     <FooterComponent></FooterComponent>
   </section>
@@ -11,16 +25,23 @@
 <script setup lang="ts">
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-import { Ref, ref, onBeforeMount, nextTick } from "vue";
+import { Ref, ref, nextTick, reactive } from "vue";
+import { CanvasSizes } from "@/types/interfaces";
 
 const username: Ref<string | null> = ref(
   localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user")!).name
+    ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      JSON.parse(localStorage.getItem("user")!).name
     : null
 );
 const canvas: Ref<HTMLCanvasElement | null> = ref(null);
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
+const sizes: CanvasSizes = reactive({
+  width: 1000,
+  height: 500,
+});
 const isDrawing: Ref<boolean> = ref(false);
+const drawFlag: Ref<boolean> = ref(false);
 (async () => {
   await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
   canvas.value = document.getElementById("canvas") as HTMLCanvasElement;
@@ -29,27 +50,32 @@ const isDrawing: Ref<boolean> = ref(false);
   }
 })().then(() => {
   if (canvas.value) {
-    canvas.value.addEventListener("mousedown", startDrawing);
-    canvas.value.addEventListener("mousemove", draw);
-    canvas.value.addEventListener("mouseup", stopDrawing);
-    canvas.value.addEventListener("mouseout", stopDrawing);
+    canvas.value.width = sizes.width;
+    canvas.value.height = sizes.height;
   }
 });
+function handleDrawFlag(): void {
+  drawFlag.value ? (drawFlag.value = false) : (drawFlag.value = true);
+  console.log(drawFlag.value);
+}
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
 }
-
-function draw(event: MouseEvent) {
-  if (!isDrawing.value || !ctx.value || !canvas.value) return;
+function stopDrawing() {
+  isDrawing.value = false;
+}
+function draw(event: MouseEvent): void {
+  if (!isDrawing.value || !ctx.value || !canvas.value || !drawFlag.value)
+    return;
 
   // Calculate the offset between the canvas and the window
-  const offsetX = canvas.value.offsetLeft;
-  const offsetY = canvas.value.offsetTop;
+  const offsetX: number = canvas.value.offsetLeft;
+  const offsetY: number = canvas.value.offsetTop;
 
   // Calculate the mouse position relative to the canvas
-  const x = event.clientX - offsetX;
-  const y = event.clientY - offsetY;
+  const x: number = event.clientX - offsetX;
+  const y: number = event.clientY - offsetY;
 
   ctx.value.lineWidth = 5;
   ctx.value.lineCap = "round";
@@ -58,10 +84,6 @@ function draw(event: MouseEvent) {
   ctx.value.moveTo(x, y);
   ctx.value.lineTo(x, y);
   ctx.value.stroke();
-}
-
-function stopDrawing() {
-  isDrawing.value = false;
 }
 </script>
 
@@ -76,14 +98,35 @@ section {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 1em;
+}
+.actions {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+.active {
+  background-color: rgba(0, 255, 0, 0.44);
+}
+.actions img {
+  width: 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0.4em;
+}
+.actions img:hover {
+  transform: scale(1.1);
 }
 canvas {
   border: 1px solid black;
-  width: 70%;
-  height: 70%;
   margin-top: 7em;
+  background-color: rgba(212, 212, 212, 0.549);
+  border-radius: 5px;
+  width: 1000px;
+  height: 500px;
 }
 </style>
