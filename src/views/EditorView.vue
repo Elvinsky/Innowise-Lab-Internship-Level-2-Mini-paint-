@@ -40,7 +40,13 @@
           v-if="colorPick"
           v-model="drawStyle.color"
         />
+        <img
+          src="@/assets/refresh-arrow.png"
+          class="main-img"
+          @click="handleClearCanvas"
+        />
       </div>
+
       <canvas
         id="canvas"
         @mousedown="startDrawing"
@@ -64,7 +70,6 @@ const canvas: Ref<HTMLCanvasElement | null> = ref(null);
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
 const isDrawing: Ref<boolean> = ref(false);
 const drawFlag: Ref<boolean> = ref(false);
-// const sideBlockVisible: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const sizes: CanvasSizes = reactive({
@@ -114,6 +119,11 @@ function stopDrawing() {
 function handleWidthChange(event: InputEvent): void {
   drawStyle.width = (event.target as HTMLInputElement).valueAsNumber;
 }
+function handleClearCanvas(): void {
+  if (canvas.value && ctx.value) {
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
+  }
+}
 const handleColorPick = (event: InputEvent) => {
   console.log((event.target as HTMLInputElement).value);
   drawStyle.color = (event.target as HTMLInputElement).value;
@@ -162,7 +172,7 @@ section {
 .color-pick {
   position: absolute;
   left: 140px;
-  top: 330px;
+  top: 300px;
   width: 60px;
   height: 60px;
 }
@@ -189,6 +199,8 @@ section {
   height: 25px;
   border: 1px solid rgba(0, 0, 0, 0.342);
   cursor: pointer;
+  transition: all;
+  transition-duration: 200ms;
 }
 .color-circle:hover {
   transform: scale(1.1);
@@ -205,6 +217,8 @@ section {
   cursor: pointer;
   border-radius: 5px;
   padding: 0.4em;
+  transition: all;
+  transition-duration: 200ms;
 }
 .main-img:hover {
   transform: scale(1.1);
