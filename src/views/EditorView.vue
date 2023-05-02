@@ -48,6 +48,13 @@
           :class="lineFlag ? 'active' : ''"
         />
         <img
+          src="@/assets/square.png"
+          alt="square"
+          @click="handleSquareFlag"
+          class="main-img"
+          :class="squareFlag ? 'active' : ''"
+        />
+        <img
           src="@/assets/refresh-arrow.png"
           class="main-img"
           @click="handleClearCanvas"
@@ -65,10 +72,7 @@
           stopDrawing();
           stopLineDrawing($event);
         "
-        @mouseout="
-          stopDrawing();
-          stopLineDrawing($event);
-        "
+        @mouseout="stopDrawing()"
       ></canvas>
     </div>
     <FooterComponent></FooterComponent>
@@ -85,9 +89,9 @@ const username: Ref<string | null> = ref(null);
 const canvas: Ref<HTMLCanvasElement | null> = ref(null);
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
 const isDrawing: Ref<boolean> = ref(false);
-// const isDrawingLine: Ref<boolean> = ref(false);
 const drawFlag: Ref<boolean> = ref(false);
 const lineFlag: Ref<boolean> = ref(false);
+const squareFlag: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const sizes: CanvasSizes = reactive({
@@ -133,19 +137,29 @@ function handleDrawFlag(): void {
   widthRange.value = false;
   colorPick.value = false;
   lineFlag.value = false;
+  squareFlag.value = false;
 }
 function handleLineFlag(): void {
   lineFlag.value ? (lineFlag.value = false) : (lineFlag.value = true);
   widthRange.value = false;
   colorPick.value = false;
   drawFlag.value = false;
+  squareFlag.value = false;
+}
+function handleSquareFlag(): void {
+  squareFlag.value ? (squareFlag.value = false) : (squareFlag.value = true);
+  widthRange.value = false;
+  colorPick.value = false;
+  drawFlag.value = false;
+  lineFlag.value = false;
 }
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
 }
 function startLineDrawing(event: MouseEvent) {
-  if (!ctx.value || !canvas.value || !lineFlag.value) return;
+  if (!ctx.value || !canvas.value || (!lineFlag.value && !squareFlag.value))
+    return;
 
   const offsetX: number = canvas.value.offsetLeft;
   const offsetY: number = canvas.value.offsetTop;
@@ -155,14 +169,17 @@ function startLineDrawing(event: MouseEvent) {
   console.log(line.x1, line.y1);
 }
 function stopLineDrawing(event: MouseEvent) {
-  if (!ctx.value || !canvas.value || !lineFlag.value) return;
+  if (!ctx.value || !canvas.value || (!lineFlag.value && !squareFlag.value))
+    return;
 
   const offsetX: number = canvas.value.offsetLeft;
   const offsetY: number = canvas.value.offsetTop;
 
   line.x2 = event.clientX - offsetX;
   line.y2 = event.clientY - offsetY;
-  drawLine(line.x1, line.y1, line.x2, line.y2);
+  lineFlag.value
+    ? drawLine(line.x1, line.y1, line.x2, line.y2)
+    : drawSquare(line.x1, line.y1, line.x2, line.y2);
 }
 function stopDrawing() {
   isDrawing.value = false;
@@ -199,13 +216,22 @@ function draw(event: MouseEvent): void {
 }
 
 function drawLine(x1: number, y1: number, x2: number, y2: number): void {
-  if (!ctx.value || !canvas.value) return;
+  if (!ctx.value || !canvas.value || !lineFlag.value) return;
   ctx.value.lineWidth = drawStyle.width;
   ctx.value.lineCap = "round";
   ctx.value.strokeStyle = drawStyle.color;
   ctx.value.beginPath();
   ctx.value.moveTo(x1, y1);
   ctx.value.lineTo(x2, y2);
+  ctx.value.stroke();
+}
+function drawSquare(x1: number, y1: number, x2: number, y2: number): void {
+  if (!ctx.value || !canvas.value || !squareFlag.value) return;
+  ctx.value.lineWidth = drawStyle.width;
+  ctx.value.lineCap = "round";
+  ctx.value.strokeStyle = drawStyle.color;
+  ctx.value.beginPath();
+  ctx.value.rect(x1, y1, x2 - x1, y2 - y1);
   ctx.value.stroke();
 }
 </script>
