@@ -94,6 +94,7 @@ const lineFlag: Ref<boolean> = ref(false);
 const squareFlag: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
+
 const sizes: CanvasSizes = reactive({
   width: 1000,
   height: 500,
@@ -108,10 +109,12 @@ const line: LineCoords = reactive({
   x2: 0,
   y2: 0,
 });
+
 username.value = localStorage.getItem("user")
   ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     JSON.parse(localStorage.getItem("user")!).name
   : null;
+
 (async () => {
   await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
   canvas.value = document.getElementById("canvas") as HTMLCanvasElement;
@@ -124,6 +127,7 @@ username.value = localStorage.getItem("user")
     canvas.value.height = sizes.height;
   }
 });
+
 function showWidthRange(): void {
   widthRange.value = !widthRange.value;
   colorPick.value = false;
