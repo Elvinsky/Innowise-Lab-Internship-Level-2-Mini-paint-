@@ -23,3 +23,7 @@ export interface CanvasSizes {
   width: number;
   height: number;
 }
+export interface DrawStyle {
+  width: number;
+  color: string;
+}
