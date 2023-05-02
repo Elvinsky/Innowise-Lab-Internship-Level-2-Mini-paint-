@@ -41,6 +41,13 @@
           v-model="drawStyle.color"
         />
         <img
+          src="@/assets/straight-line.png"
+          alt="line"
+          @click="handleLineFlag"
+          class="main-img"
+          :class="lineFlag ? 'active' : ''"
+        />
+        <img
           src="@/assets/refresh-arrow.png"
           class="main-img"
           @click="handleClearCanvas"
@@ -49,10 +56,19 @@
 
       <canvas
         id="canvas"
-        @mousedown="startDrawing"
+        @mousedown="
+          startDrawing($event);
+          startLineDrawing($event);
+        "
         @mousemove="draw"
-        @mouseup="stopDrawing"
-        @mouseout="stopDrawing"
+        @mouseup="
+          stopDrawing();
+          stopLineDrawing($event);
+        "
+        @mouseout="
+          stopDrawing();
+          stopLineDrawing($event);
+        "
       ></canvas>
     </div>
     <FooterComponent></FooterComponent>
@@ -63,13 +79,15 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import { Ref, ref, nextTick, reactive } from "vue";
-import { CanvasSizes, DrawStyle } from "@/types/interfaces";
+import { CanvasSizes, DrawStyle, LineCoords } from "@/types/interfaces";
 
 const username: Ref<string | null> = ref(null);
 const canvas: Ref<HTMLCanvasElement | null> = ref(null);
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
 const isDrawing: Ref<boolean> = ref(false);
+// const isDrawingLine: Ref<boolean> = ref(false);
 const drawFlag: Ref<boolean> = ref(false);
+const lineFlag: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const sizes: CanvasSizes = reactive({
@@ -79,6 +97,12 @@ const sizes: CanvasSizes = reactive({
 const drawStyle: DrawStyle = reactive({
   width: 5,
   color: "rgba(0, 255, 0, 0.44)",
+});
+const line: LineCoords = reactive({
+  x1: 0,
+  y1: 0,
+  x2: 0,
+  y2: 0,
 });
 username.value = localStorage.getItem("user")
   ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -108,10 +132,37 @@ function handleDrawFlag(): void {
   drawFlag.value ? (drawFlag.value = false) : (drawFlag.value = true);
   widthRange.value = false;
   colorPick.value = false;
+  lineFlag.value = false;
+}
+function handleLineFlag(): void {
+  lineFlag.value ? (lineFlag.value = false) : (lineFlag.value = true);
+  widthRange.value = false;
+  colorPick.value = false;
+  drawFlag.value = false;
 }
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
+}
+function startLineDrawing(event: MouseEvent) {
+  if (!ctx.value || !canvas.value || !lineFlag.value) return;
+
+  const offsetX: number = canvas.value.offsetLeft;
+  const offsetY: number = canvas.value.offsetTop;
+
+  line.x1 = event.clientX - offsetX;
+  line.y1 = event.clientY - offsetY;
+  console.log(line.x1, line.y1);
+}
+function stopLineDrawing(event: MouseEvent) {
+  if (!ctx.value || !canvas.value || !lineFlag.value) return;
+
+  const offsetX: number = canvas.value.offsetLeft;
+  const offsetY: number = canvas.value.offsetTop;
+
+  line.x2 = event.clientX - offsetX;
+  line.y2 = event.clientY - offsetY;
+  drawLine(line.x1, line.y1, line.x2, line.y2);
 }
 function stopDrawing() {
   isDrawing.value = false;
@@ -144,6 +195,17 @@ function draw(event: MouseEvent): void {
   ctx.value.beginPath();
   ctx.value.moveTo(x, y);
   ctx.value.lineTo(x, y);
+  ctx.value.stroke();
+}
+
+function drawLine(x1: number, y1: number, x2: number, y2: number): void {
+  if (!ctx.value || !canvas.value) return;
+  ctx.value.lineWidth = drawStyle.width;
+  ctx.value.lineCap = "round";
+  ctx.value.strokeStyle = drawStyle.color;
+  ctx.value.beginPath();
+  ctx.value.moveTo(x1, y1);
+  ctx.value.lineTo(x2, y2);
   ctx.value.stroke();
 }
 </script>
