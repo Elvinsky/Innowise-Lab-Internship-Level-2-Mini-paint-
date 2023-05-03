@@ -8,7 +8,7 @@
           class="main-img"
           alt="pen"
           @click="handleDrawFlag"
-          :class="drawFlag ? 'active' : ''"
+          :class="flag.flag.value === 'draw' ? 'active' : ''"
         />
         <div>
           <img
@@ -24,13 +24,13 @@
             step="1"
             class="width-range"
             @change="handleWidthChange"
-            v-model="drawStyle.width"
+            v-model="drawStyle.penWidth.value"
             v-if="widthRange"
           />
         </div>
         <div
           class="color-circle"
-          :style="{ backgroundColor: drawStyle.color }"
+          :style="{ backgroundColor: drawStyle.penColor.value }"
           @click="showColorPick"
         />
         <input
@@ -38,28 +38,28 @@
           class="color-pick"
           @input="handleColorPick"
           v-if="colorPick"
-          v-model="drawStyle.color"
+          v-model="drawStyle.penColor.value"
         />
         <img
           src="@/assets/straight-line.png"
           alt="line"
           @click="handleLineFlag"
           class="main-img"
-          :class="lineFlag ? 'active' : ''"
+          :class="flag.flag.value === 'line' ? 'active' : ''"
         />
         <img
           src="@/assets/square.png"
           alt="square"
           @click="handleSquareFlag"
           class="main-img"
-          :class="squareFlag ? 'active' : ''"
+          :class="flag.flag.value === 'square' ? 'active' : ''"
         />
         <img
           src="@/assets/circle.png"
           alt="circle"
           @click="handleArcFlag"
           class="main-img"
-          :class="arcFlag ? 'active' : ''"
+          :class="flag.flag.value === 'arc' ? 'active' : ''"
         />
         <img
           src="@/assets/refresh-arrow.png"
@@ -90,26 +90,29 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import { Ref, ref, nextTick, reactive } from "vue";
-import { CanvasSizes, DrawStyle, LineCoords } from "@/types/interfaces";
+import {
+  CanvasCompos,
+  CanvasContextCompos,
+  CanvasFlagCompos,
+  CanvasSizes,
+  DrawingStyleCompos,
+  LineCoords,
+} from "@/types/interfaces";
+import { useCanvasFlag } from "@/composables/useCanvasFlags";
+import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
+import { useDrawingStyle } from "@/composables/useDrawingStyle";
 
 const username: Ref<string | null> = ref(null);
-const canvas: Ref<HTMLCanvasElement | null> = ref(null);
-const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
+const flag: CanvasFlagCompos = useCanvasFlag();
+const canvas: CanvasCompos = useCanvas();
+const ctx: CanvasContextCompos = useCanvasContext();
+const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const isDrawing: Ref<boolean> = ref(false);
-const drawFlag: Ref<boolean> = ref(false);
-const lineFlag: Ref<boolean> = ref(false);
-const squareFlag: Ref<boolean> = ref(false);
-const arcFlag: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
-
 const sizes: CanvasSizes = reactive({
   width: 1000,
   height: 500,
-});
-const drawStyle: DrawStyle = reactive({
-  width: 5,
-  color: "black",
 });
 const line: LineCoords = reactive({
   x1: 0,
@@ -125,14 +128,16 @@ username.value = localStorage.getItem("user")
 
 (async () => {
   await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
-  canvas.value = document.getElementById("canvas") as HTMLCanvasElement;
-  if (canvas.value) {
-    ctx.value = canvas.value.getContext("2d") as CanvasRenderingContext2D;
+  canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
+  if (canvas.canvas.value) {
+    ctx.setCtx(
+      canvas.canvas.value.getContext("2d") as CanvasRenderingContext2D
+    );
   }
 })().then(() => {
-  if (canvas.value) {
-    canvas.value.width = sizes.width;
-    canvas.value.height = sizes.height;
+  if (canvas.canvas.value) {
+    canvas.canvas.value.width = sizes.width;
+    canvas.canvas.value.height = sizes.height;
   }
 });
 
@@ -145,36 +150,16 @@ function showColorPick(): void {
   widthRange.value = false;
 }
 function handleDrawFlag(): void {
-  drawFlag.value = !drawFlag.value;
-  widthRange.value = false;
-  colorPick.value = false;
-  lineFlag.value = false;
-  squareFlag.value = false;
-  arcFlag.value = false;
+  flag.flag.value === "draw" ? flag.setFlag("") : flag.setFlag("draw");
 }
 function handleLineFlag(): void {
-  lineFlag.value = !lineFlag.value;
-  widthRange.value = false;
-  colorPick.value = false;
-  drawFlag.value = false;
-  squareFlag.value = false;
-  arcFlag.value = false;
+  flag.flag.value === "line" ? flag.setFlag("") : flag.setFlag("line");
 }
 function handleSquareFlag(): void {
-  squareFlag.value = !squareFlag.value;
-  widthRange.value = false;
-  colorPick.value = false;
-  drawFlag.value = false;
-  lineFlag.value = false;
-  arcFlag.value = false;
+  flag.flag.value === "square" ? flag.setFlag("") : flag.setFlag("square");
 }
 function handleArcFlag(): void {
-  arcFlag.value = !arcFlag.value;
-  widthRange.value = false;
-  colorPick.value = false;
-  drawFlag.value = false;
-  lineFlag.value = false;
-  squareFlag.value = false;
+  flag.flag.value === "arc" ? flag.setFlag("") : flag.setFlag("arc");
 }
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
@@ -182,104 +167,121 @@ function startDrawing(event: MouseEvent) {
 }
 function startLineDrawing(event: MouseEvent) {
   if (
-    !ctx.value ||
-    !canvas.value ||
-    (!lineFlag.value && !squareFlag.value && !arcFlag.value)
+    !ctx.ctx.value ||
+    !canvas.canvas.value ||
+    (flag.flag.value !== "line" &&
+      flag.flag.value !== "square" &&
+      flag.flag.value !== "arc")
   )
     return;
 
-  const offsetX: number = canvas.value.offsetLeft;
-  const offsetY: number = canvas.value.offsetTop;
+  const offsetX: number = canvas.canvas.value.offsetLeft;
+  const offsetY: number = canvas.canvas.value.offsetTop;
 
   line.x1 = event.clientX - offsetX;
   line.y1 = event.clientY - offsetY;
 }
 function stopLineDrawing(event: MouseEvent) {
   if (
-    !ctx.value ||
-    !canvas.value ||
-    (!lineFlag.value && !squareFlag.value && !arcFlag.value)
+    !ctx.ctx.value ||
+    !canvas.canvas.value ||
+    (flag.flag.value !== "line" &&
+      flag.flag.value !== "square" &&
+      flag.flag.value !== "arc")
   )
     return;
 
-  const offsetX: number = canvas.value.offsetLeft;
-  const offsetY: number = canvas.value.offsetTop;
+  const offsetX: number = canvas.canvas.value.offsetLeft;
+  const offsetY: number = canvas.canvas.value.offsetTop;
 
   line.x2 = event.clientX - offsetX;
   line.y2 = event.clientY - offsetY;
-  if (lineFlag.value) drawLine(line.x1, line.y1, line.x2, line.y2);
-  else if (squareFlag.value) drawSquare(line.x1, line.y1, line.x2, line.y2);
-  else {
+  if (flag.flag.value === "line") drawLine(line.x1, line.y1, line.x2, line.y2);
+  else if (flag.flag.value === "square")
+    drawSquare(line.x1, line.y1, line.x2, line.y2);
+  else if (flag.flag.value === "arc")
     drawArc(line.x1, line.y1, line.x2, line.y2);
-  }
 }
 function stopDrawing() {
   isDrawing.value = false;
 }
 function handleWidthChange(event: InputEvent): void {
-  drawStyle.width = (event.target as HTMLInputElement).valueAsNumber;
+  drawStyle.setWidth((event.target as HTMLInputElement).valueAsNumber);
 }
 function handleClearCanvas(): void {
-  if (canvas.value && ctx.value) {
-    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
+  if (canvas.canvas.value && ctx.ctx.value) {
+    ctx.ctx.value.clearRect(
+      0,
+      0,
+      canvas.canvas.value.width,
+      canvas.canvas.value.height
+    );
   }
 }
 const handleColorPick = (event: InputEvent) => {
   console.log((event.target as HTMLInputElement).value);
-  drawStyle.color = (event.target as HTMLInputElement).value;
+  drawStyle.setColor((event.target as HTMLInputElement).value);
 };
 function draw(event: MouseEvent): void {
-  if (!isDrawing.value || !ctx.value || !canvas.value || !drawFlag.value)
+  if (
+    !isDrawing.value ||
+    !ctx.ctx.value ||
+    !canvas.canvas.value ||
+    flag.flag.value !== "draw"
+  )
     return;
 
-  const offsetX: number = canvas.value.offsetLeft;
-  const offsetY: number = canvas.value.offsetTop;
+  const offsetX: number = canvas.canvas.value.offsetLeft;
+  const offsetY: number = canvas.canvas.value.offsetTop;
 
   const x: number = event.clientX - offsetX;
   const y: number = event.clientY - offsetY;
 
-  ctx.value.lineWidth = drawStyle.width;
-  ctx.value.lineCap = "round";
-  ctx.value.strokeStyle = drawStyle.color;
-  ctx.value.beginPath();
-  ctx.value.moveTo(x, y);
-  ctx.value.lineTo(x, y);
-  ctx.value.stroke();
+  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+  ctx.ctx.value.lineCap = "round";
+  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+  ctx.ctx.value.beginPath();
+  ctx.ctx.value.moveTo(x, y);
+  ctx.ctx.value.lineTo(x, y);
+  ctx.ctx.value.stroke();
 }
 
 function drawLine(x1: number, y1: number, x2: number, y2: number): void {
-  if (!ctx.value || !canvas.value || !lineFlag.value) return;
-  ctx.value.lineWidth = drawStyle.width;
-  ctx.value.lineCap = "round";
-  ctx.value.strokeStyle = drawStyle.color;
-  ctx.value.beginPath();
-  ctx.value.moveTo(x1, y1);
-  ctx.value.lineTo(x2, y2);
-  ctx.value.stroke();
+  if (!ctx.ctx.value || !canvas.canvas.value || flag.flag.value !== "line")
+    return;
+  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+  ctx.ctx.value.lineCap = "round";
+  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+  ctx.ctx.value.beginPath();
+  ctx.ctx.value.moveTo(x1, y1);
+  ctx.ctx.value.lineTo(x2, y2);
+  ctx.ctx.value.stroke();
 }
 function drawSquare(x1: number, y1: number, x2: number, y2: number): void {
-  if (!ctx.value || !canvas.value || !squareFlag.value) return;
-  ctx.value.lineWidth = drawStyle.width;
-  ctx.value.lineCap = "round";
-  ctx.value.strokeStyle = drawStyle.color;
-  ctx.value.beginPath();
-  ctx.value.rect(x1, y1, x2 - x1, y2 - y1);
-  ctx.value.stroke();
+  if (!ctx.ctx.value || !canvas.canvas.value || flag.flag.value !== "square")
+    return;
+  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+  ctx.ctx.value.lineCap = "round";
+  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+  ctx.ctx.value.beginPath();
+  ctx.ctx.value.rect(x1, y1, x2 - x1, y2 - y1);
+  ctx.ctx.value.stroke();
 }
 function drawArc(x1: number, y1: number, x2: number, y2: number): void {
-  if (!ctx.value || !canvas.value || !arcFlag.value) return;
-  ctx.value.lineWidth = drawStyle.width;
-  ctx.value.lineCap = "round";
-  ctx.value.strokeStyle = drawStyle.color;
-  ctx.value.beginPath();
-  ctx.value.arc(
+  if (!ctx.ctx.value || !canvas.canvas.value || flag.flag.value !== "arc")
+    return;
+  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+  ctx.ctx.value.lineCap = "round";
+  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+  ctx.ctx.value.beginPath();
+  ctx.ctx.value.arc(
     x1,
     y1,
     Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2),
     0,
     2 * Math.PI
   );
-  ctx.value.stroke();
+  ctx.ctx.value.stroke();
 }
 </script>
 
