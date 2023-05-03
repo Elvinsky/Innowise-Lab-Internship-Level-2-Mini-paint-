@@ -28,9 +28,10 @@
 </template>
 
 <script setup lang="ts">
+import { auth } from "@/firebase";
 import router from "@/router";
-import { loginQuery } from "@/scripts/dbScripts/queries";
-import { UserInput, UserWithId } from "@/types/interfaces";
+import { UserInput } from "@/types/interfaces";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Ref, reactive, ref } from "vue";
 
 const input: UserInput = reactive({
@@ -40,23 +41,16 @@ const input: UserInput = reactive({
 const error: Ref<boolean> = ref(false);
 
 const submit = (): void => {
-  loginQuery(input.email, input.password).then((data) => {
-    if (data.length !== 1) {
+  signInWithEmailAndPassword(auth, input.email, input.password)
+    .then((creds) => {
+      localStorage.setItem("user", JSON.stringify(creds.user));
+      router.push("home");
+    })
+    .catch((error) => {
       error.value = true;
       input.email = "";
       input.password = "";
-      return;
-    } else {
-      const dataToSet: UserWithId = {
-        name: data[0].name,
-        email: data[0].email,
-        password: data[0].password,
-        id: data[0].id,
-      };
-      localStorage.setItem("user", JSON.stringify(dataToSet));
-      router.push("/home");
-    }
-  });
+    });
 };
 </script>
 

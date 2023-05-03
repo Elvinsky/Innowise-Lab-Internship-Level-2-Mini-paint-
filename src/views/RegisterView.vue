@@ -42,12 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { isValidCreds } from "@/scripts/utils/utils";
-import { isUniqueUser } from "@/scripts/utils/utils";
-import { setItem } from "@/scripts/dbScripts/crudApi";
 import { reactive } from "vue";
 import { Ref, ref } from "vue";
-import { UserData, UserDataToSet } from "@/types/interfaces";
+import { UserData } from "@/types/interfaces";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/firebase";
 import router from "@/router";
 
 const user: UserData = reactive({
@@ -58,25 +57,30 @@ const user: UserData = reactive({
 });
 let error: Ref<boolean> = ref(false);
 const submit = (): void => {
-  if (isValidCreds(user)) {
-    isUniqueUser(user.name).then((response) => {
-      if (response) {
-        const userBackup: UserDataToSet = {
-          name: user.name,
-          email: user.email,
-          password: user.password,
-        };
-        setItem("users", userBackup).then(() => router.push("/login"));
-      }
-    });
-  } else {
+  if (user.password !== user.repPassword) {
+    error.value = true;
     user.name = "";
     user.email = "";
     user.password = "";
     user.repPassword = "";
-    error.value = true;
     return;
   }
+  createUserWithEmailAndPassword(auth, user.email, user.password)
+    .then(() => {
+      if (auth.currentUser) {
+        updateProfile(auth.currentUser, {
+          displayName: user.name,
+        });
+        router.push("/login");
+      }
+    })
+    .catch((error) => {
+      user.name = "";
+      user.email = "";
+      user.password = "";
+      user.repPassword = "";
+      error.value = true;
+    });
 };
 </script>
 

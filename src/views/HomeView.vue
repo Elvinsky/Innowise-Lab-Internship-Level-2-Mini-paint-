@@ -17,7 +17,7 @@ import router from "@/router";
 import { Ref } from "vue";
 const username: Ref<string | null> = localStorage.getItem("user")
   ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    JSON.parse(localStorage.getItem("user")!).name
+    JSON.parse(localStorage.getItem("user")!).displayName
   : null;
 const navigate = (path: string): void => {
   router.push(path);
