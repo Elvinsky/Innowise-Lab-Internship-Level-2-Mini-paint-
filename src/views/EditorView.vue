@@ -55,6 +55,13 @@
           :class="squareFlag ? 'active' : ''"
         />
         <img
+          src="@/assets/circle.png"
+          alt="circle"
+          @click="handleArcFlag"
+          class="main-img"
+          :class="arcFlag ? 'active' : ''"
+        />
+        <img
           src="@/assets/refresh-arrow.png"
           class="main-img"
           @click="handleClearCanvas"
@@ -92,6 +99,7 @@ const isDrawing: Ref<boolean> = ref(false);
 const drawFlag: Ref<boolean> = ref(false);
 const lineFlag: Ref<boolean> = ref(false);
 const squareFlag: Ref<boolean> = ref(false);
+const arcFlag: Ref<boolean> = ref(false);
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 
@@ -101,7 +109,7 @@ const sizes: CanvasSizes = reactive({
 });
 const drawStyle: DrawStyle = reactive({
   width: 5,
-  color: "rgba(0, 255, 0, 0.44)",
+  color: "black",
 });
 const line: LineCoords = reactive({
   x1: 0,
@@ -137,32 +145,47 @@ function showColorPick(): void {
   widthRange.value = false;
 }
 function handleDrawFlag(): void {
-  drawFlag.value ? (drawFlag.value = false) : (drawFlag.value = true);
+  drawFlag.value = !drawFlag.value;
   widthRange.value = false;
   colorPick.value = false;
   lineFlag.value = false;
   squareFlag.value = false;
+  arcFlag.value = false;
 }
 function handleLineFlag(): void {
-  lineFlag.value ? (lineFlag.value = false) : (lineFlag.value = true);
+  lineFlag.value = !lineFlag.value;
   widthRange.value = false;
   colorPick.value = false;
   drawFlag.value = false;
   squareFlag.value = false;
+  arcFlag.value = false;
 }
 function handleSquareFlag(): void {
-  squareFlag.value ? (squareFlag.value = false) : (squareFlag.value = true);
+  squareFlag.value = !squareFlag.value;
   widthRange.value = false;
   colorPick.value = false;
   drawFlag.value = false;
   lineFlag.value = false;
+  arcFlag.value = false;
+}
+function handleArcFlag(): void {
+  arcFlag.value = !arcFlag.value;
+  widthRange.value = false;
+  colorPick.value = false;
+  drawFlag.value = false;
+  lineFlag.value = false;
+  squareFlag.value = false;
 }
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
 }
 function startLineDrawing(event: MouseEvent) {
-  if (!ctx.value || !canvas.value || (!lineFlag.value && !squareFlag.value))
+  if (
+    !ctx.value ||
+    !canvas.value ||
+    (!lineFlag.value && !squareFlag.value && !arcFlag.value)
+  )
     return;
 
   const offsetX: number = canvas.value.offsetLeft;
@@ -170,10 +193,13 @@ function startLineDrawing(event: MouseEvent) {
 
   line.x1 = event.clientX - offsetX;
   line.y1 = event.clientY - offsetY;
-  console.log(line.x1, line.y1);
 }
 function stopLineDrawing(event: MouseEvent) {
-  if (!ctx.value || !canvas.value || (!lineFlag.value && !squareFlag.value))
+  if (
+    !ctx.value ||
+    !canvas.value ||
+    (!lineFlag.value && !squareFlag.value && !arcFlag.value)
+  )
     return;
 
   const offsetX: number = canvas.value.offsetLeft;
@@ -181,9 +207,11 @@ function stopLineDrawing(event: MouseEvent) {
 
   line.x2 = event.clientX - offsetX;
   line.y2 = event.clientY - offsetY;
-  lineFlag.value
-    ? drawLine(line.x1, line.y1, line.x2, line.y2)
-    : drawSquare(line.x1, line.y1, line.x2, line.y2);
+  if (lineFlag.value) drawLine(line.x1, line.y1, line.x2, line.y2);
+  else if (squareFlag.value) drawSquare(line.x1, line.y1, line.x2, line.y2);
+  else {
+    drawArc(line.x1, line.y1, line.x2, line.y2);
+  }
 }
 function stopDrawing() {
   isDrawing.value = false;
@@ -236,6 +264,21 @@ function drawSquare(x1: number, y1: number, x2: number, y2: number): void {
   ctx.value.strokeStyle = drawStyle.color;
   ctx.value.beginPath();
   ctx.value.rect(x1, y1, x2 - x1, y2 - y1);
+  ctx.value.stroke();
+}
+function drawArc(x1: number, y1: number, x2: number, y2: number): void {
+  if (!ctx.value || !canvas.value || !arcFlag.value) return;
+  ctx.value.lineWidth = drawStyle.width;
+  ctx.value.lineCap = "round";
+  ctx.value.strokeStyle = drawStyle.color;
+  ctx.value.beginPath();
+  ctx.value.arc(
+    x1,
+    y1,
+    Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2),
+    0,
+    2 * Math.PI
+  );
   ctx.value.stroke();
 }
 </script>
