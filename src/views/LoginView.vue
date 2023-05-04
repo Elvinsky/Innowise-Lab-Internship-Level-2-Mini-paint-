@@ -28,9 +28,11 @@
 </template>
 
 <script setup lang="ts">
+import { useUser } from "@/composables/useUser";
 import { auth } from "@/firebase";
 import router from "@/router";
-import { UserInput } from "@/types/interfaces";
+import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { UserInput } from "@/types/interfaces/userInterfaces";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Ref, reactive, ref } from "vue";
 
@@ -38,13 +40,14 @@ const input: UserInput = reactive({
   email: "",
   password: "",
 });
+const user: UserDataCompos = useUser();
 const error: Ref<boolean> = ref(false);
 
 const submit = (): void => {
   signInWithEmailAndPassword(auth, input.email, input.password)
     .then((creds) => {
-      localStorage.setItem("user", JSON.stringify(creds.user));
-      router.push("home");
+      user.setUser(creds.user);
+      router.push("/");
     })
     .catch((error) => {
       error.value = true;

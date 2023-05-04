@@ -1,5 +1,7 @@
 import { CanvasFlag } from "@/types/literals/literals";
 import { Ref } from "vue";
+import { User } from "firebase/auth";
+
 export interface CanvasFlagCompos {
   flag: Ref<CanvasFlag>;
   setFlag: (flag: CanvasFlag) => void;
@@ -17,4 +19,8 @@ export interface DrawingStyleCompos {
   penColor: Ref<string>;
   setWidth: (param: number) => void;
   setColor: (param: string) => void;
+}
+export interface UserDataCompos {
+  user: Ref<User | null>;
+  setUser: (userData: User) => void;
 }

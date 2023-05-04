@@ -88,26 +88,18 @@
 </template>
 
 <script setup lang="ts">
-import { useCanvas } from "@/composables/useCanvasContext";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
-import { storage } from "@/firebase";
 import { clearCanvas } from "@/scripts/utils/canvasDrawUtil";
-import { dataURLtoBlob, firebaseUpload } from "@/scripts/utils/uploadUtils";
+import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 import {
-  CanvasCompos,
   CanvasFlagCompos,
   DrawingStyleCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
-import {
-  StorageReference,
-  ref as storageRef,
-  uploadBytes,
-} from "firebase/storage";
+
 const flag: CanvasFlagCompos = useCanvasFlag();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
-const canvas: CanvasCompos = useCanvas();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);

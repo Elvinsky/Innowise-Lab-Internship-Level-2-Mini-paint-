@@ -1,6 +1,8 @@
 <template>
   <section>
-    <HeaderComponent>{{ username }}</HeaderComponent>
+    <HeaderComponent>{{
+      user.user.value ? user.user.value.displayName : "undefined"
+    }}</HeaderComponent>
     <div class="editor-wrapper">
       <ToolBar />
       <canvas
@@ -29,14 +31,16 @@ import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
+  UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
+import { useUser } from "@/composables/useUser";
 
-const username: Ref<string | null> = ref(null);
+const user: UserDataCompos = useUser();
 const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
@@ -52,12 +56,6 @@ const line: LineCoords = reactive({
   x2: 0,
   y2: 0,
 });
-
-username.value = localStorage.getItem("user")
-  ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    JSON.parse(localStorage.getItem("user")!).name
-  : null;
-
 (async () => {
   await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
   canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);

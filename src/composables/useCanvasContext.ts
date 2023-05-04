@@ -3,11 +3,13 @@ import {
   CanvasContextCompos,
 } from "@/types/interfaces/composInterfaces";
 import { ref, Ref } from "vue";
+
 const canvas: Ref<HTMLCanvasElement | null> = ref(null);
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);
 const setCanvas = (canvasVal: HTMLCanvasElement) => {
   canvas.value = canvasVal;
 };
+
 export const useCanvas = (): CanvasCompos => {
   return { canvas, setCanvas };
 };

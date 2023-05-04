@@ -1,13 +1,16 @@
 import { useCanvas } from "@/composables/useCanvasContext";
+import { useUser } from "@/composables/useUser";
 import { storage } from "@/firebase";
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import {
+  CanvasCompos,
+  UserDataCompos,
+} from "@/types/interfaces/composInterfaces";
 import {
   StorageReference,
+  UploadMetadata,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-import { Ref } from "vue";
-
 const canvas: CanvasCompos = useCanvas();
 
 export function dataURLtoBlob(dataURL: string): Blob {
@@ -24,13 +27,21 @@ export function dataURLtoBlob(dataURL: string): Blob {
   return new Blob([arrayBuffer], { type: contentType });
 }
 export const firebaseUpload = (fileName: string) => {
+  const user: UserDataCompos = useUser();
   const canvasBackup = canvas.canvas.value;
   if (!canvasBackup) return;
   const imageRef: StorageReference = storageRef(storage, fileName + ".png");
   const dataURL = canvasBackup.toDataURL();
   const blob = dataURLtoBlob(dataURL);
   const file = new File([blob], fileName + ".png");
-  uploadBytes(imageRef, file).then((snapshot) => {
+  if (!user.user.value) return;
+  const metadata: UploadMetadata = {
+    customMetadata: {
+      uploadedBy: user.user.value.email as string,
+      uploadedAt: (new Date().getTime() / 1000).toString() as string,
+    },
+  };
+  uploadBytes(imageRef, file, metadata).then((snapshot) => {
     console.log("uploaded", snapshot);
   });
 };

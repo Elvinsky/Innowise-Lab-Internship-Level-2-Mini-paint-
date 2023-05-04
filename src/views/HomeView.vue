@@ -1,6 +1,8 @@
 <template>
   <section>
-    <HeaderComponent>{{ username }}</HeaderComponent>
+    <HeaderComponent>{{
+      user.user.value ? user.user.value.displayName : "undefined"
+    }}</HeaderComponent>
     <nav>
       <div @click="navigate('/editor')">New image</div>
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
@@ -14,11 +16,9 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import router from "@/router";
-import { Ref } from "vue";
-const username: Ref<string | null> = localStorage.getItem("user")
-  ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    JSON.parse(localStorage.getItem("user")!).displayName
-  : null;
+import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { useUser } from "@/composables/useUser";
+const user: UserDataCompos = useUser();
 const navigate = (path: string): void => {
   router.push(path);
 };
