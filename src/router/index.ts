@@ -11,7 +11,7 @@ import EditorView from "@/views/EditorView.vue";
 import BrowserView from "@/views/BrowserView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/home",
+    path: "/",
     name: "home",
     component: HomeView,
     beforeEnter: function (to, from, next: NavigationGuardNext): void {
@@ -19,10 +19,6 @@ const routes: Array<RouteRecordRaw> = [
       if (userStringData === null) next("/login");
       next();
     },
-  },
-  {
-    path: "/",
-    redirect: { name: "home" },
   },
   {
     path: "/editor",
@@ -61,5 +57,4 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
 export default router;

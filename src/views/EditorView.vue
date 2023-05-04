@@ -29,9 +29,8 @@ import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
-  CanvasSizes,
-  LineCoords,
-} from "@/types/interfaces";
+} from "@/types/interfaces/composInterfaces";
+import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";

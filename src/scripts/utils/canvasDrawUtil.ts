@@ -4,9 +4,10 @@ import { useDrawingStyle } from "@/composables/useDrawingStyle";
 import {
   CanvasCompos,
   CanvasContextCompos,
-  CanvasFlagCompos,
   DrawingStyleCompos,
-} from "@/types/interfaces";
+  CanvasFlagCompos,
+} from "@/types/interfaces/composInterfaces";
+
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();

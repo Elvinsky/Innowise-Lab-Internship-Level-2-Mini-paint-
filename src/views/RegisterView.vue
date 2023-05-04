@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { Ref, ref } from "vue";
-import { UserData } from "@/types/interfaces";
+import { UserData } from "@/types/interfaces/userInterfaces";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase";
 import router from "@/router";

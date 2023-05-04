@@ -1,4 +1,4 @@
-import { DrawingStyleCompos } from "@/types/interfaces";
+import { DrawingStyleCompos } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
 const penWidth: Ref<number> = ref(5);
 const penColor: Ref<string> = ref("black");

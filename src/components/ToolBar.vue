@@ -59,6 +59,27 @@
       :class="flag.flag.value === 'arc' ? 'active' : ''"
     />
     <img
+      src="@/assets/diskette.png"
+      alt="save"
+      @click="handlePopUpShow"
+      class="main-img"
+      :class="flag.flag.value === 'arc' ? 'active' : ''"
+    />
+    <div class="save-popup" v-if="isSaving">
+      <div class="save-block">
+        <input
+          class="name-input"
+          id="save-name"
+          type="text"
+          v-model="fileName"
+        />
+        <div class="action-block">
+          <div @click="handlePopUpShow">Cancel</div>
+          <div @click="handleSaveImage">Save</div>
+        </div>
+      </div>
+    </div>
+    <img
       src="@/assets/refresh-arrow.png"
       class="main-img"
       @click="handleClearCanvas"
@@ -67,15 +88,30 @@
 </template>
 
 <script setup lang="ts">
+import { useCanvas } from "@/composables/useCanvasContext";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
+import { storage } from "@/firebase";
 import { clearCanvas } from "@/scripts/utils/canvasDrawUtil";
-import { CanvasFlagCompos, DrawingStyleCompos } from "@/types/interfaces";
+import { dataURLtoBlob, firebaseUpload } from "@/scripts/utils/uploadUtils";
+import {
+  CanvasCompos,
+  CanvasFlagCompos,
+  DrawingStyleCompos,
+} from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
+import {
+  StorageReference,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 const flag: CanvasFlagCompos = useCanvasFlag();
+const drawStyle: DrawingStyleCompos = useDrawingStyle();
+const canvas: CanvasCompos = useCanvas();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
-const drawStyle: DrawingStyleCompos = useDrawingStyle();
+const isSaving: Ref<boolean> = ref(false);
+const fileName: Ref<string> = ref("canvas-image");
 
 function showWidthRange(): void {
   widthRange.value = !widthRange.value;
@@ -84,6 +120,9 @@ function showWidthRange(): void {
 function showColorPick(): void {
   colorPick.value = !colorPick.value;
   widthRange.value = false;
+}
+function handlePopUpShow() {
+  isSaving.value = !isSaving.value;
 }
 function handleDrawFlag(): void {
   flag.flag.value === "draw" ? flag.setFlag("") : flag.setFlag("draw");
@@ -108,6 +147,10 @@ const handleColorPick = (event: InputEvent) => {
   console.log((event.target as HTMLInputElement).value);
   drawStyle.setColor((event.target as HTMLInputElement).value);
 };
+const handleSaveImage = () => {
+  firebaseUpload(fileName.value);
+  isSaving.value = false;
+};
 </script>
 
 <style scoped>
@@ -122,6 +165,57 @@ const handleColorPick = (event: InputEvent) => {
   top: 230px;
   width: 60px;
   height: 60px;
+}
+.save-popup {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  background-color: rgba(153, 153, 153, 0.656);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.save-block {
+  margin: auto;
+  border-radius: 8px;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background-color: rgb(255, 255, 255);
+}
+.action-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+.name-input {
+  padding: 0.3em;
+  font-size: 1em;
+}
+.action-block div {
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 5px;
+  transition: all;
+  transition-duration: 200ms;
+}
+.action-block div:hover {
+  transform: scale(1.1);
+}
+.action-block div:first-child {
+  background-color: rgba(232, 69, 69, 0.785);
+}
+.action-block div:nth-child(2) {
+  background-color: rgba(74, 232, 69, 0.785);
 }
 .actions {
   height: 100%;

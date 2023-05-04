@@ -1,7 +1,6 @@
 import { DocumentData } from "firebase/firestore/lite";
 import { whereQuery } from "../dbScripts/queries";
-import { UserData } from "@/types/interfaces";
-
+import { UserData } from "@/types/interfaces/userInterfaces";
 export const isValidCreds = (data: UserData): boolean => {
   if (data.name.length > 0 && data.name.length <= 80) {
     if (

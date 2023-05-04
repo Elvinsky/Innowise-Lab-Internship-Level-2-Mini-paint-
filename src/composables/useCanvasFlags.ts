@@ -1,6 +1,6 @@
 import { Ref, ref } from "vue";
-import { CanvasFlag } from "@/types/literals";
-import { CanvasFlagCompos } from "@/types/interfaces";
+import { CanvasFlag } from "@/types/literals/literals";
+import { CanvasFlagCompos } from "@/types/interfaces/composInterfaces";
 const flag: Ref<CanvasFlag> = ref("");
 export const useCanvasFlag = (): CanvasFlagCompos => {
   const setFlag = (flagVal: CanvasFlag): void => {
