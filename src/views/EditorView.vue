@@ -1,8 +1,6 @@
 <template>
   <section>
-    <HeaderComponent>{{
-      user.user.value ? user.user.value.displayName : "undefined"
-    }}</HeaderComponent>
+    <HeaderComponent />
     <div class="editor-wrapper">
       <ToolBar />
       <canvas
@@ -31,16 +29,13 @@ import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
-  UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
-import { useUser } from "@/composables/useUser";
 
-const user: UserDataCompos = useUser();
 const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();

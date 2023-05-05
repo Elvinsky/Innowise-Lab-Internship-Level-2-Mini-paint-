@@ -5,7 +5,7 @@ import { Ref, ref } from "vue";
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
 
 export const useUser = (): UserDataCompos => {
-  const setUser = (userData: User) => {
+  const setUser = (userData: User | null) => {
     localStorage.setItem("user", JSON.stringify(userData));
     user.value = userData;
   };

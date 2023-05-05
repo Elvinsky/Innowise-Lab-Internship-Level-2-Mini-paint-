@@ -22,5 +22,5 @@ export interface DrawingStyleCompos {
 }
 export interface UserDataCompos {
   user: Ref<User | null>;
-  setUser: (userData: User) => void;
+  setUser: (userData: User | null) => void;
 }

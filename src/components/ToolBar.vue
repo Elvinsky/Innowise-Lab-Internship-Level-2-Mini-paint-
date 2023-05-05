@@ -63,7 +63,6 @@
       alt="save"
       @click="handlePopUpShow"
       class="main-img"
-      :class="flag.flag.value === 'arc' ? 'active' : ''"
     />
     <div class="save-popup" v-if="isSaving">
       <div class="save-block">

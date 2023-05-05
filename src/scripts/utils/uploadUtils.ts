@@ -8,7 +8,7 @@ import {
 import {
   StorageReference,
   UploadMetadata,
-  ref as storageRef,
+  ref,
   uploadBytes,
 } from "firebase/storage";
 const canvas: CanvasCompos = useCanvas();
@@ -26,11 +26,12 @@ export function dataURLtoBlob(dataURL: string): Blob {
 
   return new Blob([arrayBuffer], { type: contentType });
 }
+
 export const firebaseUpload = (fileName: string) => {
   const user: UserDataCompos = useUser();
   const canvasBackup = canvas.canvas.value;
   if (!canvasBackup) return;
-  const imageRef: StorageReference = storageRef(storage, fileName + ".png");
+  const imageRef: StorageReference = ref(storage, fileName + ".png");
   const dataURL = canvasBackup.toDataURL();
   const blob = dataURLtoBlob(dataURL);
   const file = new File([blob], fileName + ".png");
@@ -38,7 +39,7 @@ export const firebaseUpload = (fileName: string) => {
   const metadata: UploadMetadata = {
     customMetadata: {
       uploadedBy: user.user.value.email as string,
-      uploadedAt: (new Date().getTime() / 1000).toString() as string,
+      uploadedAt: Math.round(new Date().getTime() / 1000).toString() as string,
     },
   };
   uploadBytes(imageRef, file, metadata).then((snapshot) => {
