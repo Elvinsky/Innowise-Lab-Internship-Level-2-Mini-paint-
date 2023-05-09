@@ -37,11 +37,14 @@
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import CustomLoader from "@/components/CustomLoader.vue";
-import { useFetchCanvases } from "@/composables/useFetchCanvases";
+import {
+  useFetchCanvases,
+  useFetchCanvasesLimited,
+} from "@/composables/useFetchCanvases";
 import { Photo } from "@/types/interfaces/photoInterface";
 import { Ref } from "vue";
 import { useRouter } from "vue-router";
-const photos: Ref<Photo[]> = useFetchCanvases();
+const photos: Ref<Photo[]> = useFetchCanvasesLimited();
 const router = useRouter();
 const handleOpenDetails = (url: string) => {
   const urlId = url.substring(8);

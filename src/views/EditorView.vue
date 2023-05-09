@@ -2,7 +2,7 @@
   <section>
     <HeaderComponent />
     <div class="editor-wrapper">
-      <ToolBar />
+      <ToolBar :isCreator="true" />
       <canvas
         id="canvas"
         @mousedown="
