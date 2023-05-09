@@ -53,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
     component: RegisterView,
   },
   {
-    path: "/canvas/:id",
+    path: "/canvas/:id/:url/:user/:name",
     name: "canvasDetails",
     props: true,
     component: CanvasView,

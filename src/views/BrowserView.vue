@@ -3,9 +3,30 @@
   <section v-else>
     <HeaderComponent />
     <div class="image-container">
-      <div class="image-item" v-for="image in photos" :key="image.downloadUrl">
-        <img :src="image.downloadUrl" alt="image" class="canvas-img" />
-        <span>{{ image.metadata.uploadedBy }}</span>
+      <div
+        class="image-item"
+        v-for="image in photos"
+        :key="image.downloadUrl"
+        :id="image.downloadUrl"
+      >
+        <RouterLink
+          :to="{
+            name: 'canvasDetails',
+            params: {
+              id: image.metadata.uploadedAt,
+              url: image.downloadUrl,
+              user: image.metadata.uploadedBy,
+              name: image.name,
+            },
+          }"
+          ><img
+            :src="image.downloadUrl"
+            alt="image"
+            class="canvas-img"
+            @click="handleOpenDetails(image.downloadUrl)"
+          />
+          <span>{{ image.metadata.uploadedBy }}</span>
+        </RouterLink>
       </div>
     </div>
     <FooterComponent />
@@ -19,7 +40,13 @@ import CustomLoader from "@/components/CustomLoader.vue";
 import { useFetchCanvases } from "@/composables/useFetchCanvases";
 import { Photo } from "@/types/interfaces/photoInterface";
 import { Ref } from "vue";
+import { useRouter } from "vue-router";
 const photos: Ref<Photo[]> = useFetchCanvases();
+const router = useRouter();
+const handleOpenDetails = (url: string) => {
+  const urlId = url.substring(8);
+  router.push(`/canvas/${urlId}`);
+};
 </script>
 
 <style scoped>
@@ -55,5 +82,9 @@ section {
   margin: 0.5em;
   width: 260px;
   height: 130px;
+}
+a span {
+  text-decoration: none;
+  color: black;
 }
 </style>

@@ -6,6 +6,7 @@
       alt="pen"
       @click="handleDrawFlag"
       :class="flag.flag.value === 'draw' ? 'active' : ''"
+      v-if="props.isCreator"
     />
     <div>
       <img
@@ -13,6 +14,7 @@
         class="main-img"
         alt="width"
         @click="showWidthRange"
+        v-if="props.isCreator"
       />
       <input
         type="range"
@@ -29,6 +31,7 @@
       class="color-circle"
       :style="{ backgroundColor: drawStyle.penColor.value }"
       @click="showColorPick"
+      v-if="props.isCreator"
     />
     <input
       type="color"
@@ -43,6 +46,7 @@
       @click="handleLineFlag"
       class="main-img"
       :class="flag.flag.value === 'line' ? 'active' : ''"
+      v-if="props.isCreator"
     />
     <img
       src="@/assets/square.png"
@@ -50,6 +54,7 @@
       @click="handleSquareFlag"
       class="main-img"
       :class="flag.flag.value === 'square' ? 'active' : ''"
+      v-if="props.isCreator"
     />
     <img
       src="@/assets/circle.png"
@@ -57,6 +62,7 @@
       @click="handleArcFlag"
       class="main-img"
       :class="flag.flag.value === 'arc' ? 'active' : ''"
+      v-if="props.isCreator"
     />
     <img
       src="@/assets/diskette.png"
@@ -82,6 +88,7 @@
       src="@/assets/refresh-arrow.png"
       class="main-img"
       @click="handleClearCanvas"
+      v-if="props.isCreator"
     />
   </div>
 </template>
@@ -95,14 +102,16 @@ import {
   CanvasFlagCompos,
   DrawingStyleCompos,
 } from "@/types/interfaces/composInterfaces";
-import { Ref, ref } from "vue";
-
+import { Ref, ref, defineProps } from "vue";
+const props = defineProps(["filename", "isCreator"]);
 const flag: CanvasFlagCompos = useCanvasFlag();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);
-const fileName: Ref<string> = ref("canvas-image");
+const fileName: Ref<string> = ref(
+  props.filename ? props.filename : "canvas-img"
+);
 
 function showWidthRange(): void {
   widthRange.value = !widthRange.value;
