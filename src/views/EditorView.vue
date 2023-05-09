@@ -141,11 +141,11 @@ section {
   align-items: center;
   justify-content: center;
   gap: 1em;
+  margin-top: 3em;
 }
 
 canvas {
   border: 1px solid black;
-  margin-top: 7em;
   background-color: rgba(212, 212, 212, 0.549);
   border-radius: 5px;
   width: 1000px;

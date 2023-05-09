@@ -32,12 +32,20 @@ section {
 .image-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1em;
-  padding: 1em;
+  gap: 1.4em;
+  padding: 1.3em;
 }
+
 .image-item {
   border-radius: 5px;
   background-color: rgba(240, 73, 249, 0.118);
+  border: 1px solid rgba(0, 0, 0, 0.314);
+  cursor: pointer;
+  transition: all;
+  transition-duration: 200ms;
+}
+.image-item:hover {
+  transform: scale(1.1);
   box-shadow: 4px 4px 2px 1px rgba(91, 91, 91, 0.2);
 }
 .image-item span {

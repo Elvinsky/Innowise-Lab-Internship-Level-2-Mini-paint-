@@ -9,6 +9,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
 import EditorView from "@/views/EditorView.vue";
 import BrowserView from "@/views/BrowserView.vue";
+import CanvasView from "@/views/CanvasView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -50,6 +51,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "registration",
     alias: ["/register", "/signup"],
     component: RegisterView,
+  },
+  {
+    path: "/canvas/:id",
+    name: "canvasDetails",
+    props: true,
+    component: CanvasView,
   },
 ];
 

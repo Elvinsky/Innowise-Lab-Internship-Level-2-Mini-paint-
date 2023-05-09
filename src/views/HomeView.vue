@@ -21,7 +21,6 @@ const navigate = (path: string): void => {
 <style scoped>
 section {
   margin: auto;
-  padding-top: 4em;
   display: flex;
   flex-direction: column;
   align-items: center;
