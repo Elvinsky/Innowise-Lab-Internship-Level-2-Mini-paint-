@@ -1,12 +1,6 @@
 import { storage } from "@/firebase";
 import { Ref, ref as reactiveRef } from "vue";
-import {
-  getDownloadURL,
-  getMetadata,
-  list,
-  listAll,
-  ref,
-} from "@firebase/storage";
+import { getDownloadURL, getMetadata, list, ref } from "@firebase/storage";
 import { Photo } from "@/types/interfaces/photoInterface";
 
 const photos: Ref<Photo[]> = reactiveRef([]);

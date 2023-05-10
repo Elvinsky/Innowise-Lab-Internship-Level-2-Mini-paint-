@@ -106,63 +106,72 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-.image-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.4em;
-  padding: 1.3em;
-}
 
-.image-item {
-  border-radius: 5px;
-  background-color: rgba(240, 73, 249, 0.118);
-  border: 1px solid rgba(0, 0, 0, 0.314);
-  cursor: pointer;
-  transition: all;
-  transition-duration: 200ms;
-}
-.image-item:hover {
-  transform: scale(1.1);
-  box-shadow: 4px 4px 2px 1px rgba(91, 91, 91, 0.2);
-}
-.image-item span {
-  font-size: 1.1em;
-}
-.canvas-img {
-  margin: 0.5em;
-  width: 220px;
-  height: 110px;
-}
-a span {
-  text-decoration: none;
-  color: black;
-}
-.searchbar {
-  padding: 0.4em;
-  font-size: 1em;
-}
-.post-head {
-  margin-top: 0.5em;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 2em;
-}
-.post-head img {
-  width: 30px;
-  cursor: pointer;
-  transition: all;
-  transition-duration: 200ms;
-}
-.post-head img:hover {
-  transform: scale(1.1);
+  .image-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.4em;
+    padding: 1.3em;
+
+    .image-item {
+      border-radius: 5px;
+      background-color: rgba(240, 73, 249, 0.118);
+      border: 1px solid rgba(0, 0, 0, 0.314);
+      cursor: pointer;
+      transition: all 200ms;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 4px 4px 2px 1px rgba(91, 91, 91, 0.2);
+      }
+
+      span {
+        font-size: 1.1em;
+      }
+
+      .canvas-img {
+        margin: 0.5em;
+        width: 220px;
+        height: 110px;
+      }
+    }
+  }
+
+  a {
+    span {
+      text-decoration: none;
+      color: black;
+    }
+  }
+
+  .searchbar {
+    padding: 0.4em;
+    font-size: 1em;
+  }
+
+  .post-head {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+
+    img {
+      width: 30px;
+      cursor: pointer;
+      transition: all 200ms;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 }
 </style>

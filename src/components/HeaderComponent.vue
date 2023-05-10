@@ -37,7 +37,7 @@ function handleLogOut() {
   router.push("/login");
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 header {
   display: flex;
   flex-direction: row;
@@ -51,28 +51,32 @@ header {
   padding: 1em;
   font-size: 1.4em;
   background-color: aliceblue;
-}
-header img {
-  width: 30px;
-  height: 30px;
-}
-header h1 {
-  align-self: center;
-  justify-self: center;
-}
-.back-btn,
-.user-btn {
-  width: 30px;
-  transition: all;
-  transition-duration: 200ms;
-  cursor: pointer;
-}
-.back-btn:hover,
-.user-btn:hover {
-  transform: scale(1.1);
-}
-header span {
-  letter-spacing: 8px;
-  color: rgba(249, 73, 73, 255);
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+
+  h1 {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .back-btn,
+  .user-btn {
+    width: 30px;
+    transition: all;
+    transition-duration: 200ms;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  span {
+    letter-spacing: 8px;
+    color: rgba(249, 73, 73, 255);
+  }
 }
 </style>

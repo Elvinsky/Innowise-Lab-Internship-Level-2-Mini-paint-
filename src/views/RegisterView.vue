@@ -84,45 +84,59 @@ const submit = (): void => {
 };
 </script>
 
-<style scoped>
-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-}
-form {
+<style scoped lang="scss">
+$padding: 0.4em 0.6em;
+$border-radius: 5px;
+$input-width: 200px;
+
+@mixin form-style {
   display: inherit;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.6em;
 }
-form button {
-  align-self: flex-start;
-  justify-self: start;
-  background-color: rgba(18, 219, 18, 0.4);
-  padding: 0.4em 0.6em 0.4em 0.6em;
-  border-radius: 5px;
-  font-size: 0.9em;
-}
-form.error input {
-  border-color: red;
-  border-width: 1px;
-  border-style: solid;
-}
-input {
-  padding: 0.4em;
-  width: 200px;
-}
-.actions {
+
+section {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1em;
-}
-.link {
-  font-size: 0.7em;
+
+  form {
+    @include form-style;
+
+    &.error input {
+      border-color: red;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    button {
+      align-self: flex-start;
+      justify-self: start;
+      background-color: rgba(18, 219, 18, 0.4);
+      padding: $padding;
+      border-radius: $border-radius;
+      font-size: 0.9em;
+    }
+
+    input {
+      padding: $padding;
+      width: $input-width;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+
+    .link {
+      font-size: 0.7em;
+    }
+  }
 }
 </style>

@@ -126,29 +126,30 @@ function drawArc(x1: number, y1: number, x2: number, y2: number): void {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-.editor-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-top: 3em;
-}
 
-canvas {
-  border: 1px solid black;
-  background-color: rgba(212, 212, 212, 0.549);
-  border-radius: 5px;
-  width: 1000px;
-  height: 500px;
+  .editor-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 3em;
+
+    canvas {
+      border: 1px solid black;
+      background-color: rgba(212, 212, 212, 0.549);
+      border-radius: 5px;
+      width: 1000px;
+      height: 500px;
+    }
+  }
 }
 </style>

@@ -153,12 +153,13 @@ const handleSaveImage = () => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scc">
 .width-range {
   position: absolute;
   left: 140px;
   transform: rotate(-90deg);
 }
+
 .color-pick {
   position: absolute;
   left: 140px;
@@ -166,6 +167,7 @@ const handleSaveImage = () => {
   width: 60px;
   height: 60px;
 }
+
 .save-popup {
   position: absolute;
   width: 100%;
@@ -180,75 +182,88 @@ const handleSaveImage = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.save-block {
-  margin: auto;
-  border-radius: 8px;
-  padding: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  background-color: rgb(255, 255, 255);
-}
-.action-block {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-}
-.name-input {
-  padding: 0.3em;
-  font-size: 1em;
-}
-.action-block div {
-  cursor: pointer;
-  padding: 0.5em;
-  border-radius: 5px;
-  transition: all;
-  transition-duration: 200ms;
-}
-.action-block div:hover {
-  transform: scale(1.1);
-}
-.action-block div:first-child {
-  background-color: rgba(232, 69, 69, 0.785);
-}
-.action-block div:nth-child(2) {
-  background-color: rgba(74, 232, 69, 0.785);
-}
-.actions {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7em;
-}
-.active {
-  background-color: rgba(0, 255, 0, 0.44);
-}
-.color-circle {
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  border: 1px solid rgba(0, 0, 0, 0.342);
-  cursor: pointer;
-  transition: all;
-  transition-duration: 200ms;
-}
-.color-circle:hover {
-  transform: scale(1.1);
-}
-.main-img {
-  width: 25px;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 0.4em;
-  transition: all;
-  transition-duration: 200ms;
-}
-.main-img:hover {
-  transform: scale(1.1);
+
+  .save-block {
+    margin: auto;
+    border-radius: 8px;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: rgb(255, 255, 255);
+
+    .action-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 1em;
+
+      div {
+        cursor: pointer;
+        padding: 0.5em;
+        border-radius: 5px;
+        transition: all;
+        transition-duration: 200ms;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        &:first-child {
+          background-color: rgba(232, 69, 69, 0.785);
+        }
+
+        &:nth-child(2) {
+          background-color: rgba(74, 232, 69, 0.785);
+        }
+      }
+    }
+
+    .name-input {
+      padding: 0.3em;
+      font-size: 1em;
+    }
+
+    .actions {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7em;
+    }
+
+    .active {
+      background-color: rgba(0, 255, 0, 0.44);
+    }
+
+    .color-circle {
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      border: 1px solid rgba(0, 0, 0, 0.342);
+      cursor: pointer;
+      transition: all;
+      transition-duration: 200ms;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .main-img {
+      width: 25px;
+      cursor: pointer;
+      border-radius: 5px;
+      padding: 0.4em;
+      transition: all;
+      transition-duration: 200ms;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 }
 </style>

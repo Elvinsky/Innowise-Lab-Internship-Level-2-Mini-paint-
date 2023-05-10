@@ -57,45 +57,51 @@ const submit = (): void => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1em;
-}
-form {
-  display: inherit;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6em;
-}
-form.error input {
-  border-color: red;
-  border-width: 1px;
-  border-style: solid;
-}
-form button {
-  align-self: flex-start;
-  justify-self: start;
-  background-color: rgba(18, 219, 18, 0.4);
-  padding: 0.4em 0.6em 0.4em 0.6em;
-  border-radius: 5px;
-  font-size: 0.9em;
-}
-input {
-  padding: 0.4em;
-  width: 200px;
-}
-.actions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1em;
-}
-.link {
-  font-size: 0.7em;
+
+  form {
+    display: inherit;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+
+    &.error input {
+      border-color: red;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    button {
+      align-self: flex-start;
+      justify-self: start;
+      background-color: rgba(18, 219, 18, 0.4);
+      padding: 0.4em 0.6em;
+      border-radius: 5px;
+      font-size: 0.9em;
+    }
+
+    input {
+      padding: 0.4em;
+      width: 200px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+
+    .link {
+      font-size: 0.7em;
+    }
+  }
 }
 </style>
