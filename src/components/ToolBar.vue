@@ -153,7 +153,7 @@ const handleSaveImage = () => {
 };
 </script>
 
-<style scoped lang="scc">
+<style scoped lang="scss">
 .width-range {
   position: absolute;
   left: 140px;
