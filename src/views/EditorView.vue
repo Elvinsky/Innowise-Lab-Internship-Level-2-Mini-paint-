@@ -20,54 +20,26 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, nextTick, reactive } from "vue";
+import { Ref, ref } from "vue";
 import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
   LineInterface,
 } from "@/types/interfaces/composInterfaces";
-import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
 import { useLineCoords } from "@/composables/useLineCoords";
+import { initCanvas } from "@/scripts/utils/initCanvasUtil";
 
 const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const isDrawing: Ref<boolean> = ref(false);
-
-const sizes: Ref<CanvasSizes> = ref({
-  width: 1000,
-  height: 500,
-});
-const isMobile = window.innerWidth < 768;
-sizes.value = {
-  width: isMobile ? 300 : 1000,
-  height: isMobile ? 500 : 500,
-};
+initCanvas();
 const line: LineInterface = useLineCoords();
-
-(async () => {
-  await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
-  canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
-  if (canvas.canvas.value) {
-    ctx.setCtx(
-      canvas.canvas.value.getContext("2d") as CanvasRenderingContext2D
-    );
-  }
-  if (canvas.canvas.value) {
-    canvas.canvas.value.width = sizes.value.width;
-    canvas.canvas.value.height = sizes.value.height;
-    const img = document.querySelector("#preload") as HTMLImageElement | null;
-    if (img) {
-      ctx.ctx.value?.drawImage(img, 0, 0);
-    }
-  }
-})();
-
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
@@ -103,27 +75,9 @@ function stopLineDrawing(event: MouseEvent) {
 
   line.setX2(event.clientX - offsetX);
   line.setY2(event.clientY - offsetY);
-  if (flag.flag.value === "line")
-    drawLine(
-      line.line.value.x1,
-      line.line.value.y1,
-      line.line.value.x2,
-      line.line.value.y2
-    );
-  else if (flag.flag.value === "square")
-    drawSquare(
-      line.line.value.x1,
-      line.line.value.y1,
-      line.line.value.x2,
-      line.line.value.y2
-    );
-  else if (flag.flag.value === "arc")
-    drawArc(
-      line.line.value.x1,
-      line.line.value.y1,
-      line.line.value.x2,
-      line.line.value.y2
-    );
+  if (flag.flag.value === "line") drawFigure();
+  else if (flag.flag.value === "square") drawFigure();
+  else if (flag.flag.value === "arc") drawFigure();
 }
 function stopDrawing() {
   isDrawing.value = false;
@@ -133,15 +87,6 @@ function draw(event: MouseEvent): void {
   else {
     freeDraw(event);
   }
-}
-function drawLine(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
-}
-function drawSquare(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
-}
-function drawArc(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
 }
 </script>
 

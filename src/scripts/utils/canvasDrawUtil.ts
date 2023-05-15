@@ -1,19 +1,21 @@
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
+import { useLineCoords } from "@/composables/useLineCoords";
 import {
   CanvasCompos,
   CanvasContextCompos,
   DrawingStyleCompos,
   CanvasFlagCompos,
+  LineInterface,
 } from "@/types/interfaces/composInterfaces";
 
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const flag: CanvasFlagCompos = useCanvasFlag();
-
-export const drawFigure = (x1: number, y1: number, x2: number, y2: number) => {
+const line: LineInterface = useLineCoords();
+export const drawFigure = () => {
   if (!ctx.ctx.value || !canvas.canvas.value) return;
   switch (flag.flag.value) {
     case "line": {
@@ -21,8 +23,8 @@ export const drawFigure = (x1: number, y1: number, x2: number, y2: number) => {
       ctx.ctx.value.lineCap = "round";
       ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
       ctx.ctx.value.beginPath();
-      ctx.ctx.value.moveTo(x1, y1);
-      ctx.ctx.value.lineTo(x2, y2);
+      ctx.ctx.value.moveTo(line.line.value.x1, line.line.value.y1);
+      ctx.ctx.value.lineTo(line.line.value.x2, line.line.value.y2);
       ctx.ctx.value.stroke();
       break;
     }
@@ -31,7 +33,12 @@ export const drawFigure = (x1: number, y1: number, x2: number, y2: number) => {
       ctx.ctx.value.lineCap = "round";
       ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
       ctx.ctx.value.beginPath();
-      ctx.ctx.value.rect(x1, y1, x2 - x1, y2 - y1);
+      ctx.ctx.value.rect(
+        line.line.value.x1,
+        line.line.value.y1,
+        line.line.value.x2 - line.line.value.x1,
+        line.line.value.y2 - line.line.value.y1
+      );
       ctx.ctx.value.stroke();
       break;
     }
@@ -41,9 +48,12 @@ export const drawFigure = (x1: number, y1: number, x2: number, y2: number) => {
       ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
       ctx.ctx.value.beginPath();
       ctx.ctx.value.arc(
-        x1,
-        y1,
-        Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2),
+        line.line.value.x1,
+        line.line.value.y1,
+        Math.sqrt(
+          (line.line.value.x2 - line.line.value.x1) ** 2 +
+            (line.line.value.y2 - line.line.value.y1) ** 2
+        ),
         0,
         2 * Math.PI
       );
