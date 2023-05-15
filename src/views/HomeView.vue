@@ -15,6 +15,11 @@ const navigate = (path: string): void => {
 };
 </script>
 <style scoped lang="scss">
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 .wrapper {
   .octologo {
     width: 400px;
@@ -29,6 +34,11 @@ const navigate = (path: string): void => {
     margin-left: 3em;
     align-items: center;
     justify-content: center;
+    @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      width: 300px;
+    }
 
     div {
       font-size: 2em;
@@ -45,14 +55,5 @@ const navigate = (path: string): void => {
       }
     }
   }
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 1em;
-  background-color: aliceblue;
-  font-size: 1em;
 }
 </style>

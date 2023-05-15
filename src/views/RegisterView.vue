@@ -133,6 +133,11 @@ $input-width: 200px;
   justify-content: center;
   gap: 0.6em;
 }
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 
 section {
   display: flex;
@@ -140,6 +145,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 1em;
+  margin-top: 5em;
 
   form {
     @include form-style;
@@ -157,11 +163,16 @@ section {
       padding: $padding;
       border-radius: $border-radius;
       font-size: 0.9em;
+      @include for-phone {
+        font-size: 1em;
+        align-self: center;
+      }
     }
 
     input {
-      padding: $padding;
-      width: $input-width;
+      padding: 0.5em;
+      font-size: 1em;
+      width: 200px;
     }
   }
 
@@ -170,9 +181,17 @@ section {
     flex-direction: row;
     align-items: center;
     gap: 1em;
+    @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
     .link {
       font-size: 0.7em;
+      @include for-phone {
+        font-size: 1em;
+      }
     }
   }
 }

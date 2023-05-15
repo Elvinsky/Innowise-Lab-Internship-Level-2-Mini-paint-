@@ -77,6 +77,11 @@ const handleAbortToast = () => {
 </script>
 
 <style scoped lang="scss">
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 section {
   display: flex;
   flex-direction: column;
@@ -94,16 +99,20 @@ section {
     border-radius: 5px;
     padding: 1em;
     gap: 0.6em;
+
     &.error input {
       border: 1px solid red;
     }
     button {
       align-self: flex-start;
-      justify-self: start;
       background-color: rgba(18, 219, 18, 0.4);
       padding: 0.4em 0.6em;
       border-radius: 5px;
       font-size: 0.9em;
+      @include for-phone {
+        font-size: 1em;
+        align-self: center;
+      }
     }
 
     input {
@@ -118,9 +127,17 @@ section {
     flex-direction: row;
     align-items: center;
     gap: 1em;
+    @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
     .link {
       font-size: 0.7em;
+      @include for-phone {
+        font-size: 1em;
+      }
     }
   }
 }

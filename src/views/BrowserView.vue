@@ -53,7 +53,8 @@ import { useFetchCanvases } from "@/composables/useFetchCanvases";
 import { Photo } from "@/types/interfaces/photoInterface";
 import { Ref, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-const LIMIT = 12;
+const isMobile = window.innerWidth < 768;
+const LIMIT = isMobile ? 4 : 12;
 const pageToken: Ref<string> = ref("");
 const prevToken = ref<string>("");
 const photos: Ref<Photo[] | null> = ref(null);
@@ -103,12 +104,20 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 .wrapper {
   .image-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.4em;
     padding: 1.3em;
+    @include for-phone {
+      grid-template-columns: repeat(1, 1fr);
+    }
 
     .image-item {
       border-radius: 5px;
@@ -130,6 +139,10 @@ onMounted(() => {
         margin: 0.5em;
         width: 220px;
         height: 110px;
+        @include for-phone {
+          height: 95px;
+          width: 200px;
+        }
       }
     }
   }
