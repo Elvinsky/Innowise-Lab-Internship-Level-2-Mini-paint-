@@ -1,6 +1,6 @@
 <template>
   <CustomLoader v-if="!photos || photos.length === 0" />
-  <section>
+  <div class="wrapper">
     <div class="post-head">
       <div>
         <img src="@/assets/left.png" alt="left" @click="handlePrevPage" />
@@ -44,7 +44,7 @@
         </RouterLink>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -103,7 +103,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-section {
+.wrapper {
   .image-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

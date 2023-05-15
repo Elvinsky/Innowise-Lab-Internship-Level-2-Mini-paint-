@@ -61,15 +61,16 @@ import {
 import { auth } from "@/firebase";
 import router from "@/router";
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+
 const user: UserDataCompos = useUser();
+let error: Ref<boolean> = ref(false);
+const toastShown: Ref<string> = ref("");
 const input: UserData = reactive({
   name: "",
   email: "",
   password: "",
   passwordConfirm: "",
 });
-let error: Ref<boolean> = ref(false);
-const toastShown: Ref<string> = ref("");
 
 const submit = (): void => {
   if (input.password !== input.passwordConfirm) {

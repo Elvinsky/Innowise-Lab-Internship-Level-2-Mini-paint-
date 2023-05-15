@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div class="wrapper">
     <img :src="route.params.url" class="img-preload" id="preload" />
     <div class="editor-wrapper">
       <ToolBar :filename="route.params.name" :isCreator="isCreator" />
@@ -17,12 +17,10 @@
         @mouseout="stopDrawing()"
       ></canvas>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import { Ref, ref, nextTick, reactive } from "vue";
 import {
   CanvasCompos,
@@ -36,6 +34,7 @@ import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
 import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
+
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
   route.params.user === auth.currentUser?.email
@@ -135,7 +134,7 @@ function drawArc(x1: number, y1: number, x2: number, y2: number): void {
 </script>
 
 <style scoped lang="scss">
-section {
+.wrapper {
   .editor-wrapper {
     width: 100%;
     height: 100%;

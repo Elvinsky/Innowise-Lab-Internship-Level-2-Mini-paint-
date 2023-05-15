@@ -35,7 +35,6 @@
 <script setup lang="ts">
 import ErrorToast from "@/components/ErrorToast.vue";
 import SuccessToast from "@/components/SuccessToast.vue";
-
 import { useUser } from "@/composables/useUser";
 import { auth } from "@/firebase";
 import router from "@/router";
@@ -44,13 +43,14 @@ import { UserInput } from "@/types/interfaces/userInterfaces";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Ref, reactive, ref } from "vue";
 
+const user: UserDataCompos = useUser();
+const toastShown: Ref<string> = ref("");
+const error: Ref<boolean> = ref(false);
 const input: UserInput = reactive({
   email: "",
   password: "",
 });
-const user: UserDataCompos = useUser();
-const toastShown: Ref<string> = ref("");
-const error: Ref<boolean> = ref(false);
+
 const submit = (): void => {
   signInWithEmailAndPassword(auth, input.email, input.password)
     .then((creds) => {

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div class="wrapper">
     <div class="editor-wrapper">
       <ToolBar :isCreator="true" />
       <canvas
@@ -16,7 +16,7 @@
         @mouseout="stopDrawing()"
       ></canvas>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -123,12 +123,7 @@ function drawArc(x1: number, y1: number, x2: number, y2: number): void {
 </script>
 
 <style scoped lang="scss">
-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
+.wrapper {
   .editor-wrapper {
     width: 100%;
     height: 100%;

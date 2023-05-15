@@ -1,11 +1,11 @@
 <template>
-  <section>
+  <div class="wrapper">
     <nav>
       <div @click="navigate('/editor')">New image</div>
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
       <div @click="navigate('/browser')">Browse images</div>
     </nav>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -15,7 +15,7 @@ const navigate = (path: string): void => {
 };
 </script>
 <style scoped lang="scss">
-section {
+.wrapper {
   .octologo {
     width: 400px;
     margin-top: 1em;
