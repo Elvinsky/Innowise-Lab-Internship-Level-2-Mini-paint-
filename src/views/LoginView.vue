@@ -25,12 +25,19 @@
         </RouterLink>
       </div>
     </form>
-    <ErrorToast v-if="toastShown">Incorrect Creds! Try again!</ErrorToast>
+    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
+      >Incorrect Creds! Try again!</ErrorToast
+    >
+    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
+      >You are ready to go!</SuccessToast
+    >
   </section>
 </template>
 
 <script setup lang="ts">
 import ErrorToast from "@/components/ErrorToast.vue";
+import SuccessToast from "@/components/SuccessToast.vue";
+
 import { useUser } from "@/composables/useUser";
 import { auth } from "@/firebase";
 import router from "@/router";
@@ -44,26 +51,30 @@ const input: UserInput = reactive({
   password: "",
 });
 const user: UserDataCompos = useUser();
-const toastShown: Ref<boolean> = ref(false);
+const toastShown: Ref<string> = ref("");
 const error: Ref<boolean> = ref(false);
 const submit = (): void => {
   signInWithEmailAndPassword(auth, input.email, input.password)
     .then((creds) => {
+      showToast("success");
       user.setUser(creds.user);
       router.push("/");
     })
-    .catch((er) => {
+    .catch(() => {
       error.value = true;
-      showToast();
+      showToast("error");
       input.email = "";
       input.password = "";
     });
 };
-const showToast = () => {
-  toastShown.value = true;
+const showToast = (toast: string) => {
+  toastShown.value = toast;
   setTimeout(() => {
-    toastShown.value = false;
-  }, 3000);
+    toastShown.value = "";
+  }, 5000);
+};
+const handleAbortToast = () => {
+  toastShown.value = "";
 };
 </script>
 

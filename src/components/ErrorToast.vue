@@ -1,12 +1,13 @@
 <template>
   <div class="toast-wrapper">
     <img src="@/assets/error.png" alt="error" />
-    <div><slot></slot></div>
+    <div class="text"><slot></slot></div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .toast-wrapper {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -28,6 +29,11 @@
   right: 20px;
   img {
     width: 25px;
+  }
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
