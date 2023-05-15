@@ -1,7 +1,6 @@
 <template>
-  <section>
+  <div class="wrapper">
     <img :src="route.params.url" class="img-preload" id="preload" />
-    <HeaderComponent />
     <div class="editor-wrapper">
       <ToolBar :filename="route.params.name" :isCreator="isCreator" />
       <canvas
@@ -18,13 +17,10 @@
         @mouseout="stopDrawing()"
       ></canvas>
     </div>
-    <FooterComponent />
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import { Ref, ref, nextTick, reactive } from "vue";
 import {
   CanvasCompos,
@@ -38,6 +34,7 @@ import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
 import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
+
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
   route.params.user === auth.currentUser?.email
@@ -46,11 +43,15 @@ const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const isDrawing: Ref<boolean> = ref(false);
-
-const sizes: CanvasSizes = reactive({
+const sizes: Ref<CanvasSizes> = ref({
   width: 1000,
   height: 500,
 });
+const isMobile = window.innerWidth < 768;
+sizes.value = {
+  width: isMobile ? 300 : 1000,
+  height: isMobile ? 500 : 500,
+};
 const line: LineCoords = reactive({
   x1: 0,
   y1: 0,
@@ -65,16 +66,16 @@ const line: LineCoords = reactive({
       canvas.canvas.value.getContext("2d") as CanvasRenderingContext2D
     );
   }
-})().then(() => {
   if (canvas.canvas.value) {
-    canvas.canvas.value.width = sizes.width;
-    canvas.canvas.value.height = sizes.height;
+    canvas.canvas.value.width = sizes.value.width;
+    canvas.canvas.value.height = sizes.value.height;
     const img = document.querySelector("#preload") as HTMLImageElement | null;
     if (img) {
       ctx.ctx.value?.drawImage(img, 0, 0);
     }
   }
-});
+})();
+
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
@@ -137,12 +138,12 @@ function drawArc(x1: number, y1: number, x2: number, y2: number): void {
 </script>
 
 <style scoped lang="scss">
-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+.wrapper {
   .editor-wrapper {
     width: 100%;
     height: 100%;
@@ -159,6 +160,10 @@ section {
       border-radius: 5px;
       width: 1000px;
       height: 500px;
+      @include for-phone {
+        width: 300px;
+        height: 500px;
+      }
     }
   }
 

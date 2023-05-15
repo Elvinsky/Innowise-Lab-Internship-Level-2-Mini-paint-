@@ -1,9 +1,8 @@
 <template>
   <section>
     <h2>Login</h2>
-    <form @submit.prevent>
+    <form :class="error ? 'error' : ''" @submit.prevent>
       <input
-        :class="error ? 'error' : ''"
         id="email"
         v-model="input.email"
         placeholder="e-mail"
@@ -11,7 +10,6 @@
         type="text"
       />
       <input
-        :class="error ? 'error' : ''"
         id="password"
         v-model="input.password"
         placeholder="password"
@@ -25,12 +23,18 @@
         </RouterLink>
       </div>
     </form>
-    <ErrorToast v-if="toastShown">Incorrect Creds! Try again!</ErrorToast>
+    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
+      >Incorrect Creds! Try again!</ErrorToast
+    >
+    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
+      >You are ready to go!</SuccessToast
+    >
   </section>
 </template>
 
 <script setup lang="ts">
 import ErrorToast from "@/components/ErrorToast.vue";
+import SuccessToast from "@/components/SuccessToast.vue";
 import { useUser } from "@/composables/useUser";
 import { auth } from "@/firebase";
 import router from "@/router";
@@ -39,35 +43,45 @@ import { UserInput } from "@/types/interfaces/userInterfaces";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Ref, reactive, ref } from "vue";
 
+const user: UserDataCompos = useUser();
+const toastShown: Ref<string> = ref("");
+const error: Ref<boolean> = ref(false);
 const input: UserInput = reactive({
   email: "",
   password: "",
 });
-const user: UserDataCompos = useUser();
-const toastShown: Ref<boolean> = ref(false);
-const error: Ref<boolean> = ref(false);
+
 const submit = (): void => {
   signInWithEmailAndPassword(auth, input.email, input.password)
     .then((creds) => {
+      showToast("success");
       user.setUser(creds.user);
       router.push("/");
     })
-    .catch((er) => {
+    .catch(() => {
       error.value = true;
-      showToast();
+      showToast("error");
       input.email = "";
       input.password = "";
     });
 };
-const showToast = () => {
-  toastShown.value = true;
+const showToast = (toast: string) => {
+  toastShown.value = toast;
   setTimeout(() => {
-    toastShown.value = false;
-  }, 3000);
+    toastShown.value = "";
+  }, 5000);
+};
+const handleAbortToast = () => {
+  toastShown.value = "";
 };
 </script>
 
 <style scoped lang="scss">
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 section {
   display: flex;
   flex-direction: column;
@@ -86,22 +100,25 @@ section {
     padding: 1em;
     gap: 0.6em;
 
+    &.error input {
+      border: 1px solid red;
+    }
     button {
       align-self: flex-start;
-      justify-self: start;
       background-color: rgba(18, 219, 18, 0.4);
       padding: 0.4em 0.6em;
       border-radius: 5px;
       font-size: 0.9em;
+      @include for-phone {
+        font-size: 1em;
+        align-self: center;
+      }
     }
 
     input {
       padding: 0.5em;
       font-size: 1em;
       width: 200px;
-    }
-    input.error {
-      border: 1px solid red;
     }
   }
 
@@ -110,9 +127,17 @@ section {
     flex-direction: row;
     align-items: center;
     gap: 1em;
+    @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
     .link {
       font-size: 0.7em;
+      @include for-phone {
+        font-size: 1em;
+      }
     }
   }
 }

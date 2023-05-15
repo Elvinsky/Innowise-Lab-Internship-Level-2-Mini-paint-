@@ -7,9 +7,9 @@
       @click="handleGoBack"
       v-if="isHome !== '/'"
     />
-    <h1>Welcome to</h1>
-    <h1><span>INNODRAW</span></h1>
-    <h1>{{ user.user.value ? user.user.value.displayName : "undefined" }}</h1>
+    <h2 class="welcoming">Welcome to</h2>
+    <h2><span>INNODRAW</span></h2>
+    <h2>{{ user.user.value ? user.user.value.displayName : "undefined" }}</h2>
     <img
       src="@/assets/user.png"
       alt="back"
@@ -38,6 +38,11 @@ function handleLogOut() {
 }
 </script>
 <style scoped lang="scss">
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
 header {
   display: flex;
   flex-direction: row;
@@ -51,15 +56,26 @@ header {
   padding: 1em;
   font-size: 1.4em;
   background-color: aliceblue;
-
+  @include for-phone {
+    gap: 1.3em;
+    justify-content: space-between;
+  }
   img {
     width: 30px;
     height: 30px;
+    @include for-phone {
+      margin-left: 1em;
+    }
   }
 
-  h1 {
+  h2 {
     align-self: center;
     justify-self: center;
+  }
+  .welcoming {
+    @include for-phone {
+      display: none;
+    }
   }
 
   .back-btn,
@@ -77,6 +93,9 @@ header {
   span {
     letter-spacing: 8px;
     color: rgba(249, 73, 73, 255);
+    @include for-phone {
+      display: none;
+    }
   }
 }
 </style>

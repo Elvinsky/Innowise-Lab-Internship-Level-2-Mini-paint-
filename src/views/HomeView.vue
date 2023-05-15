@@ -1,31 +1,26 @@
 <template>
-  <section>
-    <HeaderComponent />
+  <div class="wrapper">
     <nav>
       <div @click="navigate('/editor')">New image</div>
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
       <div @click="navigate('/browser')">Browse images</div>
     </nav>
-    <FooterComponent></FooterComponent>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
   router.push(path);
 };
 </script>
 <style scoped lang="scss">
-section {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
+  }
+}
+.wrapper {
   .octologo {
     width: 400px;
     margin-top: 1em;
@@ -39,6 +34,11 @@ section {
     margin-left: 3em;
     align-items: center;
     justify-content: center;
+    @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      width: 300px;
+    }
 
     div {
       font-size: 2em;
@@ -55,14 +55,5 @@ section {
       }
     }
   }
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 1em;
-  background-color: aliceblue;
-  font-size: 1em;
 }
 </style>

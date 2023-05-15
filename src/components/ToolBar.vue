@@ -1,5 +1,5 @@
 <template>
-  <div class="actions">
+  <aside class="actions">
     <img
       src="@/assets/pen.png"
       class="main-img"
@@ -8,37 +8,18 @@
       :class="flag.flag.value === 'draw' ? 'active' : ''"
       v-if="props.isCreator"
     />
-    <div>
-      <img
-        src="@/assets/width.png"
-        class="main-img"
-        alt="width"
-        @click="showWidthRange"
-        v-if="props.isCreator"
-      />
-      <input
-        type="range"
-        min="1"
-        max="120"
-        step="1"
-        class="width-range"
-        @change="handleWidthChange"
-        v-model="drawStyle.penWidth.value"
-        v-if="widthRange"
-      />
-    </div>
+    <img
+      src="@/assets/width.png"
+      class="main-img"
+      alt="width"
+      @click="showWidthRange"
+      v-if="props.isCreator"
+    />
     <div
       class="color-circle"
       :style="{ backgroundColor: drawStyle.penColor.value }"
       @click="showColorPick"
       v-if="props.isCreator"
-    />
-    <input
-      type="color"
-      class="color-pick"
-      @input="handleColorPick"
-      v-if="colorPick"
-      v-model="drawStyle.penColor.value"
     />
     <img
       src="@/assets/straight-line.png"
@@ -70,6 +51,29 @@
       @click="handlePopUpShow"
       class="main-img"
     />
+    <img
+      src="@/assets/refresh-arrow.png"
+      class="main-img"
+      @click="handleClearCanvas"
+      v-if="props.isCreator"
+    />
+    <input
+      type="range"
+      min="1"
+      max="120"
+      step="1"
+      class="width-range"
+      @change="handleWidthChange"
+      v-model="drawStyle.penWidth.value"
+      v-if="widthRange"
+    />
+    <input
+      type="color"
+      class="color-pick"
+      @input="handleColorPick"
+      v-if="colorPick"
+      v-model="drawStyle.penColor.value"
+    />
     <div class="save-popup" v-if="isSaving">
       <div class="save-block">
         <input
@@ -84,13 +88,7 @@
         </div>
       </div>
     </div>
-    <img
-      src="@/assets/refresh-arrow.png"
-      class="main-img"
-      @click="handleClearCanvas"
-      v-if="props.isCreator"
-    />
-  </div>
+  </aside>
 </template>
 
 <script setup lang="ts">
@@ -211,7 +209,7 @@ const handleSaveImage = () => {
 .color-pick {
   position: absolute;
   left: 140px;
-  top: 230px;
+  top: 280px;
   width: 60px;
   height: 60px;
 }

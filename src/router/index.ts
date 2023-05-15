@@ -2,6 +2,7 @@ import {
   createRouter,
   createWebHashHistory,
   NavigationGuardNext,
+  RouteLocationNormalized,
   RouteRecordRaw,
 } from "vue-router";
 import HomeView from "../views/HomeView.vue";
@@ -10,40 +11,53 @@ import LoginView from "@/views/LoginView.vue";
 import EditorView from "@/views/EditorView.vue";
 import BrowserView from "@/views/BrowserView.vue";
 import CanvasView from "@/views/CanvasView.vue";
+import LayoutView from "@/views/LayoutView.vue";
+const authGuard = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) => {
+  const userStringData: string | null = localStorage.getItem("user");
+  if (userStringData === null) next("/login");
+  next();
+};
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
-    beforeEnter: function (to, from, next: NavigationGuardNext): void {
-      const userStringData: string | null = localStorage.getItem("user");
-      if (userStringData === null) next("/login");
-      next();
-    },
-  },
-  {
-    path: "/editor",
-    name: "editor",
-    component: EditorView,
-    beforeEnter: function (to, from, next: NavigationGuardNext): void {
-      const userStringData: string | null = localStorage.getItem("user");
-      if (userStringData === null) next("/login");
-      next();
-    },
-  },
-  {
-    path: "/browser",
-    name: "browser",
-    component: BrowserView,
-    beforeEnter: function (to, from, next: NavigationGuardNext): void {
-      const userStringData: string | null = localStorage.getItem("user");
-      if (userStringData === null) next("/login");
-      next();
-    },
+    component: LayoutView,
+    children: [
+      {
+        path: "",
+        name: "home",
+        component: HomeView,
+        beforeEnter: authGuard,
+      },
+      {
+        path: "editor",
+        name: "editor",
+        component: EditorView,
+        beforeEnter: authGuard,
+      },
+      {
+        path: "browser",
+        name: "browser",
+        component: BrowserView,
+        beforeEnter: authGuard,
+      },
+      {
+        path: "canvas/:id/:url/:user/:name",
+        name: "canvasDetails",
+        props: true,
+        component: CanvasView,
+        beforeEnter: authGuard,
+      },
+    ],
   },
   {
     path: "/login",
     name: "login",
+    alias: "/signin",
     component: LoginView,
   },
   {
@@ -51,12 +65,6 @@ const routes: Array<RouteRecordRaw> = [
     name: "registration",
     alias: ["/register", "/signup"],
     component: RegisterView,
-  },
-  {
-    path: "/canvas/:id/:url/:user/:name",
-    name: "canvasDetails",
-    props: true,
-    component: CanvasView,
   },
 ];
 
