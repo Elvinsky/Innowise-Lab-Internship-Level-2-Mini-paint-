@@ -72,4 +72,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
+// console.log(router.options.routes[0].children);
+
+export const VALID_ROUTES = router.getRoutes().map((el) => el.path);
 export default router;

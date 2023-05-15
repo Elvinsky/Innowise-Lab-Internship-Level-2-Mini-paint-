@@ -42,7 +42,5 @@ export const firebaseUpload = (fileName: string) => {
       uploadedAt: Math.round(new Date().getTime() / 1000).toString() as string,
     },
   };
-  uploadBytes(imageRef, file, metadata).then((snapshot) => {
-    console.log("uploaded", snapshot);
-  });
+  uploadBytes(imageRef, file, metadata);
 };
