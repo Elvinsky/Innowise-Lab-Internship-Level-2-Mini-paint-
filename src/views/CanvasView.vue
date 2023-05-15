@@ -21,19 +21,21 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, nextTick, reactive } from "vue";
+import { Ref, ref } from "vue";
 import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
+  LineInterface,
 } from "@/types/interfaces/composInterfaces";
-import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
 import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
+import { useLineCoords } from "@/composables/useLineCoords";
+import { initCanvas } from "@/scripts/utils/initCanvasUtil";
 
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
@@ -43,39 +45,8 @@ const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const isDrawing: Ref<boolean> = ref(false);
-const sizes: Ref<CanvasSizes> = ref({
-  width: 1000,
-  height: 500,
-});
-const isMobile = window.innerWidth < 768;
-sizes.value = {
-  width: isMobile ? 300 : 1000,
-  height: isMobile ? 500 : 500,
-};
-const line: LineCoords = reactive({
-  x1: 0,
-  y1: 0,
-  x2: 0,
-  y2: 0,
-});
-(async () => {
-  await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
-  canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
-  if (canvas.canvas.value) {
-    ctx.setCtx(
-      canvas.canvas.value.getContext("2d") as CanvasRenderingContext2D
-    );
-  }
-  if (canvas.canvas.value) {
-    canvas.canvas.value.width = sizes.value.width;
-    canvas.canvas.value.height = sizes.value.height;
-    const img = document.querySelector("#preload") as HTMLImageElement | null;
-    if (img) {
-      ctx.ctx.value?.drawImage(img, 0, 0);
-    }
-  }
-})();
-
+initCanvas();
+const line: LineInterface = useLineCoords();
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
@@ -93,8 +64,8 @@ function startLineDrawing(event: MouseEvent) {
   const offsetX: number = canvas.canvas.value.offsetLeft;
   const offsetY: number = canvas.canvas.value.offsetTop;
 
-  line.x1 = event.clientX - offsetX;
-  line.y1 = event.clientY - offsetY;
+  line.setX1(event.clientX - offsetX);
+  line.setY1(event.clientY - offsetY);
 }
 function stopLineDrawing(event: MouseEvent) {
   if (
@@ -109,13 +80,11 @@ function stopLineDrawing(event: MouseEvent) {
   const offsetX: number = canvas.canvas.value.offsetLeft;
   const offsetY: number = canvas.canvas.value.offsetTop;
 
-  line.x2 = event.clientX - offsetX;
-  line.y2 = event.clientY - offsetY;
-  if (flag.flag.value === "line") drawLine(line.x1, line.y1, line.x2, line.y2);
-  else if (flag.flag.value === "square")
-    drawSquare(line.x1, line.y1, line.x2, line.y2);
-  else if (flag.flag.value === "arc")
-    drawArc(line.x1, line.y1, line.x2, line.y2);
+  line.setX2(event.clientX - offsetX);
+  line.setY2(event.clientY - offsetY);
+  if (flag.flag.value === "line") drawFigure();
+  else if (flag.flag.value === "square") drawFigure();
+  else if (flag.flag.value === "arc") drawFigure();
 }
 function stopDrawing() {
   isDrawing.value = false;
@@ -125,15 +94,6 @@ function draw(event: MouseEvent): void {
   else {
     freeDraw(event);
   }
-}
-function drawLine(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
-}
-function drawSquare(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
-}
-function drawArc(x1: number, y1: number, x2: number, y2: number): void {
-  drawFigure(x1, y1, x2, y2);
 }
 </script>
 

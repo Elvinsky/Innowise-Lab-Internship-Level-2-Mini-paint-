@@ -142,7 +142,6 @@ function handleClearCanvas(): void {
   clearCanvas();
 }
 const handleColorPick = (event: InputEvent) => {
-  console.log((event.target as HTMLInputElement).value);
   drawStyle.setColor((event.target as HTMLInputElement).value);
 };
 const handleSaveImage = () => {
