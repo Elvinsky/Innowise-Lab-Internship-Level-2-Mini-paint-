@@ -25,12 +25,14 @@ import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
+  LineInterface,
 } from "@/types/interfaces/composInterfaces";
 import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
+import { useLineCoords } from "@/composables/useLineCoords";
 
 const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
@@ -46,12 +48,8 @@ sizes.value = {
   width: isMobile ? 300 : 1000,
   height: isMobile ? 500 : 500,
 };
-const line: LineCoords = reactive({
-  x1: 0,
-  y1: 0,
-  x2: 0,
-  y2: 0,
-});
+const line: LineInterface = useLineCoords();
+
 (async () => {
   await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
   canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
@@ -87,8 +85,8 @@ function startLineDrawing(event: MouseEvent) {
   const offsetX: number = canvas.canvas.value.offsetLeft;
   const offsetY: number = canvas.canvas.value.offsetTop;
 
-  line.x1 = event.clientX - offsetX;
-  line.y1 = event.clientY - offsetY;
+  line.setX1(event.clientX - offsetX);
+  line.setY1(event.clientY - offsetY);
 }
 function stopLineDrawing(event: MouseEvent) {
   if (
@@ -103,13 +101,29 @@ function stopLineDrawing(event: MouseEvent) {
   const offsetX: number = canvas.canvas.value.offsetLeft;
   const offsetY: number = canvas.canvas.value.offsetTop;
 
-  line.x2 = event.clientX - offsetX;
-  line.y2 = event.clientY - offsetY;
-  if (flag.flag.value === "line") drawLine(line.x1, line.y1, line.x2, line.y2);
+  line.setX2(event.clientX - offsetX);
+  line.setY2(event.clientY - offsetY);
+  if (flag.flag.value === "line")
+    drawLine(
+      line.line.value.x1,
+      line.line.value.y1,
+      line.line.value.x2,
+      line.line.value.y2
+    );
   else if (flag.flag.value === "square")
-    drawSquare(line.x1, line.y1, line.x2, line.y2);
+    drawSquare(
+      line.line.value.x1,
+      line.line.value.y1,
+      line.line.value.x2,
+      line.line.value.y2
+    );
   else if (flag.flag.value === "arc")
-    drawArc(line.x1, line.y1, line.x2, line.y2);
+    drawArc(
+      line.line.value.x1,
+      line.line.value.y1,
+      line.line.value.x2,
+      line.line.value.y2
+    );
 }
 function stopDrawing() {
   isDrawing.value = false;

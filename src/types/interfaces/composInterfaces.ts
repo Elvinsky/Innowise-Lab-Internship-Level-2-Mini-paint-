@@ -1,6 +1,7 @@
 import { CanvasFlag } from "@/types/literals/literals";
 import { Ref } from "vue";
 import { User } from "firebase/auth";
+import { LineCoords } from "./canvasInterfaces";
 
 export interface CanvasFlagCompos {
   flag: Ref<CanvasFlag>;
@@ -23,4 +24,11 @@ export interface DrawingStyleCompos {
 export interface UserDataCompos {
   user: Ref<User | null>;
   setUser: (userData: User | null) => void;
+}
+export interface LineInterface {
+  line: Ref<LineCoords>;
+  setX1: (x1: number) => void;
+  setX2: (x2: number) => void;
+  setY1: (y1: number) => void;
+  setY2: (y2: number) => void;
 }
