@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import { useUser } from "@/composables/useUser";
-import router from "@/router";
+import router, { VALID_ROUTES } from "@/router";
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
@@ -30,7 +30,8 @@ const isHome = computed(() => {
   return route.path;
 });
 function handleGoBack() {
-  router.push("/");
+  router.go(-1);
+  if (!VALID_ROUTES.includes(route.fullPath)) router.go(-1);
 }
 function handleLogOut() {
   user.setUser(null);
