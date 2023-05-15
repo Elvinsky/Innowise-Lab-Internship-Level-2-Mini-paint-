@@ -1,7 +1,6 @@
 <template>
   <section>
     <img :src="route.params.url" class="img-preload" id="preload" />
-    <HeaderComponent />
     <div class="editor-wrapper">
       <ToolBar :filename="route.params.name" :isCreator="isCreator" />
       <canvas
@@ -18,7 +17,6 @@
         @mouseout="stopDrawing()"
       ></canvas>
     </div>
-    <FooterComponent />
   </section>
 </template>
 
@@ -138,11 +136,6 @@ function drawArc(x1: number, y1: number, x2: number, y2: number): void {
 
 <style scoped lang="scss">
 section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
   .editor-wrapper {
     width: 100%;
     height: 100%;

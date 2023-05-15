@@ -4,33 +4,32 @@
     <form :class="error ? 'error' : ''" @submit.prevent>
       <input
         id="name"
-        v-model="user.name"
+        v-model="input.name"
         placeholder="username"
         name="name"
         type="text"
       />
       <input
         id="email"
-        v-model="user.email"
+        v-model="input.email"
         placeholder="e-mail"
         name="email"
         type="email"
       />
       <input
         id="password"
-        v-model="user.password"
+        v-model="input.password"
         placeholder="password"
         name="password"
         type="password"
       />
       <input
         id="repeatPassword"
-        v-model="user.repPassword"
+        v-model="input.passwordConfirm"
         placeholder="repeat password"
         name="repeatPassword"
         type="password"
       />
-      <div v-if="error">Error! Incorrect creds</div>
       <div class="actions">
         <button @click="submit">Submit</button>
         <RouterLink to="/login" class="link">
@@ -38,49 +37,86 @@
         </RouterLink>
       </div>
     </form>
+    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
+      >Incorrect Creds! Try again!</ErrorToast
+    >
+    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
+      >You are ready to go!</SuccessToast
+    >
   </section>
 </template>
 
 <script setup lang="ts">
 import { reactive } from "vue";
 import { Ref, ref } from "vue";
+import { useUser } from "@/composables/useUser";
+import ErrorToast from "@/components/ErrorToast.vue";
+import SuccessToast from "@/components/SuccessToast.vue";
 import { UserData } from "@/types/interfaces/userInterfaces";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "@/firebase";
 import router from "@/router";
-
-const user: UserData = reactive({
+import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+const user: UserDataCompos = useUser();
+const input: UserData = reactive({
   name: "",
   email: "",
   password: "",
-  repPassword: "",
+  passwordConfirm: "",
 });
 let error: Ref<boolean> = ref(false);
+const toastShown: Ref<string> = ref("");
+
 const submit = (): void => {
-  if (user.password !== user.repPassword) {
+  if (input.password !== input.passwordConfirm) {
     error.value = true;
-    user.name = "";
-    user.email = "";
-    user.password = "";
-    user.repPassword = "";
+    showToast("error");
+    input.name = "";
+    input.email = "";
+    input.password = "";
+    input.passwordConfirm = "";
     return;
   }
-  createUserWithEmailAndPassword(auth, user.email, user.password)
+  createUserWithEmailAndPassword(auth, input.email, input.password)
     .then(() => {
       if (auth.currentUser) {
         updateProfile(auth.currentUser, {
-          displayName: user.name,
+          displayName: input.name,
         });
-        router.push("/login");
+        signInWithEmailAndPassword(auth, input.email, input.password)
+          .then((creds) => {
+            showToast("success");
+            user.setUser(creds.user);
+            router.push("/");
+          })
+          .catch(() => {
+            error.value = true;
+            showToast("error");
+            input.email = "";
+            input.password = "";
+          });
       }
     })
     .catch((error) => {
-      user.name = "";
-      user.email = "";
-      user.password = "";
-      user.repPassword = "";
+      input.name = "";
+      input.email = "";
+      input.password = "";
+      input.passwordConfirm = "";
       error.value = true;
     });
+};
+const showToast = (toast: string) => {
+  toastShown.value = toast;
+  setTimeout(() => {
+    toastShown.value = "";
+  }, 5000);
+};
+const handleAbortToast = () => {
+  toastShown.value = "";
 };
 </script>
 

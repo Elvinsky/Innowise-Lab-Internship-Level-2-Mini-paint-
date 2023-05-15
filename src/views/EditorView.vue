@@ -1,6 +1,5 @@
 <template>
   <section>
-    <HeaderComponent />
     <div class="editor-wrapper">
       <ToolBar :isCreator="true" />
       <canvas
@@ -17,13 +16,10 @@
         @mouseout="stopDrawing()"
       ></canvas>
     </div>
-    <FooterComponent></FooterComponent>
   </section>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import { Ref, ref, nextTick, reactive } from "vue";
 import {
   CanvasCompos,

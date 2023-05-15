@@ -1,9 +1,8 @@
 <template>
   <section>
     <h2>Login</h2>
-    <form @submit.prevent>
+    <form :class="error ? 'error' : ''" @submit.prevent>
       <input
-        :class="error ? 'error' : ''"
         id="email"
         v-model="input.email"
         placeholder="e-mail"
@@ -11,7 +10,6 @@
         type="text"
       />
       <input
-        :class="error ? 'error' : ''"
         id="password"
         v-model="input.password"
         placeholder="password"
@@ -96,7 +94,9 @@ section {
     border-radius: 5px;
     padding: 1em;
     gap: 0.6em;
-
+    &.error input {
+      border: 1px solid red;
+    }
     button {
       align-self: flex-start;
       justify-self: start;
@@ -110,9 +110,6 @@ section {
       padding: 0.5em;
       font-size: 1em;
       width: 200px;
-    }
-    input.error {
-      border: 1px solid red;
     }
   }
 

@@ -1,18 +1,14 @@
 <template>
   <section>
-    <HeaderComponent />
     <nav>
       <div @click="navigate('/editor')">New image</div>
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
       <div @click="navigate('/browser')">Browse images</div>
     </nav>
-    <FooterComponent></FooterComponent>
   </section>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
   router.push(path);
@@ -20,12 +16,6 @@ const navigate = (path: string): void => {
 </script>
 <style scoped lang="scss">
 section {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-
   .octologo {
     width: 400px;
     margin-top: 1em;

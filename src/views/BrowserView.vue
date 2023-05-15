@@ -1,7 +1,6 @@
 <template>
   <CustomLoader v-if="!photos || photos.length === 0" />
   <section>
-    <HeaderComponent />
     <div class="post-head">
       <div>
         <img src="@/assets/left.png" alt="left" @click="handlePrevPage" />
@@ -45,13 +44,10 @@
         </RouterLink>
       </div>
     </div>
-    <FooterComponent />
   </section>
 </template>
 
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import CustomLoader from "@/components/CustomLoader.vue";
 import { useFetchCanvases } from "@/composables/useFetchCanvases";
 import { Photo } from "@/types/interfaces/photoInterface";
@@ -108,11 +104,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
   .image-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

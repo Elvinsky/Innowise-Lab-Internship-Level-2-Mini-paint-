@@ -4,7 +4,6 @@
     <div class="text"><slot></slot></div>
   </div>
 </template>
-
 <style scoped lang="scss">
 .toast-wrapper {
   cursor: pointer;
