@@ -1,10 +1,12 @@
 <template>
-  <CustomLoader v-if="!photos || photos.length === 0" />
+  <CustomLoader
+    v-if="!canvases.photos.value || canvases.photos.value.length === 0"
+  />
   <div class="wrapper">
     <div class="post-head">
-      <div>
+      <!-- <div>
         <img src="@/assets/left.png" alt="left" @click="handlePrevPage" />
-      </div>
+      </div> -->
       <input
         type="text"
         class="searchbar"
@@ -20,7 +22,7 @@
     <div class="image-container">
       <div
         class="image-item"
-        v-for="image in filteredPhotos"
+        v-for="image in canvases.photos.value"
         :key="image.downloadUrl"
         :id="image.downloadUrl"
       >
@@ -49,58 +51,33 @@
 
 <script setup lang="ts">
 import CustomLoader from "@/components/CustomLoader.vue";
-import { useFetchCanvases } from "@/composables/useFetchCanvases";
-import { Photo } from "@/types/interfaces/photoInterface";
-import { Ref, onMounted, ref } from "vue";
+import { useImages } from "@/composables/useImages";
+import {
+  fetchCanvasesByCreator,
+  fetchPaginatedCanvases,
+} from "@/scripts/utils/canvasFetchUtil";
+import { debounce } from "@/scripts/utils/debouncer";
+import { PaginationInterface } from "@/types/interfaces/composInterfaces";
+import { Ref, ref } from "vue";
 import { useRouter } from "vue-router";
 const isMobile = window.innerWidth < 768;
 const LIMIT = isMobile ? 4 : 12;
-const pageToken: Ref<string> = ref("");
-const prevToken = ref<string>("");
-const photos: Ref<Photo[] | null> = ref(null);
-const filteredPhotos: Ref<Photo[] | null> = ref(photos.value);
+const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
 const router = useRouter();
-const fetchPhotos = (limit: number, token: string) => {
-  useFetchCanvases(limit, token)
-    .then((result: any) => {
-      if (!prevToken.value) {
-        pageToken.value = result.nextPageToken;
-        prevToken.value = result.nextPageToken;
-      } else {
-        prevToken.value = pageToken.value;
-        pageToken.value = result.nextPageToken;
-      }
-      photos.value = result.data;
-      filteredPhotos.value = result.data;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+fetchPaginatedCanvases(LIMIT);
 const handleOpenDetails = (url: string) => {
   const urlId = url.substring(8);
   router.push(`/canvas/${urlId}`);
 };
-const handleSearch = () => {
-  if (!photos.value) return;
-  const data = photos.value.filter((el) =>
-    el.metadata.uploadedBy.includes(searchContent.value)
-  );
-  filteredPhotos.value = data;
-};
 const handleNextPage = () => {
-  photos.value = [];
-  fetchPhotos(LIMIT, pageToken.value);
+  canvases.setCanvases([]);
+  fetchPaginatedCanvases(LIMIT, canvases.pageTokenRef.value);
 };
-const handlePrevPage = () => {
-  photos.value = [];
-
-  fetchPhotos(LIMIT, prevToken.value);
-};
-onMounted(() => {
-  fetchPhotos(LIMIT, pageToken.value);
-});
+const handleSearch = debounce(() => {
+  canvases.setCanvases([]);
+  fetchCanvasesByCreator(LIMIT, searchContent.value);
+}, 500);
 </script>
 
 <style scoped lang="scss">

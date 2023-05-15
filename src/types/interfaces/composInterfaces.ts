@@ -2,6 +2,7 @@ import { CanvasFlag } from "@/types/literals/literals";
 import { Ref } from "vue";
 import { User } from "firebase/auth";
 import { LineCoords } from "./canvasInterfaces";
+import { Photo } from "./photoInterface";
 
 export interface CanvasFlagCompos {
   flag: Ref<CanvasFlag>;
@@ -31,4 +32,10 @@ export interface LineInterface {
   setX2: (x2: number) => void;
   setY1: (y1: number) => void;
   setY2: (y2: number) => void;
+}
+export interface PaginationInterface {
+  photos: Ref<Photo[] | null>;
+  pageTokenRef: Ref<string>;
+  setToken: (token: string) => void;
+  setCanvases: (photo: Photo[]) => void;
 }

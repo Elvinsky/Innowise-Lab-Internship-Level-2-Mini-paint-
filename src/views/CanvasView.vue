@@ -21,14 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, nextTick, reactive } from "vue";
+import { Ref, ref } from "vue";
 import {
   CanvasCompos,
   CanvasContextCompos,
   CanvasFlagCompos,
   LineInterface,
 } from "@/types/interfaces/composInterfaces";
-import { LineCoords, CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
 import { drawFigure, freeDraw } from "@/scripts/utils/canvasDrawUtil";
@@ -36,6 +35,7 @@ import ToolBar from "@/components/ToolBar.vue";
 import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
 import { useLineCoords } from "@/composables/useLineCoords";
+import { initCanvas } from "@/scripts/utils/initCanvasUtil";
 
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
@@ -45,34 +45,8 @@ const flag: CanvasFlagCompos = useCanvasFlag();
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const isDrawing: Ref<boolean> = ref(false);
-const sizes: Ref<CanvasSizes> = ref({
-  width: 1000,
-  height: 500,
-});
-const isMobile = window.innerWidth < 768;
-sizes.value = {
-  width: isMobile ? 300 : 1000,
-  height: isMobile ? 500 : 500,
-};
+initCanvas();
 const line: LineInterface = useLineCoords();
-(async () => {
-  await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
-  canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
-  if (canvas.canvas.value) {
-    ctx.setCtx(
-      canvas.canvas.value.getContext("2d") as CanvasRenderingContext2D
-    );
-  }
-  if (canvas.canvas.value) {
-    canvas.canvas.value.width = sizes.value.width;
-    canvas.canvas.value.height = sizes.value.height;
-    const img = document.querySelector("#preload") as HTMLImageElement | null;
-    if (img) {
-      ctx.ctx.value?.drawImage(img, 0, 0);
-    }
-  }
-})();
-
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);

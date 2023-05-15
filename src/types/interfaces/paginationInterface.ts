@@ -1,6 +1,5 @@
-import { Photo } from "./photoInterface";
+import { ListOptions } from "@firebase/storage";
 
-export interface PaginationResponse {
-  data: Photo[];
-  nextPageToken: string;
+export interface PaginationListOptions extends ListOptions {
+  prevPageToken?: string;
 }
