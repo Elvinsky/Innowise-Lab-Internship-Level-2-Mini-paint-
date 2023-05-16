@@ -1,7 +1,7 @@
 <template>
   <section>
     <h2>Login</h2>
-    <form :class="error ? 'error' : ''" @submit.prevent>
+    <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
       <input
         id="email"
         v-model="input.email"
@@ -23,10 +23,14 @@
         </RouterLink>
       </div>
     </form>
-    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
+    <ErrorToast
+      v-if="user.toastShown.value === 'error'"
+      @click="handleAbortToast"
       >Incorrect Creds! Try again!</ErrorToast
     >
-    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
+    <SuccessToast
+      v-if="user.toastShown.value === 'success'"
+      @click="handleAbortToast"
       >You are ready to go!</SuccessToast
     >
   </section>
@@ -36,43 +40,22 @@
 import ErrorToast from "@/components/ErrorToast.vue";
 import SuccessToast from "@/components/SuccessToast.vue";
 import { useUser } from "@/composables/useUser";
-import { auth } from "@/firebase";
-import router from "@/router";
+
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
 import { UserInput } from "@/types/interfaces/userInterfaces";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { Ref, reactive, ref } from "vue";
+import { reactive } from "vue";
 
 const user: UserDataCompos = useUser();
-const toastShown: Ref<string> = ref("");
-const error: Ref<boolean> = ref(false);
 const input: UserInput = reactive({
   email: "",
   password: "",
 });
 
-const submit = (): void => {
-  signInWithEmailAndPassword(auth, input.email, input.password)
-    .then((creds) => {
-      showToast("success");
-      user.setUser(creds.user);
-      router.push("/");
-    })
-    .catch(() => {
-      error.value = true;
-      showToast("error");
-      input.email = "";
-      input.password = "";
-    });
-};
-const showToast = (toast: string) => {
-  toastShown.value = toast;
-  setTimeout(() => {
-    toastShown.value = "";
-  }, 5000);
+const submit = async () => {
+  user.setUser(input.email, input.password);
 };
 const handleAbortToast = () => {
-  toastShown.value = "";
+  user.showToast("");
 };
 </script>
 

@@ -17,7 +17,11 @@ export interface CanvasCompos {
 }
 export interface UserDataCompos {
   user: Ref<User | null>;
-  setUser: (userData: User | null) => void;
+  setUser: (email: string, password: string) => void;
+  toastShown: Ref<string>;
+  showToast: (data: string) => void;
+  authError: Ref<boolean>;
+  regUser: (email: string, password: string, name: string) => void;
 }
 export interface PaginationInterface {
   photos: Ref<Photo[] | null>;
