@@ -1,4 +1,4 @@
-import { useCanvas } from "@/composables/useCanvasContext";
+import { useCanvas } from "@/composables/useCanvas";
 import { useUser } from "@/composables/useUser";
 import { storage } from "@/firebase";
 import {

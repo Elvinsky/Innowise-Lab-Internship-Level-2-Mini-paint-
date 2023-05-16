@@ -1,4 +1,5 @@
-import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
+import { useCanvas } from "@/composables/useCanvas";
+import { useCanvasContext } from "@/composables/useCanvasContext";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
 import { useLineCoords } from "@/composables/useLineCoords";
@@ -15,6 +16,45 @@ const ctx: CanvasContextCompos = useCanvasContext();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const flag: CanvasFlagCompos = useCanvasFlag();
 const line: LineInterface = useLineCoords();
+export const startLineDrawing = (event: MouseEvent) => {
+  if (
+    !ctx.ctx.value ||
+    !canvas.canvas.value ||
+    (flag.flag.value !== "line" &&
+      flag.flag.value !== "square" &&
+      flag.flag.value !== "arc")
+  )
+    return;
+
+  const offsetX: number = canvas.canvas.value.offsetLeft;
+  const offsetY: number = canvas.canvas.value.offsetTop;
+
+  line.setX1(event.clientX - offsetX);
+  line.setY1(event.clientY - offsetY);
+};
+export const finishDrawing = (event: MouseEvent) => {
+  if (
+    !ctx.ctx.value ||
+    !canvas.canvas.value ||
+    (flag.flag.value !== "line" &&
+      flag.flag.value !== "square" &&
+      flag.flag.value !== "arc")
+  )
+    return;
+
+  const offsetX: number = canvas.canvas.value.offsetLeft;
+  const offsetY: number = canvas.canvas.value.offsetTop;
+
+  line.setX2(event.clientX - offsetX);
+  line.setY2(event.clientY - offsetY);
+  if (
+    flag.flag.value === "line" ||
+    flag.flag.value === "square" ||
+    flag.flag.value === "arc"
+  )
+    drawFigure();
+};
+
 export const drawFigure = () => {
   if (!ctx.ctx.value || !canvas.canvas.value) return;
   switch (flag.flag.value) {
