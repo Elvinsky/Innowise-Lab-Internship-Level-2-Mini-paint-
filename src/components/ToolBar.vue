@@ -52,7 +52,7 @@
       class="main-img"
     />
     <img
-      src="@/assets/refresh-arrow.png"
+      src="@/assets/bin.png"
       class="main-img"
       @click="handleClearCanvas"
       v-if="props.isCreator"
@@ -88,6 +88,12 @@
         </div>
       </div>
     </div>
+    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
+      >Unexpected Error while saving =(</ErrorToast
+    >
+    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
+      >Your image have been saved</SuccessToast
+    >
   </aside>
 </template>
 
@@ -101,12 +107,15 @@ import {
   DrawingStyleCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref, defineProps } from "vue";
+import ErrorToast from "./ErrorToast.vue";
+import SuccessToast from "./SuccessToast.vue";
 const props = defineProps(["filename", "isCreator"]);
 const flag: CanvasFlagCompos = useCanvasFlag();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);
+const toastShown: Ref<string> = ref("");
 const fileName: Ref<string> = ref(
   props.filename ? props.filename : "canvas-img"
 );
@@ -134,7 +143,9 @@ function handleSquareFlag(): void {
 function handleArcFlag(): void {
   flag.flag.value === "arc" ? flag.setFlag("") : flag.setFlag("arc");
 }
-
+const handleAbortToast = () => {
+  toastShown.value = "";
+};
 function handleWidthChange(event: InputEvent): void {
   drawStyle.setWidth((event.target as HTMLInputElement).valueAsNumber);
 }
@@ -144,9 +155,23 @@ function handleClearCanvas(): void {
 const handleColorPick = (event: InputEvent) => {
   drawStyle.setColor((event.target as HTMLInputElement).value);
 };
+const showToast = (toast: string) => {
+  toastShown.value = toast;
+  setTimeout(() => {
+    toastShown.value = "";
+  }, 5000);
+};
 const handleSaveImage = () => {
-  firebaseUpload(fileName.value);
-  isSaving.value = false;
+  firebaseUpload(fileName.value)
+    .then(() => {
+      showToast("success");
+      isSaving.value = false;
+    })
+    .catch((err) => {
+      showToast("error");
+      console.log(err);
+      isSaving.value = false;
+    });
 };
 </script>
 

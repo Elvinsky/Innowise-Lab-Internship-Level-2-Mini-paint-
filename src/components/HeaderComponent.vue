@@ -9,7 +9,7 @@
     />
     <h2 class="welcoming">Welcome to</h2>
     <h2><span>INNODRAW</span></h2>
-    <h2>{{ user.user.value ? user.user.value.displayName : "undefined" }}</h2>
+    <h2>{{ user.user.value?.displayName }}</h2>
     <img
       src="@/assets/user.png"
       alt="back"

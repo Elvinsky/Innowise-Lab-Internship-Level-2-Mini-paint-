@@ -41,12 +41,7 @@
               name: image.name,
             },
           }"
-          ><img
-            :src="image.downloadUrl"
-            alt="image"
-            class="canvas-img"
-            @click="handleOpenDetails(image.downloadUrl)"
-          />
+          ><img :src="image.downloadUrl" alt="image" class="canvas-img" />
           <span>{{ image.metadata.uploadedBy }}</span>
         </RouterLink>
       </div>
@@ -68,18 +63,12 @@ import {
   UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
-import { useRouter } from "vue-router";
 const isMobile = window.innerWidth < 768;
 const LIMIT = isMobile ? 4 : 12;
 const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
 const user: UserDataCompos = useUser();
-const router = useRouter();
 fetchPaginatedCanvases(LIMIT);
-const handleOpenDetails = (url: string) => {
-  const urlId = url.substring(8);
-  router.push(`/canvas/${urlId}`);
-};
 const handleNextPage = () => {
   canvases.setCanvases([]);
   fetchPaginatedCanvases(LIMIT, canvases.pageTokenRef.value);
@@ -105,8 +94,8 @@ const handleSearch = debounce(() => {
     @include for-phone {
       grid-template-columns: repeat(1, 1fr);
     }
-    .image-container.your-images {
-      border: 2px solid red;
+    .your-images {
+      background-color: aquamarine;
     }
 
     .image-item {

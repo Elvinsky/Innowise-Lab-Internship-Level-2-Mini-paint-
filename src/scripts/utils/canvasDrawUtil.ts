@@ -10,12 +10,46 @@ import {
   CanvasFlagCompos,
   LineInterface,
 } from "@/types/interfaces/composInterfaces";
+import { Ref, ref } from "vue";
 
 const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const flag: CanvasFlagCompos = useCanvasFlag();
 const line: LineInterface = useLineCoords();
+const coord = ref({ x: 0, y: 0 });
+const isDrawing: Ref<boolean> = ref(false);
+
+//FREE-DRAW LOGIC _______________________________________________________________
+
+export const start = (event: MouseEvent) => {
+  isDrawing.value = true;
+  reposition(event);
+};
+export const stop = () => {
+  isDrawing.value = false;
+};
+export const reposition = (event: MouseEvent) => {
+  if (!canvas.canvas.value) return;
+  coord.value.x = event.clientX - canvas.canvas.value?.offsetLeft;
+  coord.value.y = event.clientY - canvas.canvas.value?.offsetTop;
+};
+export const draw = (event: MouseEvent) => {
+  if (!ctx.ctx.value) return;
+  if (flag.flag.value === "draw" && isDrawing.value) {
+    ctx.ctx.value.beginPath();
+    ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+    ctx.ctx.value.lineCap = "round";
+    ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+    ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
+    reposition(event);
+    ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
+    ctx.ctx.value.stroke();
+  }
+};
+
+//FREE-DRAW LOGIC _______________________________________________________________
+
 export const startLineDrawing = (event: MouseEvent) => {
   if (
     !ctx.ctx.value ||
@@ -25,12 +59,8 @@ export const startLineDrawing = (event: MouseEvent) => {
       flag.flag.value !== "arc")
   )
     return;
-
-  const offsetX: number = canvas.canvas.value.offsetLeft;
-  const offsetY: number = canvas.canvas.value.offsetTop;
-
-  line.setX1(event.clientX - offsetX);
-  line.setY1(event.clientY - offsetY);
+  line.setX1(event.clientX - canvas.canvas.value.offsetLeft);
+  line.setY1(event.clientY - canvas.canvas.value.offsetTop);
 };
 export const finishDrawing = (event: MouseEvent) => {
   if (
@@ -102,21 +132,20 @@ export const drawFigure = () => {
     }
   }
 };
-export const freeDraw = (event: MouseEvent) => {
-  if (!ctx.ctx.value || !canvas.canvas.value) return;
-  if (flag.flag.value !== "draw") return;
-  const offsetX: number = canvas.canvas.value.offsetLeft;
-  const offsetY: number = canvas.canvas.value.offsetTop;
-  const x: number = event.clientX - offsetX;
-  const y: number = event.clientY - offsetY;
-  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-  ctx.ctx.value.lineCap = "round";
-  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-  ctx.ctx.value.beginPath();
-  ctx.ctx.value.moveTo(x, y);
-  ctx.ctx.value.lineTo(x, y);
-  ctx.ctx.value.stroke();
-};
+
+// export const freeDraw = (event: MouseEvent) => {
+//   if (!ctx.ctx.value || !canvas.canvas.value) return;
+//   if (flag.flag.value === "draw") {
+//     ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+//     ctx.ctx.value.lineCap = "round";
+//     ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+
+//     ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
+//     reposition(event);
+//     ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
+//     ctx.ctx.value.stroke();
+//   }
+// };
 export const clearCanvas = (): void => {
   const canvas: CanvasCompos = useCanvas();
   const ctx: CanvasContextCompos = useCanvasContext();

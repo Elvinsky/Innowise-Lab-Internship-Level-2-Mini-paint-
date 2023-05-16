@@ -4,16 +4,9 @@
       <ToolBar :isCreator="true" />
       <canvas
         id="canvas"
-        @mousedown="
-          startDrawing($event);
-          lineDraw($event);
-        "
+        @mousedown="start"
+        @mouseup="stop"
         @mousemove="draw"
-        @mouseup="
-          stopDrawing();
-          stopLineDrawing($event);
-        "
-        @mouseout="stopDrawing()"
       ></canvas>
     </div>
   </div>
@@ -23,7 +16,9 @@
 import { Ref, ref } from "vue";
 import {
   finishDrawing,
-  freeDraw,
+  start,
+  stop,
+  draw,
   startLineDrawing,
 } from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
@@ -31,7 +26,6 @@ import { initCanvas } from "@/scripts/utils/initCanvasUtil";
 
 initCanvas();
 const isDrawing: Ref<boolean> = ref(false);
-initCanvas();
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
@@ -45,12 +39,12 @@ function stopLineDrawing(event: MouseEvent) {
 function stopDrawing() {
   isDrawing.value = false;
 }
-function draw(event: MouseEvent): void {
-  if (!isDrawing.value) return;
-  else {
-    freeDraw(event);
-  }
-}
+// function draw(event: MouseEvent): void {
+//   if (!isDrawing.value) return;
+//   else {
+//     freeDraw(event);
+//   }
+// }
 </script>
 
 <style scoped lang="scss">

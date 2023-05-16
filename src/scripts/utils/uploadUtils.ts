@@ -27,7 +27,7 @@ export function dataURLtoBlob(dataURL: string): Blob {
   return new Blob([arrayBuffer], { type: contentType });
 }
 
-export const firebaseUpload = (fileName: string) => {
+export const firebaseUpload = async (fileName: string) => {
   const user: UserDataCompos = useUser();
   const canvasBackup = canvas.canvas.value;
   if (!canvasBackup) return;

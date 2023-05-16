@@ -31,13 +31,12 @@ import ToolBar from "@/components/ToolBar.vue";
 import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
 import { initCanvas } from "@/scripts/utils/initCanvasUtil";
-
+initCanvas();
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
   route.params.user === auth.currentUser?.email
 );
 const isDrawing: Ref<boolean> = ref(false);
-initCanvas();
 function startDrawing(event: MouseEvent) {
   isDrawing.value = true;
   draw(event);
