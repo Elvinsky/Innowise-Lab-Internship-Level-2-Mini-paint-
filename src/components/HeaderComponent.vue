@@ -34,8 +34,9 @@ function handleGoBack() {
   if (!VALID_ROUTES.includes(route.fullPath)) router.go(-1);
 }
 function handleLogOut() {
-  user.setUser(null);
+  user.setUser("", "");
   router.push("/login");
+  user.showToast("");
 }
 </script>
 <style scoped lang="scss">

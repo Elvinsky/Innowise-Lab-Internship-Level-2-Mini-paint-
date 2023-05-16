@@ -5,7 +5,7 @@
       class="main-img"
       alt="pen"
       @click="handleDrawFlag"
-      :class="flag.flag.value === 'draw' ? 'active' : ''"
+      :class="canvas.flag.value === 'draw' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -17,7 +17,7 @@
     />
     <div
       class="color-circle"
-      :style="{ backgroundColor: drawStyle.penColor.value }"
+      :style="{ backgroundColor: canvas.penColor.value }"
       @click="showColorPick"
       v-if="props.isCreator"
     />
@@ -26,7 +26,7 @@
       alt="line"
       @click="handleLineFlag"
       class="main-img"
-      :class="flag.flag.value === 'line' ? 'active' : ''"
+      :class="canvas.flag.value === 'line' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -34,7 +34,7 @@
       alt="square"
       @click="handleSquareFlag"
       class="main-img"
-      :class="flag.flag.value === 'square' ? 'active' : ''"
+      :class="canvas.flag.value === 'square' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -42,7 +42,7 @@
       alt="circle"
       @click="handleArcFlag"
       class="main-img"
-      :class="flag.flag.value === 'arc' ? 'active' : ''"
+      :class="canvas.flag.value === 'arc' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -50,7 +50,7 @@
       alt="circle"
       @click="cancelLastAction"
       class="main-img"
-      :class="flag.flag.value === 'arc' ? 'active' : ''"
+      :class="canvas.flag.value === 'arc' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -72,7 +72,7 @@
       step="1"
       class="width-range"
       @change="handleWidthChange"
-      v-model="drawStyle.penWidth.value"
+      v-model="canvas.penWidth.value"
       v-if="widthRange"
     />
     <input
@@ -80,7 +80,7 @@
       class="color-pick"
       @input="handleColorPick"
       v-if="colorPick"
-      v-model="drawStyle.penColor.value"
+      v-model="canvas.penColor.value"
     />
     <div class="save-popup" v-if="isSaving">
       <div class="save-block">
@@ -106,20 +106,17 @@
 </template>
 
 <script setup lang="ts">
-import { useCanvasFlag } from "@/composables/useCanvasFlags";
-import { useDrawingStyle } from "@/composables/useDrawingStyle";
 import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
-import {
-  CanvasFlagCompos,
-  DrawingStyleCompos,
-} from "@/types/interfaces/composInterfaces";
+
 import { Ref, ref, defineProps } from "vue";
 import ErrorToast from "./ErrorToast.vue";
 import SuccessToast from "./SuccessToast.vue";
+import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { useCanvas } from "@/composables/useCanvas";
+
 const props = defineProps(["filename", "isCreator"]);
-const flag: CanvasFlagCompos = useCanvasFlag();
-const drawStyle: DrawingStyleCompos = useDrawingStyle();
+const canvas: CanvasCompos = useCanvas();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);
@@ -140,28 +137,30 @@ function handlePopUpShow() {
   isSaving.value = !isSaving.value;
 }
 function handleDrawFlag(): void {
-  flag.flag.value === "draw" ? flag.setFlag("") : flag.setFlag("draw");
+  canvas.flag.value === "draw" ? canvas.setFlag("") : canvas.setFlag("draw");
 }
 function handleLineFlag(): void {
-  flag.flag.value === "line" ? flag.setFlag("") : flag.setFlag("line");
+  canvas.flag.value === "line" ? canvas.setFlag("") : canvas.setFlag("line");
 }
 function handleSquareFlag(): void {
-  flag.flag.value === "square" ? flag.setFlag("") : flag.setFlag("square");
+  canvas.flag.value === "square"
+    ? canvas.setFlag("")
+    : canvas.setFlag("square");
 }
 function handleArcFlag(): void {
-  flag.flag.value === "arc" ? flag.setFlag("") : flag.setFlag("arc");
+  canvas.flag.value === "arc" ? canvas.setFlag("") : canvas.setFlag("arc");
 }
 const handleAbortToast = () => {
   toastShown.value = "";
 };
 function handleWidthChange(event: InputEvent): void {
-  drawStyle.setWidth((event.target as HTMLInputElement).valueAsNumber);
+  canvas.setPenWidth((event.target as HTMLInputElement).valueAsNumber);
 }
 function handleClearCanvas(): void {
   clearCanvas();
 }
 const handleColorPick = (event: InputEvent) => {
-  drawStyle.setColor((event.target as HTMLInputElement).value);
+  canvas.setPenColor((event.target as HTMLInputElement).value);
 };
 const showToast = (toast: string) => {
   toastShown.value = toast;
