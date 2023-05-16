@@ -2,13 +2,11 @@ import { useCanvas } from "@/composables/useCanvas";
 import { useCanvasContext } from "@/composables/useCanvasContext";
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
-import { useLineCoords } from "@/composables/useLineCoords";
 import {
   CanvasCompos,
   CanvasContextCompos,
   DrawingStyleCompos,
   CanvasFlagCompos,
-  LineInterface,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
 
@@ -16,136 +14,9 @@ const canvas: CanvasCompos = useCanvas();
 const ctx: CanvasContextCompos = useCanvasContext();
 const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const flag: CanvasFlagCompos = useCanvasFlag();
-const line: LineInterface = useLineCoords();
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);
 
-//FREE-DRAW LOGIC _______________________________________________________________
-
-export const start = (event: MouseEvent) => {
-  isDrawing.value = true;
-  reposition(event);
-};
-export const stop = () => {
-  isDrawing.value = false;
-};
-export const reposition = (event: MouseEvent) => {
-  if (!canvas.canvas.value) return;
-  coord.value.x = event.clientX - canvas.canvas.value?.offsetLeft;
-  coord.value.y = event.clientY - canvas.canvas.value?.offsetTop;
-};
-export const draw = (event: MouseEvent) => {
-  if (!ctx.ctx.value) return;
-  if (flag.flag.value === "draw" && isDrawing.value) {
-    ctx.ctx.value.beginPath();
-    ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-    ctx.ctx.value.lineCap = "round";
-    ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-    ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
-    reposition(event);
-    ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
-    ctx.ctx.value.stroke();
-  }
-};
-
-//FREE-DRAW LOGIC _______________________________________________________________
-
-export const startLineDrawing = (event: MouseEvent) => {
-  if (
-    !ctx.ctx.value ||
-    !canvas.canvas.value ||
-    (flag.flag.value !== "line" &&
-      flag.flag.value !== "square" &&
-      flag.flag.value !== "arc")
-  )
-    return;
-  line.setX1(event.clientX - canvas.canvas.value.offsetLeft);
-  line.setY1(event.clientY - canvas.canvas.value.offsetTop);
-};
-export const finishDrawing = (event: MouseEvent) => {
-  if (
-    !ctx.ctx.value ||
-    !canvas.canvas.value ||
-    (flag.flag.value !== "line" &&
-      flag.flag.value !== "square" &&
-      flag.flag.value !== "arc")
-  )
-    return;
-
-  const offsetX: number = canvas.canvas.value.offsetLeft;
-  const offsetY: number = canvas.canvas.value.offsetTop;
-
-  line.setX2(event.clientX - offsetX);
-  line.setY2(event.clientY - offsetY);
-  if (
-    flag.flag.value === "line" ||
-    flag.flag.value === "square" ||
-    flag.flag.value === "arc"
-  )
-    drawFigure();
-};
-
-export const drawFigure = () => {
-  if (!ctx.ctx.value || !canvas.canvas.value) return;
-  switch (flag.flag.value) {
-    case "line": {
-      ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-      ctx.ctx.value.lineCap = "round";
-      ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-      ctx.ctx.value.beginPath();
-      ctx.ctx.value.moveTo(line.line.value.x1, line.line.value.y1);
-      ctx.ctx.value.lineTo(line.line.value.x2, line.line.value.y2);
-      ctx.ctx.value.stroke();
-      break;
-    }
-    case "square": {
-      ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-      ctx.ctx.value.lineCap = "round";
-      ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-      ctx.ctx.value.beginPath();
-      ctx.ctx.value.rect(
-        line.line.value.x1,
-        line.line.value.y1,
-        line.line.value.x2 - line.line.value.x1,
-        line.line.value.y2 - line.line.value.y1
-      );
-      ctx.ctx.value.stroke();
-      break;
-    }
-    case "arc": {
-      ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-      ctx.ctx.value.lineCap = "round";
-      ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-      ctx.ctx.value.beginPath();
-      ctx.ctx.value.arc(
-        line.line.value.x1,
-        line.line.value.y1,
-        Math.sqrt(
-          (line.line.value.x2 - line.line.value.x1) ** 2 +
-            (line.line.value.y2 - line.line.value.y1) ** 2
-        ),
-        0,
-        2 * Math.PI
-      );
-      ctx.ctx.value.stroke();
-      break;
-    }
-  }
-};
-
-// export const freeDraw = (event: MouseEvent) => {
-//   if (!ctx.ctx.value || !canvas.canvas.value) return;
-//   if (flag.flag.value === "draw") {
-//     ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
-//     ctx.ctx.value.lineCap = "round";
-//     ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
-
-//     ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
-//     reposition(event);
-//     ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
-//     ctx.ctx.value.stroke();
-//   }
-// };
 export const clearCanvas = (): void => {
   const canvas: CanvasCompos = useCanvas();
   const ctx: CanvasContextCompos = useCanvasContext();
@@ -157,4 +28,75 @@ export const clearCanvas = (): void => {
       canvas.canvas.value.height
     );
   }
+};
+export const start = (event: MouseEvent) => {
+  isDrawing.value = true;
+  reposition(event);
+};
+export const stop = (event: MouseEvent) => {
+  if (!ctx.ctx.value || !isDrawing.value) return;
+
+  if (flag.flag.value === "line") {
+    drawLine(event);
+  } else if (flag.flag.value === "square") {
+    drawSquare(event);
+  } else if (flag.flag.value === "arc") {
+    drawArc(event);
+  }
+  isDrawing.value = false;
+};
+export const reposition = (event: MouseEvent) => {
+  if (!canvas.canvas.value) return;
+  coord.value.x = event.clientX - canvas.canvas.value?.offsetLeft;
+  coord.value.y = event.clientY - canvas.canvas.value?.offsetTop;
+};
+export const draw = (event: MouseEvent) => {
+  if (!ctx.ctx.value) return;
+  ctx.ctx.value.lineWidth = drawStyle.penWidth.value;
+  ctx.ctx.value.lineCap = "round";
+  ctx.ctx.value.strokeStyle = drawStyle.penColor.value;
+  if (flag.flag.value === "draw" && isDrawing.value) {
+    ctx.ctx.value.beginPath();
+    ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
+    reposition(event);
+    ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
+    ctx.ctx.value.stroke();
+  }
+};
+const drawLine = (event: MouseEvent) => {
+  if (!ctx.ctx.value) return;
+  ctx.ctx.value.beginPath();
+  ctx.ctx.value.moveTo(coord.value.x, coord.value.y);
+  reposition(event);
+  ctx.ctx.value.lineTo(coord.value.x, coord.value.y);
+  ctx.ctx.value.stroke();
+};
+const drawSquare = (event: MouseEvent) => {
+  if (!ctx.ctx.value) return;
+  ctx.ctx.value.beginPath();
+  const tmpcoords = [coord.value.x, coord.value.y];
+  reposition(event);
+  ctx.ctx.value.rect(
+    tmpcoords[0],
+    tmpcoords[1],
+    coord.value.x - tmpcoords[0],
+    coord.value.y - tmpcoords[1]
+  );
+  ctx.ctx.value.stroke();
+};
+const drawArc = (event: MouseEvent) => {
+  if (!ctx.ctx.value) return;
+  ctx.ctx.value.beginPath();
+  const tmpcoords = [coord.value.x, coord.value.y];
+  reposition(event);
+  ctx.ctx.value.arc(
+    tmpcoords[0],
+    tmpcoords[1],
+    Math.sqrt(
+      (coord.value.x - tmpcoords[0]) ** 2 + (coord.value.y - tmpcoords[1]) ** 2
+    ),
+    0,
+    2 * Math.PI
+  );
+  ctx.ctx.value.stroke();
 };

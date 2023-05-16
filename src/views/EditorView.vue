@@ -13,38 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from "vue";
-import {
-  finishDrawing,
-  start,
-  stop,
-  draw,
-  startLineDrawing,
-} from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
+import { draw, start, stop } from "@/scripts/utils/canvasDrawUtil";
 import { initCanvas } from "@/scripts/utils/initCanvasUtil";
-
 initCanvas();
-const isDrawing: Ref<boolean> = ref(false);
-function startDrawing(event: MouseEvent) {
-  isDrawing.value = true;
-  draw(event);
-}
-function lineDraw(event: MouseEvent) {
-  startLineDrawing(event);
-}
-function stopLineDrawing(event: MouseEvent) {
-  finishDrawing(event);
-}
-function stopDrawing() {
-  isDrawing.value = false;
-}
-// function draw(event: MouseEvent): void {
-//   if (!isDrawing.value) return;
-//   else {
-//     freeDraw(event);
-//   }
-// }
 </script>
 
 <style scoped lang="scss">
