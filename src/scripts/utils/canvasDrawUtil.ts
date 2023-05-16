@@ -17,7 +17,6 @@ const flag: CanvasFlagCompos = useCanvasFlag();
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);
 const drawnElements: ImageData[] = [];
-
 export const clearCanvas = (): void => {
   const canvas: CanvasCompos = useCanvas();
   const ctx: CanvasContextCompos = useCanvasContext();
@@ -31,13 +30,11 @@ export const clearCanvas = (): void => {
   }
 };
 export const start = (event: MouseEvent) => {
-  console.log(ctx.ctx.value);
+  if (!canvas.canvas.value) return;
   isDrawing.value = true;
   reposition(event);
 };
 export const stop = (event: MouseEvent) => {
-  console.log(ctx.ctx.value);
-
   if (!ctx.ctx.value || !isDrawing.value || !canvas.canvas.value) return;
 
   if (flag.flag.value === "line") {
