@@ -46,6 +46,14 @@
       v-if="props.isCreator"
     />
     <img
+      src="@/assets/return.png"
+      alt="circle"
+      @click="cancelLastAction"
+      class="main-img"
+      :class="flag.flag.value === 'arc' ? 'active' : ''"
+      v-if="props.isCreator"
+    />
+    <img
       src="@/assets/diskette.png"
       alt="save"
       @click="handlePopUpShow"
@@ -100,7 +108,7 @@
 <script setup lang="ts">
 import { useCanvasFlag } from "@/composables/useCanvasFlags";
 import { useDrawingStyle } from "@/composables/useDrawingStyle";
-import { clearCanvas } from "@/scripts/utils/canvasDrawUtil";
+import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 import {
   CanvasFlagCompos,

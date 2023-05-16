@@ -5,57 +5,26 @@
       <ToolBar :filename="route.params.name" :isCreator="isCreator" />
       <canvas
         id="canvas"
-        @mousedown="
-          startDrawing($event);
-          lineDraw($event);
-        "
+        @mousedown="start"
+        @mouseup="stop"
         @mousemove="draw"
-        @mouseup="
-          stopDrawing();
-          stopLineDrawing($event);
-        "
-        @mouseout="stopDrawing()"
       ></canvas>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from "vue";
-import {
-  finishDrawing,
-  freeDraw,
-  startLineDrawing,
-} from "@/scripts/utils/canvasDrawUtil";
 import ToolBar from "@/components/ToolBar.vue";
-import { useRoute } from "vue-router";
 import { auth } from "@/firebase";
+import { draw, start, stop } from "@/scripts/utils/canvasDrawUtil";
 import { initCanvas } from "@/scripts/utils/initCanvasUtil";
+import { Ref, ref } from "vue";
+import { useRoute } from "vue-router";
 initCanvas();
 const route = useRoute();
 const isCreator: Ref<boolean> = ref(
   route.params.user === auth.currentUser?.email
 );
-const isDrawing: Ref<boolean> = ref(false);
-function startDrawing(event: MouseEvent) {
-  isDrawing.value = true;
-  draw(event);
-}
-function lineDraw(event: MouseEvent) {
-  startLineDrawing(event);
-}
-function stopLineDrawing(event: MouseEvent) {
-  finishDrawing(event);
-}
-function stopDrawing() {
-  isDrawing.value = false;
-}
-function draw(event: MouseEvent): void {
-  if (!isDrawing.value) return;
-  else {
-    freeDraw(event);
-  }
-}
 </script>
 
 <style scoped lang="scss">

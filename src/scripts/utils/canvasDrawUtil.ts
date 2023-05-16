@@ -16,6 +16,7 @@ const drawStyle: DrawingStyleCompos = useDrawingStyle();
 const flag: CanvasFlagCompos = useCanvasFlag();
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);
+const drawnElements: ImageData[] = [];
 
 export const clearCanvas = (): void => {
   const canvas: CanvasCompos = useCanvas();
@@ -30,11 +31,14 @@ export const clearCanvas = (): void => {
   }
 };
 export const start = (event: MouseEvent) => {
+  console.log(ctx.ctx.value);
   isDrawing.value = true;
   reposition(event);
 };
 export const stop = (event: MouseEvent) => {
-  if (!ctx.ctx.value || !isDrawing.value) return;
+  console.log(ctx.ctx.value);
+
+  if (!ctx.ctx.value || !isDrawing.value || !canvas.canvas.value) return;
 
   if (flag.flag.value === "line") {
     drawLine(event);
@@ -43,6 +47,14 @@ export const stop = (event: MouseEvent) => {
   } else if (flag.flag.value === "arc") {
     drawArc(event);
   }
+  drawnElements.push(
+    ctx.ctx.value.getImageData(
+      0,
+      0,
+      canvas.canvas.value.width,
+      canvas.canvas.value.height
+    )
+  );
   isDrawing.value = false;
 };
 export const reposition = (event: MouseEvent) => {
@@ -99,4 +111,19 @@ const drawArc = (event: MouseEvent) => {
     2 * Math.PI
   );
   ctx.ctx.value.stroke();
+};
+export const cancelLastAction = () => {
+  if (!ctx.ctx.value || !canvas.canvas.value) return;
+  if (drawnElements.length > 0) {
+    ctx.ctx.value.clearRect(
+      0,
+      0,
+      canvas.canvas.value.width,
+      canvas.canvas.value.height
+    );
+    drawnElements.pop();
+    for (const element of drawnElements) {
+      ctx.ctx.value.putImageData(element, 0, 0);
+    }
+  }
 };
