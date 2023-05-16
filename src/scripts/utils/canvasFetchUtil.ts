@@ -35,8 +35,11 @@ export const fetchPaginatedCanvases = async (
       });
       const data = await Promise.all(promises);
       const nextPageToken = res.nextPageToken;
-      console.log(res);
-      photo.setCanvases(data);
+      const sortedData = data.sort(
+        (a: Photo, b: Photo) =>
+          Number(a.metadata.uploadedAt) - Number(b.metadata.uploadedAt)
+      );
+      photo.setCanvases(sortedData);
       photo.setToken(nextPageToken as string);
     })
     .catch((error) => {

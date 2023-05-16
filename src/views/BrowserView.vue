@@ -23,6 +23,11 @@
       <div
         class="image-item"
         v-for="image in canvases.photos.value"
+        :class="
+          user.user.value?.email === image.metadata.uploadedBy
+            ? 'your-images'
+            : ''
+        "
         :key="image.downloadUrl"
         :id="image.downloadUrl"
       >
@@ -52,18 +57,23 @@
 <script setup lang="ts">
 import CustomLoader from "@/components/CustomLoader.vue";
 import { useImages } from "@/composables/useImages";
+import { useUser } from "@/composables/useUser";
 import {
   fetchCanvasesByCreator,
   fetchPaginatedCanvases,
 } from "@/scripts/utils/canvasFetchUtil";
 import { debounce } from "@/scripts/utils/debouncer";
-import { PaginationInterface } from "@/types/interfaces/composInterfaces";
+import {
+  PaginationInterface,
+  UserDataCompos,
+} from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
 import { useRouter } from "vue-router";
 const isMobile = window.innerWidth < 768;
 const LIMIT = isMobile ? 4 : 12;
 const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
+const user: UserDataCompos = useUser();
 const router = useRouter();
 fetchPaginatedCanvases(LIMIT);
 const handleOpenDetails = (url: string) => {
@@ -94,6 +104,9 @@ const handleSearch = debounce(() => {
     padding: 1.3em;
     @include for-phone {
       grid-template-columns: repeat(1, 1fr);
+    }
+    .image-container.your-images {
+      border: 2px solid red;
     }
 
     .image-item {

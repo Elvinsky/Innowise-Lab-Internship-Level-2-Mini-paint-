@@ -1,4 +1,5 @@
-import { useCanvas, useCanvasContext } from "@/composables/useCanvasContext";
+import { useCanvasContext } from "@/composables/useCanvasContext";
+import { useCanvas } from "@/composables/useCanvas";
 import { CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import {
   CanvasCompos,
