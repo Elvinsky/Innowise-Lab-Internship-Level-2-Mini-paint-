@@ -1,7 +1,4 @@
-import {
-  CanvasCompos,
-  CanvasContextCompos,
-} from "@/types/interfaces/composInterfaces";
+import { CanvasContextCompos } from "@/types/interfaces/composInterfaces";
 import { ref, Ref } from "vue";
 
 const ctx: Ref<CanvasRenderingContext2D | null> = ref(null);

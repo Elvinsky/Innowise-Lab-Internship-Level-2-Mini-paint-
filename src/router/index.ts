@@ -31,26 +31,22 @@ const routes: Array<RouteRecordRaw> = [
         path: "",
         name: "home",
         component: HomeView,
-        beforeEnter: authGuard,
       },
       {
         path: "editor",
         name: "editor",
         component: EditorView,
-        beforeEnter: authGuard,
       },
       {
         path: "browser",
         name: "browser",
         component: BrowserView,
-        beforeEnter: authGuard,
       },
       {
         path: "canvas/:id/:url/:user/:name",
         name: "canvasDetails",
         props: true,
         component: CanvasView,
-        beforeEnter: authGuard,
       },
     ],
   },
@@ -72,7 +68,6 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-// console.log(router.options.routes[0].children);
 
 export const VALID_ROUTES = router.getRoutes().map((el) => el.path);
 export default router;

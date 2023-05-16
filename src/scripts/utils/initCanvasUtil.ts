@@ -13,11 +13,11 @@ export const initCanvas = () => {
     width: 1000,
     height: 500,
   });
-  const isMobile = window.innerWidth < 768;
-  sizes.value = {
-    width: isMobile ? 300 : 1000,
-    height: isMobile ? 500 : 500,
-  };
+  // const isMobile = window.innerWidth < 768;
+  // sizes.value = {
+  //   width: isMobile ? 300 : 1000,
+  //   height: isMobile ? 500 : 500,
+  // };
 
   (async () => {
     await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
