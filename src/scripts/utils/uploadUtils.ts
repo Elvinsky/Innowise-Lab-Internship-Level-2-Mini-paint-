@@ -11,6 +11,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import { updateItem } from "../dbScripts/crudApi";
 const canvas: CanvasCompos = useCanvas();
 
 export function dataURLtoBlob(dataURL: string): Blob {
@@ -43,5 +44,7 @@ export const firebaseUpload = async (fileName: string) => {
       canvasCtx: canvas.canvas.value.toDataURL(),
     },
   };
+  if (!metadata.customMetadata) return;
+  updateItem("users", user.user.value.uid, metadata.customMetadata.uploadedAt);
   uploadBytes(imageRef, file, metadata);
 };
