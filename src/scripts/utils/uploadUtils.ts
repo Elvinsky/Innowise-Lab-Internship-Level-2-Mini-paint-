@@ -34,7 +34,7 @@ export const firebaseUpload = async (fileName: string) => {
   const imageRef: StorageReference = ref(storage, fileName + ".png");
   const dataURL = canvasBackup.toDataURL();
   const blob = dataURLtoBlob(dataURL);
-  const file = new File([blob], fileName + ".png");
+  const file = new File([blob], fileName);
   if (!user.user.value || !canvas.canvas.value) return;
   const metadata: UploadMetadata = {
     customMetadata: {

@@ -1,7 +1,7 @@
 import { useCanvas } from "@/composables/useCanvas";
 import { CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
-import { Ref, ref, nextTick, withCtx } from "vue";
+import { Ref, ref, nextTick } from "vue";
 import { useRoute } from "vue-router";
 export const initCanvas = () => {
   const route = useRoute();
