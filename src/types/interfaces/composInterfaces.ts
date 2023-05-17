@@ -22,6 +22,7 @@ export interface UserDataCompos {
   showToast: (data: string) => void;
   authError: Ref<boolean>;
   regUser: (email: string, password: string, name: string) => void;
+  logOut: () => void;
 }
 export interface PaginationInterface {
   photos: Ref<Photo[] | null>;

@@ -50,7 +50,6 @@
       alt="circle"
       @click="cancelLastAction"
       class="main-img"
-      :class="canvas.flag.value === 'arc' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img

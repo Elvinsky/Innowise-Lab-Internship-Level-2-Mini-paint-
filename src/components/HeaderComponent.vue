@@ -31,12 +31,9 @@ const isHome = computed(() => {
 });
 function handleGoBack() {
   router.go(-1);
-  if (!VALID_ROUTES.includes(route.fullPath)) router.go(-1);
 }
 function handleLogOut() {
-  user.setUser("", "");
-  router.push("/login");
-  user.showToast("");
+  user.logOut();
 }
 </script>
 <style scoped lang="scss">

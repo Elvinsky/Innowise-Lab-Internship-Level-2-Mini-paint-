@@ -1,10 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  NavigationGuardNext,
-  RouteLocationNormalized,
-  RouteRecordRaw,
-} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -12,16 +6,9 @@ import EditorView from "@/views/EditorView.vue";
 import BrowserView from "@/views/BrowserView.vue";
 import CanvasView from "@/views/CanvasView.vue";
 import LayoutView from "@/views/LayoutView.vue";
-const authGuard = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) => {
-  const userStringData: string | null = localStorage.getItem("user");
-  if (userStringData === null) next("/login");
-  next();
-};
-
+import { useUser } from "@/composables/useUser";
+import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+const user: UserDataCompos = useUser();
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -30,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         name: "home",
+        alias: ["/home"],
         component: HomeView,
       },
       {
@@ -43,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
         component: BrowserView,
       },
       {
-        path: "canvas/:id/:url/:user/:name",
+        path: "canvas/:id/:context/:user/:name",
         name: "canvasDetails",
         props: true,
         component: CanvasView,
@@ -65,8 +53,14 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== "login" && to.name !== "registration" && !user.user.value)
+    next({ name: "login" });
+  else next();
 });
 
 export const VALID_ROUTES = router.getRoutes().map((el) => el.path);

@@ -19,7 +19,7 @@ export const useUser = (): UserDataCompos => {
       .then((creds) => {
         localStorage.setItem("user", JSON.stringify(creds.user));
         showToast("success");
-        router.push("/");
+        router.push("/home");
       })
       .catch((err) => {
         console.error("error", err);
@@ -49,5 +49,10 @@ export const useUser = (): UserDataCompos => {
       toastShown.value = "";
     }, 5000);
   };
-  return { user, setUser, toastShown, showToast, authError, regUser };
+  const logOut = () => {
+    user.value = null;
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
+  return { user, setUser, toastShown, showToast, authError, regUser, logOut };
 };
