@@ -6,7 +6,8 @@ const canvas: CanvasCompos = useCanvas();
 
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);
-const drawnElements: ImageData[] = [];
+const drawnElements: Ref<ImageData[]> = ref([]);
+
 export const clearCanvas = (): void => {
   if (canvas.canvas.value && canvas.ctx.value) {
     canvas.ctx.value.clearRect(
@@ -32,7 +33,7 @@ export const stop = (event: MouseEvent) => {
   } else if (canvas.flag.value === "arc") {
     drawArc(event);
   }
-  drawnElements.push(
+  drawnElements.value.push(
     canvas.ctx.value.getImageData(
       0,
       0,
@@ -99,16 +100,17 @@ const drawArc = (event: MouseEvent) => {
 };
 export const cancelLastAction = () => {
   if (!canvas.ctx.value || !canvas.canvas.value) return;
-  if (drawnElements.length > 0) {
+  if (drawnElements.value.length > 0) {
     canvas.ctx.value.clearRect(
       0,
       0,
       canvas.canvas.value.width,
       canvas.canvas.value.height
     );
-    drawnElements.pop();
-    for (const element of drawnElements) {
+    drawnElements.value.pop();
+    for (const element of drawnElements.value) {
       canvas.ctx.value.putImageData(element, 0, 0);
     }
   }
 };
+export { drawnElements };
