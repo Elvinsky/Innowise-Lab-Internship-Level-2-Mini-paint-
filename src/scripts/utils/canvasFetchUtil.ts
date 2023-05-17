@@ -30,6 +30,7 @@ export const fetchPaginatedCanvases = async (
           metadata: {
             uploadedBy: metadata.customMetadata?.uploadedBy ?? "",
             uploadedAt: metadata.customMetadata?.uploadedAt ?? "",
+            canvasCtx: metadata.customMetadata?.canvasCtx ?? "",
           },
         };
       });

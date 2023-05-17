@@ -2,7 +2,9 @@ import { useCanvas } from "@/composables/useCanvas";
 import { CanvasSizes } from "@/types/interfaces/canvasInterfaces";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { Ref, ref, nextTick } from "vue";
+import { useRoute } from "vue-router";
 export const initCanvas = () => {
+  const route = useRoute();
   const canvas: CanvasCompos = useCanvas();
   const sizes: Ref<CanvasSizes> = ref({
     width: 1000,
@@ -25,9 +27,12 @@ export const initCanvas = () => {
     if (canvas.canvas.value) {
       canvas.canvas.value.width = sizes.value.width;
       canvas.canvas.value.height = sizes.value.height;
-      const img = document.querySelector("#preload") as HTMLImageElement | null;
-      if (img) {
-        canvas.ctx.value?.drawImage(img, 0, 0);
+      if (route.params.context && canvas.ctx.value) {
+        const image = new Image();
+        image.src = route.params.context as string;
+        image.onload = () => {
+          if (canvas.ctx.value) canvas.ctx.value.drawImage(image, 0, 0);
+        };
       }
     }
   })();

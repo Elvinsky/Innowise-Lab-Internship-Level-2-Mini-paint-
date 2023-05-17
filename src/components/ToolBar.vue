@@ -50,7 +50,6 @@
       alt="circle"
       @click="cancelLastAction"
       class="main-img"
-      :class="canvas.flag.value === 'arc' ? 'active' : ''"
       v-if="props.isCreator"
     />
     <img
@@ -106,7 +105,11 @@
 </template>
 
 <script setup lang="ts">
-import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
+import {
+  cancelLastAction,
+  clearCanvas,
+  drawnElements,
+} from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 
 import { Ref, ref, defineProps } from "vue";

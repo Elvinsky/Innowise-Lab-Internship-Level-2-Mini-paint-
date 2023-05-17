@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    <img :src="route.params.url" class="img-preload" id="preload" />
     <div class="editor-wrapper">
       <ToolBar :filename="route.params.name" :isCreator="isCreator" />
       <canvas

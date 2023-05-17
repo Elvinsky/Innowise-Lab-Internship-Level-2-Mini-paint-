@@ -4,5 +4,6 @@ export interface Photo {
   metadata: {
     uploadedBy: string;
     uploadedAt: string;
+    canvasCtx: string;
   };
 }
