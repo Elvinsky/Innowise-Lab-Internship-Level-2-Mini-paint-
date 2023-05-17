@@ -52,7 +52,6 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { Ref, ref } from "vue";
 import { useUser } from "@/composables/useUser";
 import ErrorToast from "@/components/ErrorToast.vue";
 import SuccessToast from "@/components/SuccessToast.vue";
