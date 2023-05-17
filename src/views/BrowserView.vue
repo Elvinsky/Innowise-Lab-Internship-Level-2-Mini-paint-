@@ -36,7 +36,7 @@
             name: 'canvasDetails',
             params: {
               id: image.metadata.uploadedAt,
-              url: image.downloadUrl,
+              context: image.metadata.canvasCtx,
               user: image.metadata.uploadedBy,
               name: image.name,
             },
