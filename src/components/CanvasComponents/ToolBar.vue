@@ -117,8 +117,8 @@ import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 
 import { Ref, ref, defineProps } from "vue";
-import ErrorToast from "./ErrorToast.vue";
-import SuccessToast from "./SuccessToast.vue";
+import ErrorToast from "@/components/Toasts/ErrorToast.vue";
+import SuccessToast from "@/components/Toasts/SuccessToast.vue";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { useCanvas } from "@/composables/useCanvas";
 

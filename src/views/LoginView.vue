@@ -37,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import ErrorToast from "@/components/ErrorToast.vue";
-import SuccessToast from "@/components/SuccessToast.vue";
+import ErrorToast from "@/components/Toasts/ErrorToast.vue";
+import SuccessToast from "@/components/Toasts/SuccessToast.vue";
 import { useUser } from "@/composables/useUser";
 
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";

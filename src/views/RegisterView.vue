@@ -53,8 +53,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useUser } from "@/composables/useUser";
-import ErrorToast from "@/components/ErrorToast.vue";
-import SuccessToast from "@/components/SuccessToast.vue";
+import ErrorToast from "@/components/Toasts/ErrorToast.vue";
+import SuccessToast from "@/components/Toasts/SuccessToast.vue";
 import { UserData } from "@/types/interfaces/userInterfaces";
 
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
