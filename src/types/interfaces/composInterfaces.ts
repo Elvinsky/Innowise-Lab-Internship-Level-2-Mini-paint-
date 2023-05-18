@@ -26,7 +26,7 @@ export interface UserDataCompos {
 }
 export interface PaginationInterface {
   photos: Ref<Photo[] | null>;
-  pageTokenRef: Ref<string>;
-  setToken: (token: string) => void;
+  // pageTokenRef: Ref<string>;
+  // setToken: (token: string) => void;
   setCanvases: (photo: Photo[]) => void;
 }

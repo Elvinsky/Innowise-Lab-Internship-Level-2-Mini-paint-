@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import { useUser } from "@/composables/useUser";
-import router, { VALID_ROUTES } from "@/router";
+import router from "@/router";
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
 import { computed } from "vue";
 import { useRoute } from "vue-router";

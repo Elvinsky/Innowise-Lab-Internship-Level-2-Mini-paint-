@@ -63,5 +63,4 @@ router.beforeEach((to, from, next) => {
   else next();
 });
 
-export const VALID_ROUTES = router.getRoutes().map((el) => el.path);
 export default router;
