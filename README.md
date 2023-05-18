@@ -36,7 +36,6 @@
  - TypeScript
  - VueJS
  - vue-router
- - vue-loader
  - HTML5
  - CSS3
  - SCSS
