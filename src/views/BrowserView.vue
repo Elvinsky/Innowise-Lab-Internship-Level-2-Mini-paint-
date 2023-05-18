@@ -7,9 +7,14 @@
   />
   <div class="wrapper">
     <div class="post-head">
-      <!-- <div>
-        <img src="@/assets/left.png" alt="left" @click="handlePrevPage" />
-      </div> -->
+      <div>
+        <img
+          src="@/assets/left.png"
+          alt="left"
+          @click="handlePrevPage"
+          v-if="page > 1"
+        />
+      </div>
       <input
         type="text"
         class="searchbar"
@@ -17,9 +22,14 @@
         v-model="searchContent"
         @input="handleSearch"
       />
-      <!-- <div>
-        <img src="@/assets/right.png" alt="right" @click="handleNextPage" />
-      </div> -->
+      <div>
+        <img
+          src="@/assets/right.png"
+          alt="right"
+          @click="handleNextPage"
+          v-if="pages && page <= pages"
+        />
+      </div>
     </div>
     <div
       v-if="canvases.photos.value?.length === 0 && searchContent.length !== 0"
@@ -69,25 +79,49 @@ import {
   UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
-// const isMobile = window.innerWidth < 768;
-// const LIMIT = isMobile ? 4 : 12;
+const isMobile = window.innerWidth < 768;
+const LIMIT = isMobile ? 4 : 12;
+const page: Ref<number> = ref(1);
 const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
 const user: UserDataCompos = useUser();
-fetchCanvasesByCreator();
+const keys: Ref<string[]> = ref([]);
+const pages: Ref<number | null> = ref(null);
+const handleNextPage = () => {
+  canvases.setCanvases([]);
+  page.value++;
+  fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
+    if (data) {
+      pages.value = data;
+    }
+  });
+};
+const handlePrevPage = () => {
+  canvases.setCanvases([]);
 
+  page.value--;
+  fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
+    if (data) {
+      pages.value = data;
+    }
+  });
+};
+fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
+  if (data) {
+    pages.value = data;
+  }
+});
 const handleSearch = debounce(() => {
-  const keys: string[] = [];
   getItems("users")
     .then((data) => {
       data.map((el) => {
         if (el.email.includes(searchContent.value)) {
-          el.images.map((el: string) => keys.push(el));
+          el.images.map((el: string) => keys.value.push(el));
         }
       });
     })
     .then(() => {
-      fetchCanvasesByCreator(keys);
+      fetchCanvasesByCreator(page.value, LIMIT, keys.value);
     });
 }, 300);
 </script>
