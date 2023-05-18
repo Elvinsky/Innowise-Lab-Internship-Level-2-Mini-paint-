@@ -57,12 +57,12 @@ export const reposition = (event: MouseEvent) => {
   coord.value.x = event.clientX - canvas.canvas.value?.offsetLeft;
   coord.value.y = event.clientY - canvas.canvas.value?.offsetTop;
 };
-
 export const draw = (event: MouseEvent) => {
   if (!canvas.ctx.value) return;
   canvas.ctx.value.lineWidth = canvas.penWidth.value;
   canvas.ctx.value.lineCap = "round";
   canvas.ctx.value.strokeStyle = canvas.penColor.value;
+
   if (canvas.flag.value === "draw" && isDrawing.value) {
     canvas.ctx.value.beginPath();
     canvas.ctx.value.moveTo(coord.value.x, coord.value.y);
@@ -70,15 +70,19 @@ export const draw = (event: MouseEvent) => {
     canvas.ctx.value.lineTo(coord.value.x, coord.value.y);
     canvas.ctx.value.stroke();
   } else if (canvas.flag.value === "line" && isDrawing.value) {
+    clearCanvas();
     loadInitContext();
     drawLine(event);
   } else if (canvas.flag.value === "square" && isDrawing.value) {
+    clearCanvas();
     loadInitContext();
     drawSquare(event);
   } else if (canvas.flag.value === "arc" && isDrawing.value) {
+    clearCanvas();
     loadInitContext();
     drawArc(event);
   } else if (canvas.flag.value === "star" && isDrawing.value) {
+    clearCanvas();
     loadInitContext();
     drawStar(event);
   }
@@ -171,8 +175,9 @@ const loadInitContext = () => {
   const image = new Image();
   image.src = initData.value as string;
   image.onload = () => {
-    clearCanvas();
-    if (canvas.ctx.value) canvas.ctx.value.drawImage(image, 0, 0);
+    if (canvas.ctx.value) {
+      canvas.ctx.value.drawImage(image, 0, 0);
+    }
   };
 };
 export { drawnElements };
