@@ -6,6 +6,7 @@
  - `git init`
  - `git clone <repo URL>`
  - `npm install`
+ - rename .env.example as .env
  - `npm run serve`
  - Follow localhost:\<port\> (usually localhost:8080)
 
