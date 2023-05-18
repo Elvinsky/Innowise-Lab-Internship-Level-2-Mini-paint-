@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
-    <nav>
+    <div class="home-block">
       <div @click="navigate('/editor')">New image</div>
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
       <div @click="navigate('/browser')">Browse images</div>
-    </nav>
+    </div>
   </div>
 </template>
 
@@ -26,11 +26,11 @@ const navigate = (path: string): void => {
     margin-top: 1em;
   }
 
-  nav {
+  .home-block {
     display: flex;
     flex-direction: row;
     gap: 3em;
-    margin-top: 8em;
+    margin-top: 5em;
     margin-left: 3em;
     align-items: center;
     justify-content: center;

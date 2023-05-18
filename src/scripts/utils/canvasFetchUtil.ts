@@ -26,7 +26,7 @@ export const fetchCanvasesByCreator = async (
       const promises = items.map(async (itemRef) => {
         const downloadUrl = await getDownloadURL(itemRef);
         const metadata = await getMetadata(itemRef);
-        if (filter && filter.length > 0) {
+        if (filter) {
           if (
             metadata.customMetadata &&
             filter?.includes(metadata.customMetadata?.uploadedAt)

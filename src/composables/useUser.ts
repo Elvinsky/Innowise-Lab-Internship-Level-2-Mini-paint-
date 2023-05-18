@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { Ref, ref } from "vue";
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const user: Ref<User | null> = ref(null);
+const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
 const toastShown: Ref<string> = ref("");
 const authError: Ref<boolean> = ref(false);
 
@@ -68,5 +68,6 @@ export const useUser = (): UserDataCompos => {
     localStorage.removeItem("user");
     router.push("/login");
   };
+
   return { user, setUser, toastShown, showToast, authError, regUser, logOut };
 };

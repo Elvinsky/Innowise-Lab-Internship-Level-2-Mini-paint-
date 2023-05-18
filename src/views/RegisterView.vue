@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div>
     <h2>Registration</h2>
     <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
       <input
@@ -47,7 +47,7 @@
       @click="handleAbortToast"
       >You are ready to go!</SuccessToast
     >
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -102,7 +102,7 @@ $input-width: 200px;
   }
 }
 
-section {
+div {
   display: flex;
   flex-direction: column;
   align-items: center;

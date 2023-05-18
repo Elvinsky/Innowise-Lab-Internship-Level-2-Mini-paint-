@@ -71,14 +71,15 @@
 import CustomLoader from "@/components/CustomLoader.vue";
 import { useImages } from "@/composables/useImages";
 import { useUser } from "@/composables/useUser";
-import { getItems } from "@/scripts/dbScripts/crudApi";
 import { fetchCanvasesByCreator } from "@/scripts/utils/canvasFetchUtil";
 import { debounce } from "@/scripts/utils/debouncer";
+import { getKeys } from "@/scripts/utils/getKeysUtil";
 import {
   PaginationInterface,
   UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
+
 const isMobile = window.innerWidth < 768;
 const LIMIT = isMobile ? 4 : 12;
 const page: Ref<number> = ref(1);
@@ -87,42 +88,42 @@ const searchContent: Ref<string> = ref("");
 const user: UserDataCompos = useUser();
 const keys: Ref<string[]> = ref([]);
 const pages: Ref<number | null> = ref(null);
-const handleNextPage = () => {
-  canvases.setCanvases([]);
-  page.value++;
-  fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
-    if (data) {
-      pages.value = data;
-    }
-  });
-};
-const handlePrevPage = () => {
-  canvases.setCanvases([]);
-
-  page.value--;
-  fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
-    if (data) {
-      pages.value = data;
-    }
-  });
-};
 fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
   if (data) {
     pages.value = data;
   }
 });
+const handleNextPage = () => {
+  canvases.setCanvases([]);
+  page.value++;
+  if (searchContent.value) {
+    fetchCanvasesByCreator(page.value, LIMIT, keys.value);
+  } else {
+    fetchCanvasesByCreator(page.value, LIMIT);
+  }
+};
+const handlePrevPage = () => {
+  canvases.setCanvases([]);
+  page.value--;
+  if (searchContent.value) {
+    fetchCanvasesByCreator(page.value, LIMIT, keys.value);
+  } else {
+    fetchCanvasesByCreator(page.value, LIMIT);
+  }
+};
+fetchCanvasesByCreator(page.value, LIMIT).then((data) => {
+  if (data) {
+    pages.value = data;
+  }
+});
 const handleSearch = debounce(() => {
-  getItems("users")
-    .then((data) => {
-      data.map((el) => {
-        if (el.email.includes(searchContent.value)) {
-          el.images.map((el: string) => keys.value.push(el));
-        }
-      });
-    })
-    .then(() => {
-      fetchCanvasesByCreator(page.value, LIMIT, keys.value);
+  getKeys(searchContent.value).then((data) => {
+    if (!data) return;
+    keys.value = data;
+    fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
+      if (data) pages.value = data;
     });
+  });
 }, 300);
 </script>
 

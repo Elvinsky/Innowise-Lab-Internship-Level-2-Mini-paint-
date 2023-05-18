@@ -1,21 +1,23 @@
 <template>
   <header>
-    <img
-      src="@/assets/return.png"
-      alt="back"
-      class="back-btn"
-      @click="handleGoBack"
-      v-if="isHome !== '/'"
-    />
-    <h2 class="welcoming">Welcome to</h2>
-    <h2><span>INNODRAW</span></h2>
-    <h2>{{ user.user.value?.displayName }}</h2>
-    <img
-      src="@/assets/user.png"
-      alt="back"
-      class="user-btn"
-      @click="handleLogOut"
-    />
+    <nav>
+      <img
+        src="@/assets/return.png"
+        alt="back"
+        class="back-btn"
+        @click="handleGoBack"
+        v-if="isHome !== '/'"
+      />
+      <h2 class="welcoming">Welcome to</h2>
+      <h2><span>INNODRAW</span></h2>
+      <h2>{{ user.user.value?.displayName }}</h2>
+      <img
+        src="@/assets/user.png"
+        alt="back"
+        class="user-btn"
+        @click="handleLogOut"
+      />
+    </nav>
   </header>
 </template>
 <script setup lang="ts">
@@ -43,11 +45,6 @@ function handleLogOut() {
   }
 }
 header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 3em;
   position: sticky;
   box-sizing: border-box;
   top: 0;
@@ -58,6 +55,13 @@ header {
   @include for-phone {
     gap: 1.3em;
     justify-content: space-between;
+  }
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3em;
   }
   img {
     width: 30px;

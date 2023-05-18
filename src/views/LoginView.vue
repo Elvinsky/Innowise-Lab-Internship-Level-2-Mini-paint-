@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div>
     <h2>Login</h2>
     <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
       <input
@@ -33,7 +33,7 @@
       @click="handleAbortToast"
       >You are ready to go!</SuccessToast
     >
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -65,7 +65,7 @@ const handleAbortToast = () => {
     @content;
   }
 }
-section {
+div {
   display: flex;
   flex-direction: column;
   align-items: center;
