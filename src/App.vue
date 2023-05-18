@@ -1,12 +1,11 @@
 <template>
   <div>
-    <!-- <div class="background"></div> -->
     <RouterView />
   </div>
 </template>
-
 <style lang="scss">
 $font-family: Avenir, Helvetica, Arial, sans-serif;
+$background-color: rgba(0, 30, 255, 0.177);
 
 * {
   margin: 0;

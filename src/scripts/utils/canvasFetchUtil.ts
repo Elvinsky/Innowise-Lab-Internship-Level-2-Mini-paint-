@@ -6,7 +6,6 @@ import {
   ListResult,
   getDownloadURL,
   getMetadata,
-  list,
   listAll,
   ref,
 } from "@firebase/storage";

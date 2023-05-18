@@ -19,6 +19,7 @@ section {
   align-items: center;
   justify-content: start;
   background-color: $background-color;
+  height: 100%;
   margin-bottom: 3em;
 }
 </style>

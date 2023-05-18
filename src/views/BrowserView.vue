@@ -1,6 +1,9 @@
 <template>
   <CustomLoader
-    v-if="!canvases.photos.value || canvases.photos.value.length === 0"
+    v-if="
+      !canvases.photos.value ||
+      (canvases.photos.value.length === 0 && searchContent.length === 0)
+    "
   />
   <div class="wrapper">
     <div class="post-head">
@@ -18,7 +21,12 @@
         <img src="@/assets/right.png" alt="right" @click="handleNextPage" />
       </div> -->
     </div>
-
+    <div
+      v-if="canvases.photos.value?.length === 0 && searchContent.length !== 0"
+      class="no-found"
+    >
+      Sorry, nothing was found
+    </div>
     <div class="image-container">
       <div
         class="image-item"
@@ -61,8 +69,8 @@ import {
   UserDataCompos,
 } from "@/types/interfaces/composInterfaces";
 import { Ref, ref } from "vue";
-const isMobile = window.innerWidth < 768;
-const LIMIT = isMobile ? 4 : 12;
+// const isMobile = window.innerWidth < 768;
+// const LIMIT = isMobile ? 4 : 12;
 const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
 const user: UserDataCompos = useUser();
@@ -90,6 +98,13 @@ const handleSearch = debounce(() => {
   }
 }
 .wrapper {
+  .no-found {
+    margin-top: 2em;
+    padding: 0.7em;
+    background-color: rgba(255, 129, 129, 0.401);
+    border-radius: 8px;
+    font-size: 2em;
+  }
   .image-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
