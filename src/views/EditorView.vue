@@ -34,7 +34,7 @@ initCanvas();
     align-items: center;
     justify-content: center;
     gap: 1em;
-    margin-top: 3em;
+    margin-top: 1em;
 
     canvas {
       border: 1px solid black;

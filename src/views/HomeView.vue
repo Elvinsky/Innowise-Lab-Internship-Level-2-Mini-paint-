@@ -30,7 +30,7 @@ const navigate = (path: string): void => {
     display: flex;
     flex-direction: row;
     gap: 3em;
-    margin-top: 6em;
+    margin-top: 8em;
     margin-left: 3em;
     align-items: center;
     justify-content: center;

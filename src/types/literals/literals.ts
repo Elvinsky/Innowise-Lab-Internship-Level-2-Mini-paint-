@@ -1,1 +1,1 @@
-export type CanvasFlag = "draw" | "line" | "square" | "arc" | "";
+export type CanvasFlag = "draw" | "line" | "square" | "arc" | "star" | "";

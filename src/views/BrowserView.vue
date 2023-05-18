@@ -75,6 +75,7 @@ const canvases: PaginationInterface = useImages();
 const searchContent: Ref<string> = ref("");
 const user: UserDataCompos = useUser();
 fetchCanvasesByCreator();
+
 const handleSearch = debounce(() => {
   const keys: string[] = [];
   getItems("users")
@@ -88,7 +89,7 @@ const handleSearch = debounce(() => {
     .then(() => {
       fetchCanvasesByCreator(keys);
     });
-}, 500);
+}, 300);
 </script>
 
 <style scoped lang="scss">

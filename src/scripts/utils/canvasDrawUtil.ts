@@ -38,6 +38,8 @@ export const stop = (event: MouseEvent) => {
     drawSquare(event);
   } else if (canvas.flag.value === "arc") {
     drawArc(event);
+  } else if (canvas.flag.value === "star") {
+    drawStar(event);
   }
   drawnElements.value.push(
     canvas.ctx.value.getImageData(
@@ -69,37 +71,16 @@ export const draw = (event: MouseEvent) => {
     canvas.ctx.value.stroke();
   } else if (canvas.flag.value === "line" && isDrawing.value) {
     loadInitContext();
-    canvas.ctx.value.beginPath();
-    canvas.ctx.value.moveTo(initCoords.x, initCoords.y);
-    reposition(event);
-    canvas.ctx.value.lineTo(coord.value.x, coord.value.y);
-    canvas.ctx.value.stroke();
+    drawLine(event);
   } else if (canvas.flag.value === "square" && isDrawing.value) {
     loadInitContext();
-    canvas.ctx.value.beginPath();
-    reposition(event);
-    canvas.ctx.value.rect(
-      initCoords.x,
-      initCoords.y,
-      coord.value.x - initCoords.x,
-      coord.value.y - initCoords.y
-    );
-    canvas.ctx.value.stroke();
+    drawSquare(event);
   } else if (canvas.flag.value === "arc" && isDrawing.value) {
     loadInitContext();
-    canvas.ctx.value.beginPath();
-    reposition(event);
-    canvas.ctx.value.arc(
-      initCoords.x,
-      initCoords.y,
-      Math.sqrt(
-        (coord.value.x - initCoords.x) ** 2 +
-          (coord.value.y - initCoords.y) ** 2
-      ),
-      0,
-      2 * Math.PI
-    );
-    canvas.ctx.value.stroke();
+    drawArc(event);
+  } else if (canvas.flag.value === "star" && isDrawing.value) {
+    loadInitContext();
+    drawStar(event);
   }
 };
 
@@ -140,7 +121,34 @@ const drawArc = (event: MouseEvent) => {
   );
   canvas.ctx.value.stroke();
 };
-
+const drawStar = (event: MouseEvent) => {
+  if (!canvas.ctx.value) return;
+  canvas.ctx.value.beginPath();
+  reposition(event);
+  const radius = Math.min(
+    Math.abs(coord.value.x - initCoords.x),
+    Math.abs(coord.value.y - initCoords.y)
+  );
+  const outerRad = radius;
+  const innerRad = radius / 2;
+  const rotation = (Math.PI / 2) * 3;
+  const x = initCoords.x + radius;
+  const y = initCoords.y + radius;
+  canvas.ctx.value.moveTo(x, y - outerRad);
+  for (let i = 0; i < 7; i++) {
+    let angle = rotation + (i * Math.PI) / 3;
+    const outerX = x + Math.cos(angle) * outerRad;
+    const outerY = y + Math.sin(angle) * outerRad;
+    canvas.ctx.value.lineTo(outerX, outerY);
+    angle += Math.PI / 6;
+    const innerX = x + Math.cos(angle) * innerRad;
+    const innerY = y + Math.sin(angle) * innerRad;
+    canvas.ctx.value.lineTo(innerX, innerY);
+  }
+  canvas.ctx.value.lineTo(x, y - outerRad);
+  canvas.ctx.value.closePath();
+  canvas.ctx.value.stroke();
+};
 export const cancelLastAction = () => {
   if (!canvas.ctx.value || !canvas.canvas.value) return;
   if (drawnElements.value.length > 0) {

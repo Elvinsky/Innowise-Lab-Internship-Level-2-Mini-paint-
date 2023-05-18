@@ -54,7 +54,7 @@ header {
   width: 100%;
   padding: 1em;
   font-size: 1.4em;
-  background-color: aliceblue;
+  background-color: rgb(164, 213, 255);
   @include for-phone {
     gap: 1.3em;
     justify-content: space-between;

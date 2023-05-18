@@ -1,4 +1,5 @@
 <template>
+  <div></div>
   <section>
     <HeaderComponent />
     <RouterView />
@@ -10,15 +11,22 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 </script>
 <style scoped lang="scss">
-$background-color: rgba(0, 30, 255, 0.177);
-
+div {
+  position: absolute;
+  z-index: -9999;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-color: rgba(131, 145, 255, 0.133);
+}
 section {
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  background-color: $background-color;
   height: 100%;
   margin-bottom: 3em;
 }

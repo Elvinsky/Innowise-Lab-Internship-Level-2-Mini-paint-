@@ -46,6 +46,14 @@
       v-if="props.isCreator"
     />
     <img
+      src="@/assets/star.png"
+      alt="star"
+      @click="handleStarFlag"
+      class="main-img"
+      :class="canvas.flag.value === 'star' ? 'active' : ''"
+      v-if="props.isCreator"
+    />
+    <img
       src="@/assets/return.png"
       alt="circle"
       @click="cancelLastAction"
@@ -148,6 +156,9 @@ function handleSquareFlag(): void {
 }
 function handleArcFlag(): void {
   canvas.flag.value === "arc" ? canvas.setFlag("") : canvas.setFlag("arc");
+}
+function handleStarFlag(): void {
+  canvas.flag.value === "star" ? canvas.setFlag("") : canvas.setFlag("star");
 }
 const handleAbortToast = () => {
   toastShown.value = "";

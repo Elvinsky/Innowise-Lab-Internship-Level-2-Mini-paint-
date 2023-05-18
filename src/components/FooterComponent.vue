@@ -17,7 +17,7 @@ footer {
   z-index: 999;
   width: 100%;
   padding: 1em;
-  background-color: aliceblue;
+  background-color: rgb(164, 213, 255);
   font-size: 1em;
   h2 {
     &:first-child {

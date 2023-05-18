@@ -5,8 +5,6 @@
 </template>
 <style lang="scss">
 $font-family: Avenir, Helvetica, Arial, sans-serif;
-$background-color: rgba(0, 30, 255, 0.177);
-
 * {
   margin: 0;
   padding: 0;
