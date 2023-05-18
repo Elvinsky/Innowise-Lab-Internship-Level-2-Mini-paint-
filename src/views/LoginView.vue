@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="login-wrap">
     <h2>Login</h2>
     <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
       <input
@@ -65,7 +65,7 @@ const handleAbortToast = () => {
     @content;
   }
 }
-div {
+.login-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;

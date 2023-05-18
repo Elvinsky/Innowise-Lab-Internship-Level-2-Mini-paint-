@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="register-wrap">
     <h2>Registration</h2>
     <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
       <input
@@ -94,6 +94,9 @@ $input-width: 200px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: rgba(209, 209, 209, 0.641);
+  border-radius: 5px;
+  padding: 1em;
   gap: 0.6em;
 }
 @mixin for-phone {
@@ -102,7 +105,7 @@ $input-width: 200px;
   }
 }
 
-div {
+.register-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
