@@ -1,6 +1,6 @@
 <template>
   <div class="toast-wrapper">
-    <img src="@/assets/mark.png" alt="error" />
+    <img src="@/assets/mark.png" alt="correct" />
     <div class="text"><slot></slot></div>
   </div>
 </template>

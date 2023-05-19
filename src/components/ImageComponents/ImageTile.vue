@@ -10,7 +10,11 @@
           name: props.image.name,
         },
       }"
-      ><img :src="props.image.downloadUrl" alt="image" class="canvas-img" />
+      ><img
+        :src="props.image.downloadUrl"
+        alt="user-image"
+        class="canvas-img"
+      />
       <span>{{ props.image.metadata.uploadedBy }}</span>
     </RouterLink>
   </div>

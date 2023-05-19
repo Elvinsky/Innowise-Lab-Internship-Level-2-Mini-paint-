@@ -13,7 +13,7 @@
       <h2>{{ user.user.value?.displayName }}</h2>
       <img
         src="@/assets/user.png"
-        alt="back"
+        alt="log-out"
         class="user-btn"
         @click="handleLogOut"
       />

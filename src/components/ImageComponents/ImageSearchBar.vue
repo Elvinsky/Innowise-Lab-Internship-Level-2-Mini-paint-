@@ -3,7 +3,7 @@
     <div>
       <img
         src="@/assets/left.png"
-        alt="left"
+        alt="back"
         @click="handlePrevPage"
         v-show="images.page.value > 1"
       />
@@ -18,7 +18,7 @@
     <div>
       <img
         src="@/assets/right.png"
-        alt="right"
+        alt="forward"
         @click="handleNextPage"
         v-show="
           images.totalPages.value &&
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { fetchCanvasesByCreator } from "@/scripts/utils/canvasFetchUtil";
+import { fetchCanvasesByCreator } from "@/scripts/utils/filteredCanvasUtil";
 import { debounce } from "@/scripts/utils/debouncer";
 import { getKeys } from "@/scripts/utils/getKeysUtil";
 import { Ref, ref } from "vue";

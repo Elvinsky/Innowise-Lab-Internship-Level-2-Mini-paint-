@@ -68,6 +68,7 @@
     />
     <img
       src="@/assets/bin.png"
+      alt="delete"
       class="main-img"
       @click="handleClearCanvas"
       v-if="props.isCreator"
