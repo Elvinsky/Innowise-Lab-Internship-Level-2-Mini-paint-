@@ -5,7 +5,7 @@
         src="@/assets/left.png"
         alt="left"
         @click="handlePrevPage"
-        v-if="page > 1"
+        v-show="images.page.value > 1"
       />
     </div>
     <input
@@ -20,7 +20,10 @@
         src="@/assets/right.png"
         alt="right"
         @click="handleNextPage"
-        v-if="pages && page <= pages"
+        v-show="
+          images.totalPages.value &&
+          images.page.value <= images.totalPages.value
+        "
       />
     </div>
   </div>
@@ -30,42 +33,37 @@ import { fetchCanvasesByCreator } from "@/scripts/utils/canvasFetchUtil";
 import { debounce } from "@/scripts/utils/debouncer";
 import { getKeys } from "@/scripts/utils/getKeysUtil";
 import { Ref, ref } from "vue";
-
-const isMobile = window.innerWidth < 768;
-const LIMIT = isMobile ? 4 : 12;
-const page: Ref<number> = ref(1);
+import { useImages } from "@/composables/useImages";
 const searchContent: Ref<string> = ref("");
 const keys: Ref<string[]> = ref([]);
-const pages: Ref<number | null> = ref(null);
-
-fetchCanvasesByCreator(page.value, LIMIT).then((data) => {
-  if (data) {
-    pages.value = data;
-  }
-});
+const images = useImages();
 
 const handleNextPage = () => {
-  page.value++;
+  images.setPage(images.page.value + 1);
   if (searchContent.value) {
-    fetchCanvasesByCreator(page.value, LIMIT, keys.value);
+    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
   } else {
-    fetchCanvasesByCreator(page.value, LIMIT);
+    fetchCanvasesByCreator(images.page.value, images.limit.value);
   }
 };
 const handlePrevPage = () => {
-  page.value--;
+  images.setPage(images.page.value - 1);
   if (searchContent.value) {
-    fetchCanvasesByCreator(page.value, LIMIT, keys.value);
+    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
   } else {
-    fetchCanvasesByCreator(page.value, LIMIT);
+    fetchCanvasesByCreator(images.page.value, images.limit.value);
   }
 };
 const handleSearch = debounce(() => {
   getKeys(searchContent.value).then((data) => {
     if (!data) return;
     keys.value = data;
-    fetchCanvasesByCreator(page.value, LIMIT, keys.value).then((data) => {
-      if (data) pages.value = data;
+    fetchCanvasesByCreator(
+      images.page.value,
+      images.limit.value,
+      keys.value
+    ).then((data) => {
+      if (data) images.setTotalPages(data);
     });
   });
 }, 300);

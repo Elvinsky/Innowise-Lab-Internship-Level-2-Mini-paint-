@@ -2,6 +2,7 @@ import { auth } from "@/firebase";
 import router from "@/router";
 import { setItem } from "@/scripts/dbScripts/crudApi";
 import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { UserData } from "@/types/interfaces/userInterfaces";
 import {
   User,
   createUserWithEmailAndPassword,
@@ -13,6 +14,12 @@ import { Ref, ref } from "vue";
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
 const toastShown: Ref<string> = ref("");
 const authError: Ref<boolean> = ref(false);
+const userInput: Ref<UserData> = ref({
+  name: "",
+  email: "",
+  password: "",
+  passwordConfirm: "",
+});
 
 export const useUser = (): UserDataCompos => {
   const setUser = (email: string, password: string) => {
@@ -68,6 +75,29 @@ export const useUser = (): UserDataCompos => {
     localStorage.removeItem("user");
     router.push("/login");
   };
+  const setUserInput = (
+    email: string,
+    password: string,
+    name = "",
+    passwordConfirm = ""
+  ) => {
+    userInput.value = {
+      email: email,
+      password: password,
+      name: name,
+      passwordConfirm: passwordConfirm,
+    };
+  };
 
-  return { user, setUser, toastShown, showToast, authError, regUser, logOut };
+  return {
+    user,
+    setUser,
+    toastShown,
+    showToast,
+    authError,
+    regUser,
+    logOut,
+    userInput,
+    setUserInput,
+  };
 };

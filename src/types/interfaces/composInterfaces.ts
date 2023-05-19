@@ -2,6 +2,7 @@ import { CanvasFlag } from "@/types/literals/literals";
 import { Ref } from "vue";
 import { User } from "firebase/auth";
 import { Photo } from "./photoInterface";
+import { UserData } from "./userInterfaces";
 
 export interface CanvasCompos {
   canvas: Ref<HTMLCanvasElement | null>;
@@ -23,6 +24,13 @@ export interface UserDataCompos {
   authError: Ref<boolean>;
   regUser: (email: string, password: string, name: string) => void;
   logOut: () => void;
+  userInput: Ref<UserData>;
+  setUserInput: (
+    email: string,
+    password: string,
+    name: string,
+    passwordConfirm: string
+  ) => void;
 }
 export interface PaginationInterface {
   photos: Ref<Photo[] | null>;

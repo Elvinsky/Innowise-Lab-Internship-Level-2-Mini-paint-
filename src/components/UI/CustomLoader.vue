@@ -1,5 +1,5 @@
 <template>
-  <div class="loader">
+  <div class="loader" v-if="!images.photos.value">
     <breeding-rhombus-spinner
       :animation-duration="2000"
       :size="100"
@@ -8,7 +8,9 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useImages } from "@/composables/useImages";
 import { BreedingRhombusSpinner } from "epic-spinners";
+const images = useImages();
 </script>
 <style scoped>
 .loader {

@@ -1,5 +1,10 @@
 <template>
-  <div class="no-found"><slot></slot></div>
+  <div
+    class="no-found"
+    v-if="images.photos.value && images.photos.value.length === 0"
+  >
+    <slot></slot>
+  </div>
 </template>
 <style scoped lang="scss">
 .no-found {
@@ -11,3 +16,7 @@
   font-size: 2em;
 }
 </style>
+<script setup lang="ts">
+import { useImages } from "@/composables/useImages";
+const images = useImages();
+</script>
