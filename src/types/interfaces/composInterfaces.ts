@@ -18,11 +18,11 @@ export interface CanvasCompos {
 }
 export interface UserDataCompos {
   user: Ref<User | null>;
-  setUser: (email: string, password: string) => void;
+  setUser: (input: Ref<UserData>) => void;
   toastShown: Ref<string>;
   showToast: (data: string) => void;
   authError: Ref<boolean>;
-  regUser: (email: string, password: string, name: string) => void;
+  regUser: (input: Ref<UserData>) => void;
   logOut: () => void;
   userInput: Ref<UserData>;
   setUserInput: (

@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import CustomLoader from "@/components/UI/CustomLoader.vue";
-import FallBack from "@/components/UI/FallBack.vue";
+import CustomLoader from "@/components/UI/LoadingComponents/CustomLoader.vue";
+import FallBack from "@/components/UI/LoadingComponents/FallBack.vue";
 import ImageSearchBar from "@/components/ImageComponents/ImageSearchBar.vue";
 import ImageContainer from "@/components/ImageComponents/ImageContainer.vue";
 </script>
