@@ -6,8 +6,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+import HeaderComponent from "@/components/UI/HeaderComponent.vue";
+import FooterComponent from "@/components/UI/FooterComponent.vue";
 </script>
 <style scoped lang="scss">
 .layout {
