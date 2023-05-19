@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { fetchCanvasesByCreator } from "@/scripts/utils/filteredCanvasUtil";
+import { fetchCanvasesByCreator } from "@/scripts/utils/fetchCanvasUtil";
 import { debounce } from "@/scripts/utils/debouncer";
 import { getKeys } from "@/scripts/utils/getKeysUtil";
 import { Ref, ref } from "vue";
