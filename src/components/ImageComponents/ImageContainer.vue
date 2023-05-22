@@ -14,7 +14,7 @@ import { useImages } from "@/composables/useImages";
 import { fetchCanvasesByCreator } from "@/scripts/utils/fetchCanvasUtil";
 const images = useImages();
 const isMobile = window.innerWidth < 750;
-isMobile ? images.setLimit(4) : images.setLimit(16);
+isMobile ? images.setLimit(4) : images.setLimit(12);
 fetchCanvasesByCreator(images.page.value, images.limit.value).then((data) => {
   if (data) {
     images.setTotalPages(data);

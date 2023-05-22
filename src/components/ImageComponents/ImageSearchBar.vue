@@ -5,7 +5,7 @@
         src="@/assets/left.png"
         alt="back"
         @click="handlePrevPage"
-        v-show="images.page.value > 1"
+        v-if="images.page.value > 1"
       />
     </div>
     <input
@@ -20,7 +20,7 @@
         src="@/assets/right.png"
         alt="forward"
         @click="handleNextPage"
-        v-show="
+        v-if="
           images.totalPages.value &&
           images.page.value <= images.totalPages.value
         "

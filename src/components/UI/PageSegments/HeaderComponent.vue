@@ -9,7 +9,7 @@
         v-if="isHome !== '/'"
       />
       <h2 class="welcoming">Welcome to</h2>
-      <h2><span>INNODRAW</span></h2>
+      <h1><span>INNODRAW</span></h1>
       <h2>{{ user.user.value?.displayName }}</h2>
       <img
         src="@/assets/user.png"
@@ -71,9 +71,11 @@ header {
     }
   }
 
-  h2 {
+  h1 {
     align-self: center;
     justify-self: center;
+    font-size: 2em;
+    font-weight: 700;
   }
   .welcoming {
     @include for-phone {

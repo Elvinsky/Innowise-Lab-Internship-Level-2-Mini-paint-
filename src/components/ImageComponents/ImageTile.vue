@@ -15,7 +15,7 @@
         alt="user-image"
         class="canvas-img"
       />
-      <span>{{ props.image.metadata.uploadedBy }}</span>
+      <div class="naming">{{ props.image.metadata.uploadedBy }}</div>
     </RouterLink>
   </div>
 </template>
@@ -44,14 +44,15 @@ const props = defineProps(["image"]);
     box-shadow: 4px 4px 2px 1px rgba(91, 91, 91, 0.2);
   }
 
-  span {
+  .naming {
     font-size: 1.1em;
+    width: 100%;
   }
 
   .canvas-img {
     margin: 0.5em;
-    width: 220px;
-    height: 110px;
+    width: 300px;
+    height: 130px;
     @include for-phone {
       height: 95px;
       width: 200px;
@@ -61,7 +62,7 @@ const props = defineProps(["image"]);
 
 a {
   text-decoration: none;
-  span {
+  .naming {
     color: black;
   }
 }

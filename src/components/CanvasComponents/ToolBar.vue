@@ -123,15 +123,13 @@ import SuccessToast from "@/components/Toasts/SuccessToast.vue";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { useCanvas } from "@/composables/useCanvas";
 
-const props = defineProps(["filename", "isCreator"]);
+const props = defineProps(["isCreator"]);
 const canvas: CanvasCompos = useCanvas();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);
 const toastShown: Ref<string> = ref("");
-const fileName: Ref<string> = ref(
-  props.filename ? props.filename : "canvas-img"
-);
+const fileName: Ref<string> = ref(Math.random().toString(36).substring(4));
 
 function showWidthRange(): void {
   widthRange.value = !widthRange.value;
@@ -184,6 +182,7 @@ const handleSaveImage = () => {
     .then(() => {
       showToast("success");
       isSaving.value = false;
+      fileName.value = Math.random().toString(36).substring(4);
     })
     .catch((err) => {
       showToast("error");

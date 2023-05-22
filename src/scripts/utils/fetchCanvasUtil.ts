@@ -12,7 +12,6 @@ export const fetchCanvasesByCreator = async (
   try {
     const canvases = await retrieveCanvases(page, limit, filter);
     photo.setCanvases(canvases);
-
     const pageCount = canvases.length / limit;
     return pageCount;
   } catch (error) {
