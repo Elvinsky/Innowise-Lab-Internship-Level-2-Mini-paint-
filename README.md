@@ -6,14 +6,14 @@
  - `git init`
  - `git clone <repo URL>`
  - `npm install`
- - rename .env.example as .env
+ - `.env.example --> .env`
  - `npm run serve`
  - Follow localhost:\<port\> (usually localhost:8080)
 
 ### DB information:
 
  - Data Base - **Firebase**
- - Entities: **User**, **Canvas**
+ - Entities: **User**, **Images**
  - User authorization implemented with **Firebase Authentication**
  - User session and sign in/up implemented with JWT token uder the hood
  - Canvas storing implemented with **Firebase Storage**
