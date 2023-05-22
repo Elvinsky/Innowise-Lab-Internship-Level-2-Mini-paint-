@@ -9,7 +9,7 @@
         v-if="isHome !== '/' && isHome !== '/home'"
       />
       <h2 class="welcoming">Welcome to</h2>
-      <h1><span>INNODRAW</span></h1>
+      <h1>INNODRAW</h1>
       <h2>{{ user.user.value?.displayName }}</h2>
       <img
         src="@/assets/user.png"
@@ -94,7 +94,7 @@ header {
     }
   }
 
-  span {
+  h1 {
     letter-spacing: 8px;
     color: rgba(249, 73, 73, 255);
     @include for-phone {

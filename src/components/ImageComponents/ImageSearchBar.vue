@@ -1,5 +1,5 @@
 <template>
-  <div class="post-head">
+  <div class="searchline">
     <div>
       <img
         src="@/assets/left.png"
@@ -80,7 +80,7 @@ const handleSearch = debounce(() => {
   font-size: 1em;
 }
 
-.post-head {
+.searchline {
   margin-top: 0.5em;
   display: flex;
   flex-direction: row;

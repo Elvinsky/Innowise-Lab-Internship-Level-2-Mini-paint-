@@ -1,16 +1,16 @@
 <template>
-  <div class="layout">
-    <HeaderComponent />
+  <HeaderComponent />
+  <section>
     <RouterView />
-    <FooterComponent />
-  </div>
+  </section>
+  <FooterComponent />
 </template>
 <script setup lang="ts">
 import HeaderComponent from "@/components/UI/PageSegments/HeaderComponent.vue";
 import FooterComponent from "@/components/UI/PageSegments/FooterComponent.vue";
 </script>
 <style scoped lang="scss">
-.layout {
+section {
   margin: auto;
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 <template>
-  <section>
+  <div class="wrapper">
     <RouterView />
-  </section>
+  </div>
 </template>
 <style lang="scss">
 $font-family: Avenir, Helvetica, Arial, sans-serif;

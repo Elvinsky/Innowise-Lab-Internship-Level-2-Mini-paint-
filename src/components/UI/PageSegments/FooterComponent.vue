@@ -1,7 +1,7 @@
 <template>
   <footer>
-    <h2>Made by Nick Mikhnevich. Mini-Paint Innowise task #9</h2>
-    <h2 class="mobile">Innowise Task #9</h2>
+    <p>Made by Nick Mikhnevich. Mini-Paint Innowise task #9</p>
+    <p class="mobile">Innowise Task #9</p>
   </footer>
 </template>
 
@@ -19,7 +19,8 @@ footer {
   padding: 1em;
   background-color: rgb(164, 213, 255);
   font-size: 1em;
-  h2 {
+  p {
+    font-size: 1.4em;
     &:first-child {
       @include for-phone {
         display: none;

@@ -9,6 +9,7 @@ const isDrawing: Ref<boolean> = ref(false);
 const drawnElements: Ref<ImageData[]> = ref([]);
 const initCoords = { x: 0, y: 0 };
 const initData: Ref<string> = ref("");
+const isLoaded: Ref<boolean> = ref(false);
 
 export const clearCanvas = (): void => {
   if (canvas.canvas.value && canvas.ctx.value) {
@@ -23,11 +24,11 @@ export const clearCanvas = (): void => {
 
 export const start = (event: MouseEvent) => {
   if (!canvas.canvas.value) return;
-  saveInitContext();
   isDrawing.value = true;
   initCoords.x = event.clientX - canvas.canvas.value?.offsetLeft;
   initCoords.y = event.clientY - canvas.canvas.value?.offsetTop;
   reposition(event);
+  saveInitContext();
 };
 
 export const stop = (event: MouseEvent) => {
@@ -70,8 +71,8 @@ export const draw = (event: MouseEvent) => {
     canvas.ctx.value.lineTo(coord.value.x, coord.value.y);
     canvas.ctx.value.stroke();
   } else if (canvas.flag.value === "line" && isDrawing.value) {
-    clearCanvas();
     loadInitContext();
+    clearCanvas();
     drawLine(event);
   } else if (canvas.flag.value === "square" && isDrawing.value) {
     clearCanvas();
@@ -156,12 +157,7 @@ const drawStar = (event: MouseEvent) => {
 export const cancelLastAction = () => {
   if (!canvas.ctx.value || !canvas.canvas.value) return;
   if (drawnElements.value.length > 0) {
-    canvas.ctx.value.clearRect(
-      0,
-      0,
-      canvas.canvas.value.width,
-      canvas.canvas.value.height
-    );
+    clearCanvas();
     drawnElements.value.pop();
     for (const element of drawnElements.value) {
       canvas.ctx.value.putImageData(element, 0, 0);
@@ -172,12 +168,14 @@ const saveInitContext = () => {
   if (canvas.canvas.value) initData.value = canvas.canvas.value.toDataURL();
 };
 const loadInitContext = () => {
-  const image = new Image();
-  image.src = initData.value as string;
-  image.onload = () => {
-    if (canvas.ctx.value) {
-      canvas.ctx.value.drawImage(image, 0, 0);
-    }
-  };
+  if (!isLoaded.value) {
+    const image = new Image();
+    image.src = initData.value as string;
+    image.onload = () => {
+      if (canvas.ctx.value) {
+        canvas.ctx.value.drawImage(image, 0, 0);
+      }
+    };
+  }
 };
 export { drawnElements };
