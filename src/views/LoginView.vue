@@ -9,7 +9,9 @@
         :id="'password'"
       />
       <div class="actions">
-        <CustomButton :action="('setUser'as ActionFlag)">Login</CustomButton>
+        <CustomButton :action="('setUser'as ActionFlag)" :class="'auth'"
+          >Login</CustomButton
+        >
         <RouterLink to="/registration" class="link">
           Noe yet have an account?
         </RouterLink>

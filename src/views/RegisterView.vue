@@ -15,7 +15,9 @@
         :id="'passwordConfirm'"
       />
       <div class="actions">
-        <CustomButton :action="('regUser' as ActionFlag)">Submit</CustomButton>
+        <CustomButton :action="('regUser' as ActionFlag)" :class="'auth'"
+          >Submit</CustomButton
+        >
         <RouterLink to="/login" class="link">
           Already have an account?
         </RouterLink>

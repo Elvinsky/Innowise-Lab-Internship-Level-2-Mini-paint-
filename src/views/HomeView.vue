@@ -1,14 +1,19 @@
 <template>
   <div class="wrapper">
     <div class="home-block">
-      <div @click="navigate('/editor')">New image</div>
+      <CustomButton :custom-action="() => navigate('/editor')" :class="'home'"
+        >New image</CustomButton
+      >
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
-      <div @click="navigate('/browser')">Browse images</div>
+      <CustomButton :custom-action="() => navigate('/browser')" :class="'home'"
+        >Browse images</CustomButton
+      >
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
   router.push(path);
@@ -38,21 +43,6 @@ const navigate = (path: string): void => {
       flex-direction: column;
       align-items: center;
       width: 300px;
-    }
-
-    div {
-      font-size: 2em;
-      color: black;
-      padding: 0.4em;
-      border-radius: 8px;
-      background-color: #fc9797;
-      transition: all 200ms;
-      cursor: pointer;
-
-      &:hover {
-        transform: scale(1.1);
-        box-shadow: 10px 10px 2px 1px rgba(0, 0, 83, 0.2);
-      }
     }
   }
 }

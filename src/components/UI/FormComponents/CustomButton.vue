@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleClick"><slot></slot></button>
+  <button @click="handleClick" :class="props.class"><slot></slot></button>
 </template>
 
 <script setup lang="ts">
@@ -9,12 +9,17 @@ import { defineProps } from "vue";
 const props = defineProps({
   action: String,
   customAction: Function,
+  class: String,
 });
 const userAction: ActionFlag = props.action as ActionFlag;
 const user = useUser();
 const action = user[userAction];
 const handleClick = () => {
-  action(user.userInput);
+  if (props.action) {
+    action(user.userInput);
+  } else if (props.customAction) {
+    props.customAction();
+  }
 };
 </script>
 
@@ -27,7 +32,7 @@ $input-width: 200px;
     @content;
   }
 }
-button {
+button.auth {
   align-self: flex-start;
   justify-self: start;
   background-color: rgba(18, 219, 18, 0.4);
@@ -37,6 +42,20 @@ button {
   @include for-phone {
     font-size: 1em;
     align-self: center;
+  }
+}
+button.home {
+  font-size: 2em;
+  color: black;
+  padding: 0.4em;
+  border-radius: 8px;
+  background-color: #fc9797;
+  transition: all 200ms;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 10px 10px 2px 1px rgba(0, 0, 83, 0.2);
   }
 }
 </style>
