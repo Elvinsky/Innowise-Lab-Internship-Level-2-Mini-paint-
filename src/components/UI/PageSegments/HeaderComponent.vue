@@ -6,7 +6,7 @@
         alt="back"
         class="back-btn"
         @click="handleGoBack"
-        v-if="isHome !== '/'"
+        v-if="isHome !== '/' && isHome !== '/home'"
       />
       <h2 class="welcoming">Welcome to</h2>
       <h1><span>INNODRAW</span></h1>
@@ -89,7 +89,6 @@ header {
     transition: all;
     transition-duration: 200ms;
     cursor: pointer;
-
     &:hover {
       transform: scale(1.1);
     }
