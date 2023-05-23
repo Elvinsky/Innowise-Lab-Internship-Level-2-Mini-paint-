@@ -16,6 +16,7 @@
 import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
+  sessionStorage.removeItem("imgData");
   router.push(path);
 };
 </script>
