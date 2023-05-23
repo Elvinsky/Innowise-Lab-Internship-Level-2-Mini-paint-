@@ -5,17 +5,22 @@
         name: 'canvasDetails',
         params: {
           id: props.image.metadata.uploadedAt,
-          context: props.image.metadata.canvasCtx,
           user: props.image.metadata.uploadedBy,
           name: props.image.name,
         },
       }"
-      ><img
-        :src="props.image.downloadUrl"
-        alt="user-image"
-        class="canvas-img"
-      />
-      <div class="naming">{{ props.image.metadata.uploadedBy }}</div>
+      @click="handleParseImgData"
+    >
+      <figure>
+        <img
+          :src="props.image.downloadUrl"
+          alt="user-image"
+          class="canvas-img"
+        />
+        <figcaption class="naming">
+          {{ props.image.metadata.uploadedBy }}
+        </figcaption>
+      </figure>
     </RouterLink>
   </div>
 </template>
@@ -23,6 +28,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 const props = defineProps(["image"]);
+const handleParseImgData = () => {
+  sessionStorage.setItem(
+    "imgData",
+    JSON.stringify({ data: props.image.metadata.canvasCtx })
+  );
+};
 </script>
 
 <style scoped lang="scss">
@@ -53,10 +64,6 @@ const props = defineProps(["image"]);
     margin: 0.5em;
     width: 300px;
     height: 130px;
-    @include for-phone {
-      height: 95px;
-      width: 200px;
-    }
   }
 }
 

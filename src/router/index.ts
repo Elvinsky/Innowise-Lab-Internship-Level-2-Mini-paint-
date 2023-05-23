@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
         component: BrowserView,
       },
       {
-        path: "canvas/:id/:context/:user/:name",
+        path: "canvas/:id/:user/:name",
         name: "canvasDetails",
         props: true,
         component: CanvasView,

@@ -193,89 +193,16 @@ const handleSaveImage = () => {
 </script>
 
 <style scoped lang="scss">
-.width-range {
-  position: absolute;
-  left: 140px;
-  transform: rotate(-90deg);
-}
-.save-block {
-  margin: auto;
-  border-radius: 8px;
-  padding: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  background-color: rgb(255, 255, 255);
-
-  .action-block {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-
-    div {
-      cursor: pointer;
-      padding: 0.5em;
-      border-radius: 5px;
-      transition: all;
-      transition-duration: 200ms;
-
-      &:hover {
-        transform: scale(1.1);
-      }
-
-      &:first-child {
-        background-color: rgba(232, 69, 69, 0.785);
-      }
-
-      &:nth-child(2) {
-        background-color: rgba(74, 232, 69, 0.785);
-      }
-    }
+@mixin for-phone {
+  @media (max-width: 599px) {
+    @content;
   }
 }
-.main-img {
-  width: 25px;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 0.4em;
-  transition: all;
-  transition-duration: 200ms;
-
-  &:hover {
-    transform: scale(1.1);
+@mixin for-tablet {
+  @media (max-width: 750px) {
+    @content;
   }
 }
-.color-pick {
-  position: absolute;
-  left: 140px;
-  top: 280px;
-  width: 60px;
-  height: 60px;
-}
-
-.save-popup {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 9999;
-  background-color: rgba(153, 153, 153, 0.656);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.name-input {
-  padding: 0.3em;
-  font-size: 1em;
-}
-
 .actions {
   height: 100%;
   display: flex;
@@ -283,23 +210,106 @@ const handleSaveImage = () => {
   align-items: center;
   justify-content: center;
   gap: 0.7em;
-}
 
-.active {
-  background-color: rgba(0, 255, 0, 0.44);
-}
+  .width-range {
+    position: absolute;
+    left: 140px;
+    transform: rotate(-90deg);
+  }
+  .save-block {
+    margin: auto;
+    border-radius: 8px;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: rgb(255, 255, 255);
 
-.color-circle {
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  border: 1px solid rgba(0, 0, 0, 0.342);
-  cursor: pointer;
-  transition: all;
-  transition-duration: 200ms;
+    .action-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 1em;
 
-  &:hover {
-    transform: scale(1.1);
+      div {
+        cursor: pointer;
+        padding: 0.5em;
+        border-radius: 5px;
+        transition: all;
+        transition-duration: 200ms;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        &:first-child {
+          background-color: rgba(232, 69, 69, 0.785);
+        }
+
+        &:nth-child(2) {
+          background-color: rgba(74, 232, 69, 0.785);
+        }
+      }
+    }
+  }
+  .main-img {
+    width: 25px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0.4em;
+    transition: all;
+    transition-duration: 200ms;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .color-pick {
+    position: absolute;
+    left: 140px;
+    top: 280px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .save-popup {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: rgba(153, 153, 153, 0.656);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .name-input {
+    padding: 0.3em;
+    font-size: 1em;
+  }
+
+  .active {
+    background-color: rgba(0, 255, 0, 0.44);
+  }
+
+  .color-circle {
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.342);
+    cursor: pointer;
+    transition: all;
+    transition-duration: 200ms;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 </style>

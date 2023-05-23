@@ -16,16 +16,27 @@
 import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
+  sessionStorage.removeItem("imgData");
   router.push(path);
 };
 </script>
 <style scoped lang="scss">
 @mixin for-phone {
-  @media (max-width: 599px) {
+  @media (max-width: 576px) {
+    @content;
+  }
+}
+@mixin for-tablet {
+  @media (max-width: 768px) {
     @content;
   }
 }
 .wrapper {
+  margin-top: 5em;
+  @include for-phone {
+    margin-bottom: 0em;
+    margin-top: 0em;
+  }
   .octologo {
     width: 400px;
     margin-top: 1em;
@@ -34,15 +45,15 @@ const navigate = (path: string): void => {
   .home-block {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 3em;
-    margin-top: 5em;
-    margin-left: 3em;
     align-items: center;
     justify-content: center;
     @include for-phone {
       flex-direction: column;
-      align-items: center;
-      width: 300px;
+    }
+    @include for-tablet {
+      flex-direction: column;
     }
   }
 }
