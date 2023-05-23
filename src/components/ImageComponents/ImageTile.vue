@@ -10,12 +10,17 @@
           name: props.image.name,
         },
       }"
-      ><img
-        :src="props.image.downloadUrl"
-        alt="user-image"
-        class="canvas-img"
-      />
-      <div class="naming">{{ props.image.metadata.uploadedBy }}</div>
+    >
+      <figure>
+        <img
+          :src="props.image.downloadUrl"
+          alt="user-image"
+          class="canvas-img"
+        />
+        <figcaption class="naming">
+          {{ props.image.metadata.uploadedBy }}
+        </figcaption>
+      </figure>
     </RouterLink>
   </div>
 </template>

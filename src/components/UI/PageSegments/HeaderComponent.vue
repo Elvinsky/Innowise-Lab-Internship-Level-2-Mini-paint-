@@ -45,7 +45,7 @@ function handleLogOut() {
   }
 }
 header {
-  position: sticky;
+  position: fixed;
   box-sizing: border-box;
   top: 0;
   width: 100%;

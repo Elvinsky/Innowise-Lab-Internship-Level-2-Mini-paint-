@@ -21,11 +21,20 @@ const navigate = (path: string): void => {
 </script>
 <style scoped lang="scss">
 @mixin for-phone {
-  @media (max-width: 599px) {
+  @media (max-width: 576px) {
+    @content;
+  }
+}
+@mixin for-tablet {
+  @media (max-width: 768px) {
     @content;
   }
 }
 .wrapper {
+  margin-top: 5em;
+  @include for-phone {
+    margin-bottom: 2em;
+  }
   .octologo {
     width: 400px;
     margin-top: 1em;
@@ -40,6 +49,11 @@ const navigate = (path: string): void => {
     align-items: center;
     justify-content: center;
     @include for-phone {
+      flex-direction: column;
+      align-items: center;
+      width: 300px;
+    }
+    @include for-tablet {
       flex-direction: column;
       align-items: center;
       width: 300px;

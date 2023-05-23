@@ -29,8 +29,9 @@ fetchCanvasesByCreator(images.page.value, images.limit.value).then((data) => {
   }
 }
 .image-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 1.4em;
   padding: 1.3em;
   @include for-phone {
