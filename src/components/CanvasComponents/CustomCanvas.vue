@@ -39,12 +39,6 @@ const props = defineProps(["isCreator", "filename"]);
     border: 1px solid black;
     background-color: rgba(212, 212, 212, 0.549);
     border-radius: 5px;
-    width: 1000px;
-    height: 500px;
-    @include for-phone {
-      width: 300px;
-      height: 500px;
-    }
   }
 }
 </style>

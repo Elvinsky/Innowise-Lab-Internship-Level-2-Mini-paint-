@@ -33,7 +33,8 @@ const navigate = (path: string): void => {
 .wrapper {
   margin-top: 5em;
   @include for-phone {
-    margin-bottom: 2em;
+    margin-bottom: 0em;
+    margin-top: 0em;
   }
   .octologo {
     width: 400px;
@@ -43,20 +44,15 @@ const navigate = (path: string): void => {
   .home-block {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 3em;
-    margin-top: 5em;
-    margin-left: 3em;
     align-items: center;
     justify-content: center;
     @include for-phone {
       flex-direction: column;
-      align-items: center;
-      width: 300px;
     }
     @include for-tablet {
       flex-direction: column;
-      align-items: center;
-      width: 300px;
     }
   }
 }

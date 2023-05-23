@@ -58,10 +58,6 @@ const props = defineProps(["image"]);
     margin: 0.5em;
     width: 300px;
     height: 130px;
-    @include for-phone {
-      height: 95px;
-      width: 200px;
-    }
   }
 }
 

@@ -8,9 +8,9 @@
         @click="handleGoBack"
         v-if="isHome !== '/' && isHome !== '/home'"
       />
-      <h2 class="welcoming">Welcome to</h2>
+      <p class="welcoming">Welcome to</p>
       <h1>INNODRAW</h1>
-      <h2>{{ user.user.value?.displayName }}</h2>
+      <p class="welcoming">{{ user.user.value?.displayName }}</p>
       <img
         src="@/assets/user.png"
         alt="log-out"
@@ -44,6 +44,11 @@ function handleLogOut() {
     @content;
   }
 }
+@mixin for-tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
 header {
   position: fixed;
   box-sizing: border-box;
@@ -56,19 +61,23 @@ header {
     gap: 1.3em;
     justify-content: space-between;
   }
+  p {
+    font-size: 1.6em;
+    font-weight: bold;
+  }
   nav {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 3em;
+    @include for-tablet {
+      gap: 1.2em;
+    }
   }
   img {
     width: 30px;
     height: 30px;
-    @include for-phone {
-      margin-left: 1em;
-    }
   }
 
   h1 {
@@ -79,6 +88,9 @@ header {
   }
   .welcoming {
     @include for-phone {
+      display: none;
+    }
+    @include for-tablet {
       display: none;
     }
   }

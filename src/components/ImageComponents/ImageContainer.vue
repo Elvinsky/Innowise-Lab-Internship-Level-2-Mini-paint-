@@ -13,8 +13,7 @@ import ImageTile from "@/components/ImageComponents/ImageTile.vue";
 import { useImages } from "@/composables/useImages";
 import { fetchCanvasesByCreator } from "@/scripts/utils/fetchCanvasUtil";
 const images = useImages();
-const isMobile = window.innerWidth < 750;
-isMobile ? images.setLimit(4) : images.setLimit(12);
+images.setLimit(12);
 fetchCanvasesByCreator(images.page.value, images.limit.value).then((data) => {
   if (data) {
     images.setTotalPages(data);
@@ -30,12 +29,10 @@ fetchCanvasesByCreator(images.page.value, images.limit.value).then((data) => {
 }
 .image-container {
   display: flex;
-  flex-direction: row;
+  align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1.4em;
   padding: 1.3em;
-  @include for-phone {
-    grid-template-columns: repeat(1, 1fr);
-  }
 }
 </style>
