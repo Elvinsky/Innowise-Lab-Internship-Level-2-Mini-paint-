@@ -5,11 +5,11 @@
         name: 'canvasDetails',
         params: {
           id: props.image.metadata.uploadedAt,
-          context: props.image.metadata.canvasCtx,
           user: props.image.metadata.uploadedBy,
           name: props.image.name,
         },
       }"
+      @click="handleParseImgData"
     >
       <figure>
         <img
@@ -28,6 +28,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 const props = defineProps(["image"]);
+const handleParseImgData = () => {
+  sessionStorage.setItem(
+    "imgData",
+    JSON.stringify({ data: props.image.metadata.canvasCtx })
+  );
+};
 </script>
 
 <style scoped lang="scss">

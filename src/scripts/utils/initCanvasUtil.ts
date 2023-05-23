@@ -1,9 +1,7 @@
 import { useCanvas } from "@/composables/useCanvas";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { nextTick } from "vue";
-import { useRoute } from "vue-router";
-export const initCanvas = async () => {
-  const route = useRoute();
+export const initCanvas = () => {
   const canvas: CanvasCompos = useCanvas();
   (async () => {
     await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
@@ -19,10 +17,10 @@ export const initCanvas = async () => {
       console.log(window.innerWidth);
       canvas.canvas.value.style.width = window.innerWidth * 0.7 + "px";
       canvas.canvas.value.style.height = 500 + "px";
-
-      if (route.params.context && canvas.ctx.value) {
+      const imgData = sessionStorage.getItem("imgData");
+      if (imgData && canvas.ctx.value) {
         const image = new Image();
-        image.src = route.params.context as string;
+        image.src = JSON.parse(imgData).data as string;
         image.onload = () => {
           if (!canvas.canvas.value) return;
           const scaleX = canvas.canvas.value.width / image.width;
