@@ -1,10 +1,8 @@
 import { useCanvas } from "@/composables/useCanvas";
 import { useUser } from "@/composables/useUser";
 import { storage } from "@/firebase";
-import {
-  CanvasCompos,
-  UserDataCompos,
-} from "@/types/interfaces/composInterfaces";
+import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { UserDataCompos } from "@/types/interfaces/UserDataCompos";
 import {
   StorageReference,
   UploadMetadata,

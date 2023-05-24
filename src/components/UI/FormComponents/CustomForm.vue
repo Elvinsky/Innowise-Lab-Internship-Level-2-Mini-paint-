@@ -1,28 +1,16 @@
 <template>
   <form :class="user.authError.value ? 'error' : ''" @submit.prevent>
     <slot></slot>
-    <ErrorToast
-      v-if="user.toastShown.value === 'error'"
-      @click="handleAbortToast"
-      >Incorrect Creds! Try again!</ErrorToast
-    >
-    <SuccessToast
-      v-if="user.toastShown.value === 'success'"
-      @click="handleAbortToast"
-      >You are ready to go!</SuccessToast
-    >
+    <BaseToast :type="toast.toastShown.value"></BaseToast>
   </form>
 </template>
 
 <script setup lang="ts">
+import BaseToast from "@/components/Toast/BaseToast.vue";
+import { useToast } from "@/composables/useToast";
 import { useUser } from "@/composables/useUser";
-import { UserDataCompos } from "@/types/interfaces/composInterfaces";
-import SuccessToast from "@/components/Toasts/SuccessToast.vue";
-import ErrorToast from "@/components/Toasts/ErrorToast.vue";
-const user: UserDataCompos = useUser();
-const handleAbortToast = () => {
-  user.showToast("");
-};
+const toast = useToast();
+const user = useUser();
 </script>
 
 <style scoped lang="scss">

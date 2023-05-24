@@ -1,7 +1,7 @@
 import { auth } from "@/firebase";
 import router from "@/router";
 import { setItem } from "@/scripts/dbScripts/crudApi";
-import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { UserDataCompos } from "@/types/interfaces/UserDataCompos";
 import { UserData } from "@/types/interfaces/userInterfaces";
 import {
   User,
@@ -10,9 +10,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { Ref, ref } from "vue";
+import { useToast } from "./useToast";
+
+const toast = useToast();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
-const toastShown: Ref<string> = ref("");
 const authError: Ref<boolean> = ref(false);
 const userInput: Ref<UserData> = ref({
   name: "",
@@ -27,16 +29,15 @@ export const useUser = (): UserDataCompos => {
       .then((creds) => {
         user.value = creds.user;
         localStorage.setItem("user", JSON.stringify(creds.user));
-        showToast("success");
+        toast.showToast("success");
         router.push("/home");
       })
       .catch((err) => {
         console.error("error", err);
-        showToast("error");
+        toast.showToast("error");
         authError.value = true;
       });
   };
-
   const regUser = (input: Ref<UserData>) => {
     if (input.value.password !== input.value.passwordConfirm) {
       userInput.value.email = "";
@@ -44,7 +45,7 @@ export const useUser = (): UserDataCompos => {
       userInput.value.password = "";
       userInput.value.passwordConfirm = "";
       authError.value = true;
-      showToast("error");
+      toast.showToast("error");
     }
     createUserWithEmailAndPassword(
       auth,
@@ -69,19 +70,14 @@ export const useUser = (): UserDataCompos => {
           });
         }
         setUser(input);
-        showToast("success");
+        toast.showToast("success");
       })
       .catch(() => {
         authError.value = true;
-        showToast("error");
+        toast.showToast("error");
       });
   };
-  const showToast = (toast: string) => {
-    toastShown.value = toast;
-    setTimeout(() => {
-      toastShown.value = "";
-    }, 5000);
-  };
+
   const logOut = () => {
     user.value = null;
     localStorage.removeItem("user");
@@ -104,8 +100,6 @@ export const useUser = (): UserDataCompos => {
   return {
     user,
     setUser,
-    toastShown,
-    showToast,
     authError,
     regUser,
     logOut,

@@ -104,12 +104,7 @@
         </div>
       </div>
     </div>
-    <ErrorToast v-if="toastShown === 'error'" @click="handleAbortToast"
-      >Unexpected Error while saving =(</ErrorToast
-    >
-    <SuccessToast v-if="toastShown === 'success'" @click="handleAbortToast"
-      >Your image have been saved</SuccessToast
-    >
+    <BaseToast :type="toast.toastShown.value"></BaseToast>
   </aside>
 </template>
 
@@ -118,17 +113,17 @@ import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 
 import { Ref, ref, defineProps } from "vue";
-import ErrorToast from "@/components/Toasts/ErrorToast.vue";
-import SuccessToast from "@/components/Toasts/SuccessToast.vue";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { useCanvas } from "@/composables/useCanvas";
+import BaseToast from "../Toast/BaseToast.vue";
+import { useToast } from "@/composables/useToast";
 
 const props = defineProps(["isCreator"]);
+const toast = useToast();
 const canvas: CanvasCompos = useCanvas();
 const widthRange: Ref<boolean> = ref(false);
 const colorPick: Ref<boolean> = ref(false);
 const isSaving: Ref<boolean> = ref(false);
-const toastShown: Ref<string> = ref("");
 const fileName: Ref<string> = ref(Math.random().toString(36).substring(4));
 
 function showWidthRange(): void {
@@ -142,6 +137,7 @@ function showColorPick(): void {
 function handlePopUpShow() {
   isSaving.value = !isSaving.value;
 }
+
 function handleDrawFlag(): void {
   canvas.flag.value === "draw" ? canvas.setFlag("") : canvas.setFlag("draw");
 }
@@ -159,9 +155,7 @@ function handleArcFlag(): void {
 function handleStarFlag(): void {
   canvas.flag.value === "star" ? canvas.setFlag("") : canvas.setFlag("star");
 }
-const handleAbortToast = () => {
-  toastShown.value = "";
-};
+
 function handleWidthChange(event: InputEvent): void {
   canvas.setPenWidth((event.target as HTMLInputElement).valueAsNumber);
 }
@@ -171,21 +165,15 @@ function handleClearCanvas(): void {
 const handleColorPick = (event: InputEvent) => {
   canvas.setPenColor((event.target as HTMLInputElement).value);
 };
-const showToast = (toast: string) => {
-  toastShown.value = toast;
-  setTimeout(() => {
-    toastShown.value = "";
-  }, 5000);
-};
 const handleSaveImage = () => {
   firebaseUpload(fileName.value)
     .then(() => {
-      showToast("success");
+      toast.showToast("success");
       isSaving.value = false;
       fileName.value = Math.random().toString(36).substring(4);
     })
     .catch((err) => {
-      showToast("error");
+      toast.showToast("error");
       console.log(err);
       isSaving.value = false;
     });

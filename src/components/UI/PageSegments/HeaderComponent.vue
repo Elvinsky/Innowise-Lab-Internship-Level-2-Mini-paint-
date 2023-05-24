@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useUser } from "@/composables/useUser";
 import router from "@/router";
-import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { UserDataCompos } from "@/types/interfaces/UserDataCompos";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 const user: UserDataCompos = useUser();

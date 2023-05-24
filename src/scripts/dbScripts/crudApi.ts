@@ -1,8 +1,6 @@
-// eslint-disable-next-line max-len
 import {
   collection,
   getDocs,
-  deleteDoc,
   doc,
   updateDoc,
   setDoc,
@@ -27,10 +25,4 @@ export async function updateItem(
 ) {
   const itemRef = doc(db, item, itemId.toString());
   await updateDoc(itemRef, { images: arrayUnion(element) });
-}
-
-export async function deleteItem(collName: string, itemId: string) {
-  const itemRef = doc(db, collName, itemId);
-  await deleteDoc(itemRef);
-  console.log("Document deleted with id ", itemId);
 }
