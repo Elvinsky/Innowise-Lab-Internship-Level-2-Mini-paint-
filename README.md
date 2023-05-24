@@ -6,9 +6,19 @@
  - `git init`
  - `git clone <repo URL>`
  - `npm install`
- - `.env.example --> .env`
+ - Rename .env.example --> .env
  - `npm run serve`
  - Follow localhost:\<port\> (usually localhost:8080)
+
+
+### If you are using application after 06.06.2023:
+
+- Create your own DB in Firebase
+- Initialize Storage, Auth and Firestore
+- Add users doc in Firestore
+- Enter application settings
+- Copy DB creds in .env file
+- Relaunch application
 
 ### DB information:
 
