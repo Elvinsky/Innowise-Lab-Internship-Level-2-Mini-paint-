@@ -42,9 +42,19 @@ export const stop = (event: MouseEvent) => {
     drawArc(event);
   } else if (canvas.flag.value === "star") {
     drawStar(event);
+  } else if (canvas.flag.value === "draw") {
+    drawnElements.value.push(
+      canvas.ctx.value.getImageData(
+        0,
+        0,
+        canvas.canvas.value.width,
+        canvas.canvas.value.height
+      )
+    );
   }
-  loadInitContext();
 
+  isDrawing.value = false;
+  loadInitContext();
   drawnElements.value.push(
     canvas.ctx.value.getImageData(
       0,
@@ -53,7 +63,6 @@ export const stop = (event: MouseEvent) => {
       canvas.canvas.value.height
     )
   );
-  isDrawing.value = false;
 };
 
 export const reposition = (event: MouseEvent) => {

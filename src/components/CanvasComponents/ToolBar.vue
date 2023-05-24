@@ -4,7 +4,7 @@
       src="@/assets/pen.png"
       class="main-img"
       alt="pen"
-      @click="handleDrawFlag"
+      @click="handleSetFlag('draw')"
       :class="canvas.flag.value === 'draw' ? 'active' : ''"
       v-if="props.isCreator"
     />
@@ -24,7 +24,7 @@
     <img
       src="@/assets/straight-line.png"
       alt="line"
-      @click="handleLineFlag"
+      @click="handleSetFlag('line')"
       class="main-img"
       :class="canvas.flag.value === 'line' ? 'active' : ''"
       v-if="props.isCreator"
@@ -32,7 +32,7 @@
     <img
       src="@/assets/square.png"
       alt="square"
-      @click="handleSquareFlag"
+      @click="handleSetFlag('square')"
       class="main-img"
       :class="canvas.flag.value === 'square' ? 'active' : ''"
       v-if="props.isCreator"
@@ -40,7 +40,7 @@
     <img
       src="@/assets/circle.png"
       alt="circle"
-      @click="handleArcFlag"
+      @click="handleSetFlag('arc')"
       class="main-img"
       :class="canvas.flag.value === 'arc' ? 'active' : ''"
       v-if="props.isCreator"
@@ -48,7 +48,7 @@
     <img
       src="@/assets/star.png"
       alt="star"
-      @click="handleStarFlag"
+      @click="handleSetFlag('star')"
       class="main-img"
       :class="canvas.flag.value === 'star' ? 'active' : ''"
       v-if="props.isCreator"
@@ -130,30 +130,19 @@ function showWidthRange(): void {
   widthRange.value = !widthRange.value;
   colorPick.value = false;
 }
+
 function showColorPick(): void {
   colorPick.value = !colorPick.value;
   widthRange.value = false;
 }
+
 function handlePopUpShow() {
   isSaving.value = !isSaving.value;
 }
 
-function handleDrawFlag(): void {
-  canvas.flag.value === "draw" ? canvas.setFlag("") : canvas.setFlag("draw");
-}
-function handleLineFlag(): void {
-  canvas.flag.value === "line" ? canvas.setFlag("") : canvas.setFlag("line");
-}
-function handleSquareFlag(): void {
-  canvas.flag.value === "square"
-    ? canvas.setFlag("")
-    : canvas.setFlag("square");
-}
-function handleArcFlag(): void {
-  canvas.flag.value === "arc" ? canvas.setFlag("") : canvas.setFlag("arc");
-}
-function handleStarFlag(): void {
-  canvas.flag.value === "star" ? canvas.setFlag("") : canvas.setFlag("star");
+function handleSetFlag(flag: string): void {
+  if (flag === canvas.flag.value) canvas.flag.value = "";
+  else canvas.flag.value = flag;
 }
 
 function handleWidthChange(event: InputEvent): void {
