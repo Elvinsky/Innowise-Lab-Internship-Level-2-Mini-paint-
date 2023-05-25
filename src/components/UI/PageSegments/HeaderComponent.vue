@@ -23,10 +23,10 @@
 <script setup lang="ts">
 import { useUser } from "@/composables/useUser";
 import router from "@/router";
-import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-const user: UserDataCompos = useUser();
+const user: UserDataComposable = useUser();
 const route = useRoute();
 const isHome = computed(() => {
   return route.path;

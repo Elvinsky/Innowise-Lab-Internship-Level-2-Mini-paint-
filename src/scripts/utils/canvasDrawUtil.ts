@@ -1,15 +1,14 @@
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { Ref, ref } from "vue";
 
-const canvas: CanvasCompos = useCanvas();
+const canvas: CanvasComposable = useCanvas();
 
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);
-const drawnElements: Ref<ImageData[]> = ref([]);
+let drawnElements: ImageData[] = [];
 const initCoords = { x: 0, y: 0 };
 const initData: Ref<string> = ref("");
-
 export const clearCanvas = (): void => {
   if (canvas.canvas.value && canvas.ctx.value) {
     canvas.ctx.value.clearRect(
@@ -19,9 +18,8 @@ export const clearCanvas = (): void => {
       canvas.canvas.value.height
     );
   }
-  drawnElements.value = [];
+  drawnElements = [];
 };
-
 export const start = (event: MouseEvent) => {
   if (!canvas.canvas.value) return;
   isDrawing.value = true;
@@ -42,10 +40,20 @@ export const stop = (event: MouseEvent) => {
     drawArc(event);
   } else if (canvas.flag.value === "star") {
     drawStar(event);
+  } else if (canvas.flag.value === "draw") {
+    drawnElements.push(
+      canvas.ctx.value.getImageData(
+        0,
+        0,
+        canvas.canvas.value.width,
+        canvas.canvas.value.height
+      )
+    );
   }
-  loadInitContext();
 
-  drawnElements.value.push(
+  isDrawing.value = false;
+  loadInitContext();
+  drawnElements.push(
     canvas.ctx.value.getImageData(
       0,
       0,
@@ -53,7 +61,6 @@ export const stop = (event: MouseEvent) => {
       canvas.canvas.value.height
     )
   );
-  isDrawing.value = false;
 };
 
 export const reposition = (event: MouseEvent) => {
@@ -74,10 +81,10 @@ export const draw = (event: MouseEvent) => {
     canvas.ctx.value.lineTo(coord.value.x, coord.value.y);
     canvas.ctx.value.stroke();
   } else if (canvas.flag.value === "line" && isDrawing.value) {
-    cancelLastAction();
     loadInitContext();
+    cancelLastAction();
     drawLine(event);
-    drawnElements.value.push(
+    drawnElements.push(
       canvas.ctx.value.getImageData(
         0,
         0,
@@ -89,7 +96,7 @@ export const draw = (event: MouseEvent) => {
     cancelLastAction();
     loadInitContext();
     drawSquare(event);
-    drawnElements.value.push(
+    drawnElements.push(
       canvas.ctx.value.getImageData(
         0,
         0,
@@ -101,7 +108,7 @@ export const draw = (event: MouseEvent) => {
     cancelLastAction();
     loadInitContext();
     drawArc(event);
-    drawnElements.value.push(
+    drawnElements.push(
       canvas.ctx.value.getImageData(
         0,
         0,
@@ -113,7 +120,7 @@ export const draw = (event: MouseEvent) => {
     cancelLastAction();
     loadInitContext();
     drawStar(event);
-    drawnElements.value.push(
+    drawnElements.push(
       canvas.ctx.value.getImageData(
         0,
         0,
@@ -191,15 +198,15 @@ const drawStar = (event: MouseEvent) => {
 };
 export const cancelLastAction = () => {
   if (!canvas.ctx.value || !canvas.canvas.value) return;
-  if (drawnElements.value.length > 0) {
+  if (drawnElements.length > 0) {
     canvas.ctx.value.clearRect(
       0,
       0,
       canvas.canvas.value.width,
       canvas.canvas.value.height
     );
-    drawnElements.value.pop();
-    for (const element of drawnElements.value) {
+    drawnElements.pop();
+    for (const element of drawnElements) {
       canvas.ctx.value.putImageData(element, 0, 0);
     }
   }

@@ -1,7 +1,7 @@
 import { auth } from "@/firebase";
 import router from "@/router";
-import { setItem } from "@/scripts/dbScripts/crudApi";
-import { UserDataCompos } from "@/types/interfaces/composInterfaces";
+import { setItem } from "@/scripts/FirebaseManipulation/firebaseCRUD";
+import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import { UserData } from "@/types/interfaces/userInterfaces";
 import {
   User,
@@ -10,51 +10,59 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { Ref, ref } from "vue";
+import { useToast } from "./useToast";
+import { FormField } from "@/types/literals/literals";
+
+const toast = useToast();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
-const toastShown: Ref<string> = ref("");
 const authError: Ref<boolean> = ref(false);
-const userInput: Ref<UserData> = ref({
+const formData: Ref<UserData> = ref({
   name: "",
   email: "",
   password: "",
   passwordConfirm: "",
 });
 
-export const useUser = (): UserDataCompos => {
-  const setUser = (input: Ref<UserData>) => {
-    signInWithEmailAndPassword(auth, input.value.email, input.value.password)
+export const useUser = (): UserDataComposable => {
+  const setUser = () => {
+    signInWithEmailAndPassword(
+      auth,
+      formData.value.email,
+      formData.value.password
+    )
       .then((creds) => {
         user.value = creds.user;
         localStorage.setItem("user", JSON.stringify(creds.user));
-        showToast("success");
+        toast.showToast("success");
         router.push("/home");
       })
-      .catch((err) => {
-        console.error("error", err);
-        showToast("error");
+      .catch(() => {
+        toast.showToast("error");
         authError.value = true;
+        setTimeout(() => {
+          authError.value = false;
+        }, 2000);
       });
   };
-
-  const regUser = (input: Ref<UserData>) => {
-    if (input.value.password !== input.value.passwordConfirm) {
-      userInput.value.email = "";
-      userInput.value.name = "";
-      userInput.value.password = "";
-      userInput.value.passwordConfirm = "";
+  const regUser = () => {
+    if (formData.value.password !== formData.value.passwordConfirm) {
+      formData.value.email = "";
+      formData.value.name = "";
+      formData.value.password = "";
+      formData.value.passwordConfirm = "";
       authError.value = true;
-      showToast("error");
+      toast.showToast("error");
     }
     createUserWithEmailAndPassword(
       auth,
-      input.value.email,
-      input.value.password
+      formData.value.email,
+      formData.value.password
     )
       .then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
-            displayName: input.value.name,
+            displayName: formData.value.name,
           }).then(() => {
             if (!auth.currentUser) return;
             setItem(
@@ -68,48 +76,34 @@ export const useUser = (): UserDataCompos => {
             );
           });
         }
-        setUser(input);
-        showToast("success");
+        setUser();
+        toast.showToast("success");
       })
       .catch(() => {
+        toast.showToast("error");
         authError.value = true;
-        showToast("error");
+        setTimeout(() => {
+          authError.value = false;
+        }, 2000);
       });
   };
-  const showToast = (toast: string) => {
-    toastShown.value = toast;
-    setTimeout(() => {
-      toastShown.value = "";
-    }, 5000);
-  };
+
   const logOut = () => {
     user.value = null;
     localStorage.removeItem("user");
     router.push("/login");
   };
-  const setUserInput = (
-    email: string,
-    password: string,
-    name = "",
-    passwordConfirm = ""
-  ) => {
-    userInput.value = {
-      email: email,
-      password: password,
-      name: name,
-      passwordConfirm: passwordConfirm,
-    };
+  const setFormData = (field: FormField, data: string) => {
+    formData.value[field] = data;
   };
 
   return {
     user,
     setUser,
-    toastShown,
-    showToast,
     authError,
     regUser,
     logOut,
-    userInput,
-    setUserInput,
+    formData,
+    setFormData,
   };
 };

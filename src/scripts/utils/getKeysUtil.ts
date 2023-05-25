@@ -1,4 +1,4 @@
-import { getItems } from "../dbScripts/crudApi";
+import { getItems } from "../FirebaseManipulation/firebaseCRUD";
 
 export const getKeys = async (filter: string) => {
   try {

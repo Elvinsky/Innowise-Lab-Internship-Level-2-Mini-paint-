@@ -1,22 +1,23 @@
 <template>
-  <div class="editor-wrapper">
-    <ToolBar :isCreator="props.isCreator" />
-    <canvas
-      id="canvas"
-      @mousedown="start"
-      @mouseup="stop"
-      @mousemove="draw"
-    ></canvas>
-  </div>
+  <canvas
+    id="canvas"
+    @mousedown="start"
+    @mouseup="stop"
+    @mousemove="draw"
+  ></canvas>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
-import ToolBar from "@/components/CanvasComponents/ToolBar.vue";
+import { useImages } from "@/composables/useImages";
 import { draw, start, stop } from "@/scripts/utils/canvasDrawUtil";
 import { initCanvas } from "@/scripts/utils/initCanvasUtil";
+import { ImagesComposableInterface } from "@/types/interfaces/composableInterfaces";
+import { onUnmounted } from "vue";
+const images: ImagesComposableInterface = useImages();
 initCanvas();
-const props = defineProps(["isCreator", "filename"]);
+onUnmounted(() => {
+  images.setCurrentImageData(null);
+});
 </script>
 
 <style scoped lang="scss">
@@ -25,20 +26,9 @@ const props = defineProps(["isCreator", "filename"]);
     @content;
   }
 }
-.editor-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-top: 1em;
-
-  canvas {
-    border: 1px solid black;
-    background-color: rgba(212, 212, 212, 0.549);
-    border-radius: 5px;
-  }
+canvas {
+  border: 1px solid black;
+  background-color: rgba(212, 212, 212, 0.549);
+  border-radius: 5px;
 }
 </style>

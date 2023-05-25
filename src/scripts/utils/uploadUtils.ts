@@ -1,18 +1,16 @@
 import { useCanvas } from "@/composables/useCanvas";
 import { useUser } from "@/composables/useUser";
 import { storage } from "@/firebase";
-import {
-  CanvasCompos,
-  UserDataCompos,
-} from "@/types/interfaces/composInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
+import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import {
   StorageReference,
   UploadMetadata,
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { updateItem } from "../dbScripts/crudApi";
-const canvas: CanvasCompos = useCanvas();
+import { updateItem } from "../FirebaseManipulation/firebaseCRUD";
+const canvas: CanvasComposable = useCanvas();
 
 export function dataURLtoBlob(dataURL: string): Blob {
   const parts = dataURL.split(",");
@@ -29,7 +27,7 @@ export function dataURLtoBlob(dataURL: string): Blob {
 }
 
 export const firebaseUpload = async (fileName: string) => {
-  const user: UserDataCompos = useUser();
+  const user: UserDataComposable = useUser();
   const canvasBackup = canvas.canvas.value;
   if (!canvasBackup) return;
   const imageRef: StorageReference = ref(storage, fileName + ".png");

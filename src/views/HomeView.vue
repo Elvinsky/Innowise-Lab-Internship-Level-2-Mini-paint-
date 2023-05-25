@@ -1,19 +1,19 @@
 <template>
   <div class="wrapper">
     <div class="home-block">
-      <CustomButton :custom-action="() => navigate('/editor')" :class="'home'"
-        >New image</CustomButton
+      <BaseButton :class="'home'" :onClick="() => navigate('/editor')"
+        >New Image</BaseButton
       >
       <img src="../assets/Octopus4.png" class="octologo" alt="octologo" />
-      <CustomButton :custom-action="() => navigate('/browser')" :class="'home'"
-        >Browse images</CustomButton
+      <BaseButton :class="'home'" :onClick="() => navigate('/browser')"
+        >Browse Images</BaseButton
       >
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
+import BaseButton from "@/components/BaseComponents/BaseButton.vue";
 import router from "@/router";
 const navigate = (path: string): void => {
   sessionStorage.removeItem("imgData");

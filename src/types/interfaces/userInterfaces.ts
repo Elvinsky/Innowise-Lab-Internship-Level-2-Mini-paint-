@@ -1,10 +1,6 @@
-export interface UserInput {
+export interface UserData {
+  name: string;
   email: string;
   password: string;
-}
-export interface UserDataToSet extends UserInput {
-  name: string;
-}
-export interface UserData extends UserDataToSet {
   passwordConfirm: string;
 }
