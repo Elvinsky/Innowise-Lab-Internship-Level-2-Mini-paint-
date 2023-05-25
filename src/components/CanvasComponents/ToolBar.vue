@@ -119,7 +119,7 @@ import { Ref, ref } from "vue";
 import BaseToast from "../Toast/CustomToast.vue";
 import { useToast } from "@/composables/useToast";
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { CanvasCompos } from "@/types/interfaces/composableInterfaces";
 import { useRoute } from "vue-router";
 import { useUser } from "@/composables/useUser";
 import BaseButton from "../BaseComponents/BaseButton.vue";

@@ -1,65 +1,7 @@
 <template>
-  <div class="login-wrap">
-    <h2>Login</h2>
-    <CustomForm>
-      <CustomInput :inputFlag="'email'" :type="'text'" :id="'email'" />
-      <CustomInput
-        :inputFlag="'password'"
-        :type="'password'"
-        :id="'password'"
-      />
-      <div class="actions">
-        <BaseButton :class="'auth'" :onClick="handleAuth">Submit</BaseButton>
-        <RouterLink to="/registration" class="link">
-          Noe yet have an account?
-        </RouterLink>
-      </div>
-    </CustomForm>
-  </div>
+  <AuthorizationForm />
 </template>
 
 <script setup lang="ts">
-import CustomInput from "@/components/UI/FormComponents/CustomInput.vue";
-import CustomForm from "@/components/UI/FormComponents/CustomForm.vue";
-import BaseButton from "@/components/BaseComponents/BaseButton.vue";
-import { useUser } from "@/composables/useUser";
-const user = useUser();
-const handleAuth = () => {
-  user.setUser();
-};
+import AuthorizationForm from "@/components/AuthComponents/AuthorizationForm.vue";
 </script>
-
-<style scoped lang="scss">
-@mixin for-phone {
-  @media (max-width: 599px) {
-    @content;
-  }
-}
-.login-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-top: 5em;
-
-  .actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1em;
-    @include for-phone {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .link {
-      font-size: 0.7em;
-      @include for-phone {
-        font-size: 1em;
-      }
-    }
-  }
-}
-</style>

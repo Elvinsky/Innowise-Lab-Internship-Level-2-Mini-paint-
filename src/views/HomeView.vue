@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import BaseButton from "@/components/BaseComponents/BaseButton.vue";
 import router from "@/router";
-
 const navigate = (path: string): void => {
   sessionStorage.removeItem("imgData");
   router.push(path);

@@ -1,8 +1,8 @@
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { nextTick } from "vue";
 export const initCanvas = () => {
-  const canvas: CanvasCompos = useCanvas();
+  const canvas: CanvasComposable = useCanvas();
   (async () => {
     await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
     canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);

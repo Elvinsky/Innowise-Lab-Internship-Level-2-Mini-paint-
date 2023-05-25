@@ -1,7 +1,7 @@
 import { auth } from "@/firebase";
 import router from "@/router";
-import { setItem } from "@/scripts/dbScripts/crudApi";
-import { UserDataCompos } from "@/types/interfaces/UserDataCompos";
+import { setItem } from "@/scripts/FirebaseManipulation/firebaseCRUD";
+import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import { UserData } from "@/types/interfaces/userInterfaces";
 import {
   User,
@@ -16,19 +16,19 @@ const toast = useToast();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
 const authError: Ref<boolean> = ref(false);
-const userInput: Ref<UserData> = ref({
+const formData: Ref<UserData> = ref({
   name: "",
   email: "",
   password: "",
   passwordConfirm: "",
 });
 
-export const useUser = (): UserDataCompos => {
+export const useUser = (): UserDataComposable => {
   const setUser = () => {
     signInWithEmailAndPassword(
       auth,
-      userInput.value.email,
-      userInput.value.password
+      formData.value.email,
+      formData.value.password
     )
       .then((creds) => {
         user.value = creds.user;
@@ -36,30 +36,32 @@ export const useUser = (): UserDataCompos => {
         toast.showToast("success");
         router.push("/home");
       })
-      .catch((err) => {
-        console.error("error", err);
+      .catch(() => {
         toast.showToast("error");
         authError.value = true;
+        setTimeout(() => {
+          authError.value = false;
+        }, 2000);
       });
   };
   const regUser = () => {
-    if (userInput.value.password !== userInput.value.passwordConfirm) {
-      userInput.value.email = "";
-      userInput.value.name = "";
-      userInput.value.password = "";
-      userInput.value.passwordConfirm = "";
+    if (formData.value.password !== formData.value.passwordConfirm) {
+      formData.value.email = "";
+      formData.value.name = "";
+      formData.value.password = "";
+      formData.value.passwordConfirm = "";
       authError.value = true;
       toast.showToast("error");
     }
     createUserWithEmailAndPassword(
       auth,
-      userInput.value.email,
-      userInput.value.password
+      formData.value.email,
+      formData.value.password
     )
       .then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
-            displayName: userInput.value.name,
+            displayName: formData.value.name,
           }).then(() => {
             if (!auth.currentUser) return;
             setItem(
@@ -77,8 +79,11 @@ export const useUser = (): UserDataCompos => {
         toast.showToast("success");
       })
       .catch(() => {
-        authError.value = true;
         toast.showToast("error");
+        authError.value = true;
+        setTimeout(() => {
+          authError.value = false;
+        }, 2000);
       });
   };
 
@@ -87,19 +92,6 @@ export const useUser = (): UserDataCompos => {
     localStorage.removeItem("user");
     router.push("/login");
   };
-  const setUserInput = (
-    email: string,
-    password: string,
-    name = "",
-    passwordConfirm = ""
-  ) => {
-    userInput.value = {
-      email: email,
-      password: password,
-      name: name,
-      passwordConfirm: passwordConfirm,
-    };
-  };
 
   return {
     user,
@@ -107,7 +99,6 @@ export const useUser = (): UserDataCompos => {
     authError,
     regUser,
     logOut,
-    userInput,
-    setUserInput,
+    formData,
   };
 };

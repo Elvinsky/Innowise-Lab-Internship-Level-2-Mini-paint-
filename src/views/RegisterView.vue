@@ -1,38 +1,9 @@
 <template>
-  <div class="register-wrap">
-    <h2>Registration</h2>
-    <CustomForm>
-      <CustomInput :inputFlag="'name'" :type="'text'" :id="'name'" />
-      <CustomInput :inputFlag="'email'" :type="'text'" :id="'email'" />
-      <CustomInput
-        :inputFlag="'password'"
-        :type="'password'"
-        :id="'password'"
-      />
-      <CustomInput
-        :inputFlag="'passwordConfirm'"
-        :type="'password'"
-        :id="'passwordConfirm'"
-      />
-      <div class="actions">
-        <BaseButton :class="'auth'" :onClick="handleSubmit">Submit</BaseButton>
-        <RouterLink to="/login" class="link">
-          Already have an account?
-        </RouterLink>
-      </div>
-    </CustomForm>
-  </div>
+  <RegistrationForm />
 </template>
 
 <script setup lang="ts">
-import CustomInput from "@/components/UI/FormComponents/CustomInput.vue";
-import CustomForm from "@/components/UI/FormComponents/CustomForm.vue";
-import BaseButton from "@/components/BaseComponents/BaseButton.vue";
-import { useUser } from "@/composables/useUser";
-const user = useUser();
-const handleSubmit = () => {
-  user.regUser();
-};
+import RegistrationForm from "@/components/AuthComponents/RegistrationForm.vue";
 </script>
 
 <style scoped lang="scss">

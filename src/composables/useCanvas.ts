@@ -1,4 +1,4 @@
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { CanvasFlag } from "@/types/literals/literals";
 import { ref, Ref } from "vue";
 
@@ -8,7 +8,7 @@ const flag: Ref<CanvasFlag> = ref("");
 const penWidth: Ref<number> = ref(5);
 const penColor: Ref<string> = ref("black");
 
-export const useCanvas = (): CanvasCompos => {
+export const useCanvas = (): CanvasComposable => {
   const setCanvas = (canvasVal: HTMLCanvasElement) => {
     canvas.value = canvasVal;
   };

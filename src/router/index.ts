@@ -7,8 +7,8 @@ import BrowserView from "@/views/BrowserView.vue";
 import CanvasView from "@/views/CanvasView.vue";
 import LayoutView from "@/views/LayoutView.vue";
 import { useUser } from "@/composables/useUser";
-import { UserDataCompos } from "@/types/interfaces/UserDataCompos";
-const user: UserDataCompos = useUser();
+import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
+const user: UserDataComposable = useUser();
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",

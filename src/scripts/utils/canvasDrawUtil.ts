@@ -1,8 +1,8 @@
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasCompos } from "@/types/interfaces/composInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { Ref, ref } from "vue";
 
-const canvas: CanvasCompos = useCanvas();
+const canvas: CanvasComposable = useCanvas();
 
 const coord = ref({ x: 0, y: 0 });
 const isDrawing: Ref<boolean> = ref(false);

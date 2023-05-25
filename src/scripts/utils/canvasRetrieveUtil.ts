@@ -8,7 +8,7 @@ import {
 } from "@firebase/storage";
 import { Photo } from "@/types/interfaces/photoInterface";
 
-export const retrieveCanvases = async (
+export const retrieveCanvas = async (
   page: number,
   limit: number,
   filter?: string[]
