@@ -1,12 +1,25 @@
 <template>
-  <form :class="props.error ? 'error' : ''" @submit.prevent>
-    <slot></slot>
+  <form @submit.prevent>
+    <BaseInput
+      v-for="(field, index) in props.formData"
+      :key="index"
+      :onChange="handleChange"
+      :model="field.model"
+      :type="field.type"
+      :placeholder="field.placeholder"
+      :error="props.error"
+    />
   </form>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
-const props = defineProps(["error"]);
+import { defineProps, defineEmits } from "vue";
+import BaseInput from "./BaseInput.vue";
+const props = defineProps(["formData", "error"]);
+const emit = defineEmits(["userInput"]);
+const handleChange = (value: string, model: string) => {
+  emit("userInput", value, model);
+};
 </script>
 
 <style scoped lang="scss">

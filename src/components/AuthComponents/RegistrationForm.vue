@@ -1,42 +1,18 @@
 <template>
   <div class="login-wrap">
     <h2>Register</h2>
-    <BaseForm>
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.name"
-        :onChange="handleSetName"
-        type="text"
-        placeholder="name"
-      />
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.email"
-        :onChange="handleSetEmail"
-        type="email"
-        placeholder="email"
-      />
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.password"
-        :onChange="handleSetPassword"
-        type="password"
-        placeholder="password"
-      />
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.passwordConfirm"
-        :onChange="handleSetPasswordCofirm"
-        type="password"
-        placeholder="repeat password"
-      />
-      <div class="actions">
-        <BaseButton class="auth" :onClick="handleRegister">Submit</BaseButton>
-        <RouterLink to="/login" class="link">
-          Already have an account?
-        </RouterLink>
-      </div>
-    </BaseForm>
+    <BaseForm
+      :formData="formFields"
+      :onUserInput="handleInput"
+      :error="user.authError.value"
+    />
+
+    <div class="actions">
+      <BaseButton class="auth" :onClick="handleRegister">Submit</BaseButton>
+      <RouterLink to="/login" class="link">
+        Already have an account?
+      </RouterLink>
+    </div>
   </div>
   <CustomToasts :type="toast.toastShown.value"></CustomToasts>
 </template>
@@ -47,23 +23,54 @@ import BaseButton from "../BaseComponents/BaseButton.vue";
 import { useUser } from "@/composables/useUser";
 import BaseForm from "../BaseComponents/BaseForm.vue";
 import { useToast } from "@/composables/useToast";
-import BaseInput from "../BaseComponents/BaseInput.vue";
+import { UserData } from "@/types/interfaces/userInterfaces";
+import { Ref, ref } from "vue";
+import { FormField } from "@/types/literals/literals";
 const user = useUser();
 const toast = useToast();
-const handleSetEmail = (value: string) => {
-  user.setFormData("email", value);
-};
-const handleSetName = (value: string) => {
-  user.setFormData("name", value);
-};
-const handleSetPassword = (value: string) => {
-  user.setFormData("password", value);
-};
-const handleSetPasswordCofirm = (value: string) => {
-  user.setFormData("passwordConfirm", value);
-};
+const formFields = [
+  {
+    type: "text",
+    placeholder: "name",
+    model: "name",
+  },
+  {
+    type: "text",
+    placeholder: "e-mail",
+    model: "email",
+  },
+  {
+    type: "password",
+    placeholder: "password",
+    model: "password",
+  },
+  {
+    type: "password",
+    placeholder: "repeat password",
+    model: "passwordConfirm",
+  },
+];
+const userFormData: Ref<UserData> = ref({
+  name: "",
+  email: "",
+  password: "",
+  passwordConfirm: "",
+});
 const handleRegister = () => {
-  user.regUser();
+  if (userFormData.value.password !== userFormData.value.passwordConfirm) {
+    toast.showToast("error");
+    userFormData.value = {
+      name: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    };
+    return;
+  }
+  user.regUser(userFormData.value);
+};
+const handleInput = (value: string, model: FormField) => {
+  userFormData.value[model] = value;
 };
 </script>
 
