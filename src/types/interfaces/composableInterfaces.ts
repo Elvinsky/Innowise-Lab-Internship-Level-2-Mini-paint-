@@ -1,4 +1,4 @@
-import { CanvasFlag, FormField } from "@/types/literals/literals";
+import { CanvasFlag } from "@/types/literals/literals";
 import { Ref } from "vue";
 import { User } from "firebase/auth";
 import { Photo } from "./photoInterface";
@@ -30,12 +30,10 @@ export interface ImagesComposableInterface {
 }
 export interface UserDataComposable {
   readonly user: Ref<User | null>;
-  setUser: () => void;
+  setUser: (data: UserData) => void;
   readonly authError: Ref<boolean>;
-  regUser: () => void;
+  regUser: (data: UserData) => void;
   logOut: () => void;
-  readonly formData: Ref<UserData>;
-  setFormData: (field: FormField, data: string) => void;
 }
 export interface PaginationInterface {
   readonly photos: Ref<Photo[] | null>;

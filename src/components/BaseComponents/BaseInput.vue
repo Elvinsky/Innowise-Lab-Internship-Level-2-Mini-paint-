@@ -15,11 +15,12 @@ const props = defineProps({
   type: String,
   error: Boolean,
   placeholder: String,
+  model: String,
 });
 const emit = defineEmits(["change"]);
 const handleChange = (event: Event) => {
   const newValue = (event.target as HTMLInputElement).value;
-  emit("change", newValue);
+  emit("change", newValue, props.model);
 };
 </script>
 

@@ -1,28 +1,13 @@
 <template>
   <div class="login-wrap">
     <h2>Login</h2>
-    <BaseForm>
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.email"
-        :onChange="handleSetEmail"
-        type="email"
-        placeholder="e-mail"
-      />
-      <BaseInput
-        :error="user.authError.value"
-        :value="user.formData.value.password"
-        :onChange="handleSetPassword"
-        type="password"
-        placeholder="password"
-      />
-      <div class="actions">
-        <BaseButton class="auth" :onClick="handleRegister">Submit</BaseButton>
-        <RouterLink to="/registration" class="link">
-          Not yet have an account?
-        </RouterLink>
-      </div>
-    </BaseForm>
+    <BaseForm :formData="formFields" :onUserInput="handleInput" />
+    <div class="actions">
+      <BaseButton class="auth" :onClick="handleLogin">Submit</BaseButton>
+      <RouterLink to="/registration" class="link">
+        Not yet have an account?
+      </RouterLink>
+    </div>
   </div>
   <CustomToasts :type="toast.toastShown.value"></CustomToasts>
 </template>
@@ -33,17 +18,34 @@ import BaseButton from "../BaseComponents/BaseButton.vue";
 import { useUser } from "@/composables/useUser";
 import BaseForm from "../BaseComponents/BaseForm.vue";
 import { useToast } from "@/composables/useToast";
-import BaseInput from "../BaseComponents/BaseInput.vue";
+import { UserData } from "@/types/interfaces/userInterfaces";
+import { Ref, ref } from "vue";
+import { FormField } from "@/types/literals/literals";
 const user = useUser();
 const toast = useToast();
-const handleSetEmail = (value: string) => {
-  user.setFormData("email", value);
+const userFormData: Ref<UserData> = ref({
+  name: "",
+  email: "",
+  password: "",
+  passwordConfirm: "",
+});
+const formFields = [
+  {
+    type: "text",
+    placeholder: "e-mail",
+    model: "email",
+  },
+  {
+    type: "password",
+    placeholder: "password",
+    model: "password",
+  },
+];
+const handleLogin = () => {
+  user.setUser(userFormData.value);
 };
-const handleSetPassword = (value: string) => {
-  user.setFormData("password", value);
-};
-const handleRegister = () => {
-  user.setUser();
+const handleInput = (value: string, model: FormField) => {
+  userFormData.value[model] = value;
 };
 </script>
 

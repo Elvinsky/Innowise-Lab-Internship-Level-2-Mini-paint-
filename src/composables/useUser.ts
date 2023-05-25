@@ -11,26 +11,15 @@ import {
 } from "firebase/auth";
 import { Ref, ref } from "vue";
 import { useToast } from "./useToast";
-import { FormField } from "@/types/literals/literals";
 
 const toast = useToast();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const user: Ref<User | null> = ref(JSON.parse(localStorage.getItem("user")!));
 const authError: Ref<boolean> = ref(false);
-const formData: Ref<UserData> = ref({
-  name: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-});
 
 export const useUser = (): UserDataComposable => {
-  const setUser = () => {
-    signInWithEmailAndPassword(
-      auth,
-      formData.value.email,
-      formData.value.password
-    )
+  const setUser = (data: UserData) => {
+    signInWithEmailAndPassword(auth, data.email, data.password)
       .then((creds) => {
         user.value = creds.user;
         localStorage.setItem("user", JSON.stringify(creds.user));
@@ -45,24 +34,12 @@ export const useUser = (): UserDataComposable => {
         }, 2000);
       });
   };
-  const regUser = () => {
-    if (formData.value.password !== formData.value.passwordConfirm) {
-      formData.value.email = "";
-      formData.value.name = "";
-      formData.value.password = "";
-      formData.value.passwordConfirm = "";
-      authError.value = true;
-      toast.showToast("error");
-    }
-    createUserWithEmailAndPassword(
-      auth,
-      formData.value.email,
-      formData.value.password
-    )
+  const regUser = (data: UserData) => {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
       .then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
-            displayName: formData.value.name,
+            displayName: data.name,
           }).then(() => {
             if (!auth.currentUser) return;
             setItem(
@@ -76,7 +53,7 @@ export const useUser = (): UserDataComposable => {
             );
           });
         }
-        setUser();
+        setUser(data);
         toast.showToast("success");
       })
       .catch(() => {
@@ -93,9 +70,6 @@ export const useUser = (): UserDataComposable => {
     localStorage.removeItem("user");
     router.push("/login");
   };
-  const setFormData = (field: FormField, data: string) => {
-    formData.value[field] = data;
-  };
 
   return {
     user,
@@ -103,7 +77,5 @@ export const useUser = (): UserDataComposable => {
     authError,
     regUser,
     logOut,
-    formData,
-    setFormData,
   };
 };
