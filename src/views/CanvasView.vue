@@ -1,16 +1,23 @@
 <template>
   <div class="wrapper">
-    <CustomCanvas
-      :isCreator="route.params.user === user.user.value?.email"
-      :filename="route.params.name"
-    />
+    <ToolBar />
+    <CustomCanvas />
   </div>
 </template>
 
 <script setup lang="ts">
 import CustomCanvas from "@/components/CanvasComponents/CustomCanvas.vue";
-import { useRoute } from "vue-router";
-import { useUser } from "@/composables/useUser";
-const route = useRoute();
-const user = useUser();
+import ToolBar from "@/components/CanvasComponents/ToolBar.vue";
 </script>
+<style scoped lang="scss">
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1em;
+}
+</style>
