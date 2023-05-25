@@ -48,7 +48,7 @@ const handleAbortToast = () => {
 
   width: 350px;
   height: fit-content;
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   top: 20px;
   right: 20px;

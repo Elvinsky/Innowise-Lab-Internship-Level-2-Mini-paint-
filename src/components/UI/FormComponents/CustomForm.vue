@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseToast from "@/components/Toast/BaseToast.vue";
+import BaseToast from "@/components/Toast/CustomToast.vue";
 import { useToast } from "@/composables/useToast";
 import { useUser } from "@/composables/useUser";
 const toast = useToast();

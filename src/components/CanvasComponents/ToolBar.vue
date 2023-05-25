@@ -100,8 +100,12 @@
     <div class="save-block">
       <input class="name-input" id="save-name" type="text" v-model="fileName" />
       <div class="save-action-block">
-        <div @click="handlePopUpShow">Cancel</div>
-        <div @click="handleSaveImage">Save</div>
+        <BaseButton :class="'cancel'" :onClick="handlePopUpShow"
+          >Cancel</BaseButton
+        >
+        <BaseButton :class="'accept'" :onClick="handleSaveImage"
+          >Save</BaseButton
+        >
       </div>
     </div>
   </div>
@@ -112,21 +116,19 @@ import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
 import { firebaseUpload } from "@/scripts/utils/uploadUtils";
 
 import { Ref, ref } from "vue";
-import BaseToast from "../Toast/BaseToast.vue";
+import BaseToast from "../Toast/CustomToast.vue";
 import { useToast } from "@/composables/useToast";
 import { useCanvas } from "@/composables/useCanvas";
 import { CanvasCompos } from "@/types/interfaces/composInterfaces";
 import { useRoute } from "vue-router";
 import { useUser } from "@/composables/useUser";
+import BaseButton from "../BaseComponents/BaseButton.vue";
 const route = useRoute();
 const user = useUser();
-
-// const props = defineProps(["isCreator"]);
 const isCreator: boolean =
   route.fullPath === "/editor"
     ? true
     : route.params.user === user.user.value?.email;
-console.log(isCreator);
 const toast = useToast();
 const canvas: CanvasCompos = useCanvas();
 const isSaving: Ref<boolean> = ref(false);
@@ -154,9 +156,8 @@ const handleSaveImage = () => {
       isSaving.value = false;
       fileName.value = Math.random().toString(36).substring(4);
     })
-    .catch((err) => {
+    .catch(() => {
       toast.showToast("error");
-      console.log(err);
       isSaving.value = false;
     });
 };
@@ -265,6 +266,10 @@ const handleClearCanvas = () => {
       left: 10%;
     }
   }
+}
+.name-input {
+  font-size: 1em;
+  padding: 0.4em;
 }
 .save-action-block {
   display: flex;

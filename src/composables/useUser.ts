@@ -24,8 +24,12 @@ const userInput: Ref<UserData> = ref({
 });
 
 export const useUser = (): UserDataCompos => {
-  const setUser = (input: Ref<UserData>) => {
-    signInWithEmailAndPassword(auth, input.value.email, input.value.password)
+  const setUser = () => {
+    signInWithEmailAndPassword(
+      auth,
+      userInput.value.email,
+      userInput.value.password
+    )
       .then((creds) => {
         user.value = creds.user;
         localStorage.setItem("user", JSON.stringify(creds.user));
@@ -38,8 +42,8 @@ export const useUser = (): UserDataCompos => {
         authError.value = true;
       });
   };
-  const regUser = (input: Ref<UserData>) => {
-    if (input.value.password !== input.value.passwordConfirm) {
+  const regUser = () => {
+    if (userInput.value.password !== userInput.value.passwordConfirm) {
       userInput.value.email = "";
       userInput.value.name = "";
       userInput.value.password = "";
@@ -49,13 +53,13 @@ export const useUser = (): UserDataCompos => {
     }
     createUserWithEmailAndPassword(
       auth,
-      input.value.email,
-      input.value.password
+      userInput.value.email,
+      userInput.value.password
     )
       .then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
-            displayName: input.value.name,
+            displayName: userInput.value.name,
           }).then(() => {
             if (!auth.currentUser) return;
             setItem(
@@ -69,7 +73,7 @@ export const useUser = (): UserDataCompos => {
             );
           });
         }
-        setUser(input);
+        setUser();
         toast.showToast("success");
       })
       .catch(() => {

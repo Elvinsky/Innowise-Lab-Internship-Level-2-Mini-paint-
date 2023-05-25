@@ -4,9 +4,9 @@ import { UserData } from "./userInterfaces";
 
 export interface UserDataCompos {
   user: Ref<User | null>;
-  setUser: (input: Ref<UserData>) => void;
+  setUser: () => void;
   authError: Ref<boolean>;
-  regUser: (input: Ref<UserData>) => void;
+  regUser: () => void;
   logOut: () => void;
   userInput: Ref<UserData>;
   setUserInput: (

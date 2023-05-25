@@ -9,9 +9,7 @@
         :id="'password'"
       />
       <div class="actions">
-        <CustomButton :action="('setUser'as ActionFlag)" :class="'auth'"
-          >Login</CustomButton
-        >
+        <BaseButton :class="'auth'" :onClick="handleAuth">Submit</BaseButton>
         <RouterLink to="/registration" class="link">
           Noe yet have an account?
         </RouterLink>
@@ -22,9 +20,13 @@
 
 <script setup lang="ts">
 import CustomInput from "@/components/UI/FormComponents/CustomInput.vue";
-import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
 import CustomForm from "@/components/UI/FormComponents/CustomForm.vue";
-import { ActionFlag } from "@/types/literals/literals";
+import BaseButton from "@/components/BaseComponents/BaseButton.vue";
+import { useUser } from "@/composables/useUser";
+const user = useUser();
+const handleAuth = () => {
+  user.setUser();
+};
 </script>
 
 <style scoped lang="scss">

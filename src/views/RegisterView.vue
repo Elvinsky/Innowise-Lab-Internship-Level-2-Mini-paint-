@@ -15,9 +15,7 @@
         :id="'passwordConfirm'"
       />
       <div class="actions">
-        <CustomButton :action="('regUser' as ActionFlag)" :class="'auth'"
-          >Submit</CustomButton
-        >
+        <BaseButton :class="'auth'" :onClick="handleSubmit">Submit</BaseButton>
         <RouterLink to="/login" class="link">
           Already have an account?
         </RouterLink>
@@ -28,9 +26,13 @@
 
 <script setup lang="ts">
 import CustomInput from "@/components/UI/FormComponents/CustomInput.vue";
-import CustomButton from "@/components/UI/FormComponents/CustomButton.vue";
-import { ActionFlag } from "@/types/literals/literals";
 import CustomForm from "@/components/UI/FormComponents/CustomForm.vue";
+import BaseButton from "@/components/BaseComponents/BaseButton.vue";
+import { useUser } from "@/composables/useUser";
+const user = useUser();
+const handleSubmit = () => {
+  user.regUser();
+};
 </script>
 
 <style scoped lang="scss">
