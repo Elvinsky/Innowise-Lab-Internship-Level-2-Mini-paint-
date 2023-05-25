@@ -8,9 +8,16 @@
 </template>
 
 <script setup lang="ts">
+import { useImages } from "@/composables/useImages";
 import { draw, start, stop } from "@/scripts/utils/canvasDrawUtil";
 import { initCanvas } from "@/scripts/utils/initCanvasUtil";
+import { ImagesComposableInterface } from "@/types/interfaces/composableInterfaces";
+import { onUnmounted } from "vue";
+const images: ImagesComposableInterface = useImages();
 initCanvas();
+onUnmounted(() => {
+  images.setCurrentImageData(null);
+});
 </script>
 
 <style scoped lang="scss">

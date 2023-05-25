@@ -51,16 +51,16 @@ import BaseInput from "../BaseComponents/BaseInput.vue";
 const user = useUser();
 const toast = useToast();
 const handleSetEmail = (value: string) => {
-  user.formData.value.email = value;
+  user.setFormData("email", value);
 };
 const handleSetName = (value: string) => {
-  user.formData.value.name = value;
+  user.setFormData("name", value);
 };
 const handleSetPassword = (value: string) => {
-  user.formData.value.password = value;
+  user.setFormData("password", value);
 };
 const handleSetPasswordCofirm = (value: string) => {
-  user.formData.value.passwordConfirm = value;
+  user.setFormData("passwordConfirm", value);
 };
 const handleRegister = () => {
   user.regUser();

@@ -1,8 +1,13 @@
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
+import { useImages } from "@/composables/useImages";
+import {
+  CanvasComposable,
+  ImagesComposableInterface,
+} from "@/types/interfaces/composableInterfaces";
 import { nextTick } from "vue";
 export const initCanvas = () => {
   const canvas: CanvasComposable = useCanvas();
+  const images: ImagesComposableInterface = useImages();
   (async () => {
     await nextTick(); // Wait for the next tick to ensure the canvas element is mounted
     canvas.setCanvas(document.getElementById("canvas") as HTMLCanvasElement);
@@ -17,10 +22,10 @@ export const initCanvas = () => {
       console.log(window.innerWidth);
       canvas.canvas.value.style.width = window.innerWidth * 0.7 + "px";
       canvas.canvas.value.style.height = 500 + "px";
-      const imgData = sessionStorage.getItem("imgData");
+      const imgData = images.currentImageData.value;
       if (imgData && canvas.ctx.value) {
         const image = new Image();
-        image.src = JSON.parse(imgData).data as string;
+        image.src = imgData;
         image.onload = () => {
           if (!canvas.canvas.value) return;
           const scaleX = canvas.canvas.value.width / image.width;

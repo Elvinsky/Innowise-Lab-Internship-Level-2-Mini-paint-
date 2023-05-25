@@ -119,7 +119,7 @@ import { Ref, ref } from "vue";
 import BaseToast from "../Toast/CustomToast.vue";
 import { useToast } from "@/composables/useToast";
 import { useCanvas } from "@/composables/useCanvas";
-import { CanvasCompos } from "@/types/interfaces/composableInterfaces";
+import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { useRoute } from "vue-router";
 import { useUser } from "@/composables/useUser";
 import BaseButton from "../BaseComponents/BaseButton.vue";
@@ -130,7 +130,7 @@ const isCreator: boolean =
     ? true
     : route.params.user === user.user.value?.email;
 const toast = useToast();
-const canvas: CanvasCompos = useCanvas();
+const canvas: CanvasComposable = useCanvas();
 const isSaving: Ref<boolean> = ref(false);
 const fileName: Ref<string> = ref(Math.random().toString(36).substring(4));
 const widthShow: Ref<boolean> = ref(false);

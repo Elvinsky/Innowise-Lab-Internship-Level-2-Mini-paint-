@@ -1,4 +1,4 @@
-import { CanvasFlag } from "@/types/literals/literals";
+import { CanvasFlag, FormField } from "@/types/literals/literals";
 import { Ref } from "vue";
 import { User } from "firebase/auth";
 import { Photo } from "./photoInterface";
@@ -16,6 +16,18 @@ export interface CanvasComposable {
   readonly penColor: Ref<string>;
   setPenColor: (data: string) => void;
 }
+export interface ImagesComposableInterface {
+  readonly photos: Ref<Photo[] | null>;
+  setCanvases: (photos: Photo[]) => void;
+  readonly limit: Ref<number>;
+  setLimit: (value: number) => void;
+  readonly page: Ref<number>;
+  setPage: (value: number) => void;
+  readonly totalPages: Ref<number>;
+  setTotalPages: (value: number) => void;
+  readonly currentImageData: Ref<string | null>;
+  setCurrentImageData: (value: string | null) => void;
+}
 export interface UserDataComposable {
   readonly user: Ref<User | null>;
   setUser: () => void;
@@ -23,6 +35,7 @@ export interface UserDataComposable {
   regUser: () => void;
   logOut: () => void;
   readonly formData: Ref<UserData>;
+  setFormData: (field: FormField, data: string) => void;
 }
 export interface PaginationInterface {
   readonly photos: Ref<Photo[] | null>;

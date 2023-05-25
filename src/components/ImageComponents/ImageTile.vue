@@ -26,13 +26,12 @@
 </template>
 
 <script setup lang="ts">
+import { useImages } from "@/composables/useImages";
 import { defineProps } from "vue";
 const props = defineProps(["image"]);
+const images = useImages();
 const handleParseImgData = () => {
-  sessionStorage.setItem(
-    "imgData",
-    JSON.stringify({ data: props.image.metadata.canvasCtx })
-  );
+  images.setCurrentImageData(props.image.metadata.canvasCtx);
 };
 </script>
 

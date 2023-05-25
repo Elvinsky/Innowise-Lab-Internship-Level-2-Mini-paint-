@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import { Ref, ref } from "vue";
 import { useToast } from "./useToast";
+import { FormField } from "@/types/literals/literals";
 
 const toast = useToast();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -92,6 +93,9 @@ export const useUser = (): UserDataComposable => {
     localStorage.removeItem("user");
     router.push("/login");
   };
+  const setFormData = (field: FormField, data: string) => {
+    formData.value[field] = data;
+  };
 
   return {
     user,
@@ -100,5 +104,6 @@ export const useUser = (): UserDataComposable => {
     regUser,
     logOut,
     formData,
+    setFormData,
   };
 };
