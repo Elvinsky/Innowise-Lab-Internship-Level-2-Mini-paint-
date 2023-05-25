@@ -1,8 +1,10 @@
 import { PaginationInterface } from "@/types/interfaces/composableInterfaces";
 import { retrieveCanvas } from "./canvasRetrieveUtil";
 import { useImages } from "@/composables/useImages";
+import { useToast } from "@/composables/useToast";
 
 const photo: PaginationInterface = useImages();
+const toast = useToast();
 
 export const fetchCanvasesByCreator = async (
   page: number,
@@ -15,7 +17,7 @@ export const fetchCanvasesByCreator = async (
     const pageCount = canvases.length / limit;
     return pageCount;
   } catch (error) {
-    console.error(error);
+    toast.showToast("error");
     return 0;
   }
 };

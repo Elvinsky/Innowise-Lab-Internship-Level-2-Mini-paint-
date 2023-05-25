@@ -7,7 +7,10 @@ import {
   ref,
 } from "@firebase/storage";
 import { Photo } from "@/types/interfaces/photoInterface";
-
+import { useToast } from "@/composables/useToast";
+import { useImages } from "@/composables/useImages";
+const toast = useToast();
+const images = useImages();
 export const retrieveCanvas = async (
   page: number,
   limit: number,
@@ -52,9 +55,10 @@ export const retrieveCanvas = async (
     });
     const data = await Promise.all(promises);
     const dataToSet = data.filter((el) => el);
+    images.setTotalPages(dataToSet.length);
     return dataToSet.slice(startIndex, endIndex) as Photo[];
   } catch (error) {
-    console.error(error);
+    toast.showToast("error");
     return [];
   }
 };
