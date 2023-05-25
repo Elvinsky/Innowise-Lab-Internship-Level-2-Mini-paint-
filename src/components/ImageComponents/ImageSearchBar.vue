@@ -21,8 +21,8 @@
         alt="forward"
         @click="handleNextPage"
         v-if="
-          images.totalPages.value &&
-          images.page.value <= images.totalPages.value
+          images.photos.value &&
+          images.photos.value.length === images.limit.value
         "
       />
     </div>
@@ -58,13 +58,7 @@ const handleSearch = debounce(() => {
   getKeys(searchContent.value).then((data) => {
     if (!data) return;
     keys.value = data;
-    fetchCanvasesByCreator(
-      images.page.value,
-      images.limit.value,
-      keys.value
-    ).then((data) => {
-      if (data) images.setTotalPages(data);
-    });
+    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
   });
 }, 300);
 </script>

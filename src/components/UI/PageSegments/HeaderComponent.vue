@@ -32,7 +32,11 @@ const isHome = computed(() => {
   return route.path;
 });
 function handleGoBack() {
-  router.go(-1);
+  if (document.referrer.includes(window.location.origin)) {
+    router.go(-1);
+  } else {
+    router.push("/");
+  }
 }
 function handleLogOut() {
   user.logOut();
