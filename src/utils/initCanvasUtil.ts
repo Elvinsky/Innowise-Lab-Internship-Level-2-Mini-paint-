@@ -19,7 +19,6 @@ export const initCanvas = () => {
     if (canvas.canvas.value) {
       canvas.canvas.value.width = window.innerWidth * 0.7;
       canvas.canvas.value.height = 500;
-      console.log(window.innerWidth);
       canvas.canvas.value.style.width = window.innerWidth * 0.7 + "px";
       canvas.canvas.value.style.height = 500 + "px";
       const imgData = images.currentImageData.value;

@@ -1,7 +1,7 @@
 <template>
   <div
     class="no-found"
-    v-if="images.photos.value && images.photos.value.length === 0"
+    v-if="images.images.value && images.images.value.length === 0"
   >
     <slot></slot>
   </div>
