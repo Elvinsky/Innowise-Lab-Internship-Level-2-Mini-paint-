@@ -5,14 +5,7 @@
     @click="handleAbortToast"
     v-if="toast.toastShown.value !== ''"
   >
-    <img
-      :src="
-        toast.toastShown.value === 'error'
-          ? returnIcon('error.png')
-          : returnIcon('mark.png')
-      "
-      alt="status-icon"
-    />
+    <img :src="returnIcon(`${toast.toastShown.value}.png`)" alt="status-icon" />
     <div v-if="toast.toastShown.value === 'error'" class="text">
       Unexpected error, try again
     </div>

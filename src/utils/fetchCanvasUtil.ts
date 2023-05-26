@@ -1,9 +1,9 @@
-import { PaginationInterface } from "@/types/interfaces/composableInterfaces";
+import { ImagesComposableInterface } from "@/types/interfaces/composableInterfaces";
 import { retrieveCanvas } from "./canvasRetrieveUtil";
 import { useImages } from "@/composables/useImages";
 import { useToast } from "@/composables/useToast";
 
-const photo: PaginationInterface = useImages();
+const images: ImagesComposableInterface = useImages();
 const toast = useToast();
 
 export const fetchCanvasesByCreator = async (
@@ -13,7 +13,7 @@ export const fetchCanvasesByCreator = async (
 ): Promise<number> => {
   try {
     const canvases = await retrieveCanvas(page, limit, filter);
-    photo.setCanvases(canvases);
+    images.setImages(canvases);
     const pageCount = canvases.length / limit;
     return pageCount;
   } catch (error) {

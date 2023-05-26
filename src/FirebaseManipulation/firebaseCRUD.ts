@@ -13,6 +13,7 @@ export async function getItems(path: string) {
   const itemList = itemSnapshot.docs.map((doc) => doc.data());
   return itemList;
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function setItem(item: string, data: any, id: string) {
   const docRef = doc(db, item, id);
   await setDoc(docRef, { ...data, id });

@@ -1,6 +1,6 @@
 import { auth } from "@/firebase";
 import router from "@/router";
-import { setItem } from "@/scripts/FirebaseManipulation/firebaseCRUD";
+import { setItem } from "@/FirebaseManipulation/firebaseCRUD";
 import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import { UserData } from "@/types/interfaces/userInterfaces";
 import {

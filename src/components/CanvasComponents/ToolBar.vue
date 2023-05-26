@@ -112,8 +112,8 @@
 </template>
 
 <script setup lang="ts">
-import { cancelLastAction, clearCanvas } from "@/scripts/utils/canvasDrawUtil";
-import { firebaseUpload } from "@/scripts/utils/uploadUtils";
+import { cancelLastAction, clearCanvas } from "@/utils/canvasDrawUtil";
+import { firebaseUpload } from "@/utils/uploadUtils";
 
 import { Ref, ref } from "vue";
 import BaseToast from "../Toast/CustomToast.vue";

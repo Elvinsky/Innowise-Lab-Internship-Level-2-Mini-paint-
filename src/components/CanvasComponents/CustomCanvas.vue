@@ -9,13 +9,15 @@
 
 <script setup lang="ts">
 import { useImages } from "@/composables/useImages";
-import { draw, start, stop } from "@/scripts/utils/canvasDrawUtil";
-import { initCanvas } from "@/scripts/utils/initCanvasUtil";
+import { draw, start, stop } from "@/utils/canvasDrawUtil";
+import { initCanvas } from "@/utils/initCanvasUtil";
 import { ImagesComposableInterface } from "@/types/interfaces/composableInterfaces";
-import { onUnmounted } from "vue";
+import { onMounted } from "vue";
+import { drawnElements } from "@/utils/canvasDrawUtil";
 const images: ImagesComposableInterface = useImages();
 initCanvas();
-onUnmounted(() => {
+onMounted(() => {
+  drawnElements.value = [];
   images.setCurrentImageData(null);
 });
 </script>

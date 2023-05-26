@@ -1,5 +1,5 @@
 <template>
-  <div class="loader" v-if="!images.photos.value">
+  <div class="loader" v-if="!images.images.value">
     <breeding-rhombus-spinner
       :animation-duration="2000"
       :size="100"
