@@ -21,17 +21,17 @@
         alt="forward"
         @click="handleNextPage"
         v-if="
-          images.photos.value &&
-          images.photos.value.length === images.limit.value
+          images.images.value &&
+          images.images.value.length === images.limit.value
         "
       />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { fetchCanvasesByCreator } from "@/scripts/utils/fetchCanvasUtil";
-import { debounce } from "@/scripts/utils/debouncer";
-import { getKeys } from "@/scripts/utils/getKeysUtil";
+import { fetchCanvasesByCreator } from "@/utils/fetchCanvasUtil";
+import { debounce } from "@/utils/debouncer";
+import { getKeys } from "@/utils/getKeysUtil";
 import { Ref, ref } from "vue";
 import { useImages } from "@/composables/useImages";
 const searchContent: Ref<string> = ref("");

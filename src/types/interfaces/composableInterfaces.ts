@@ -17,8 +17,8 @@ export interface CanvasComposable {
   setPenColor: (data: string) => void;
 }
 export interface ImagesComposableInterface {
-  readonly photos: Ref<Photo[] | null>;
-  setCanvases: (photos: Photo[]) => void;
+  readonly images: Ref<Photo[] | null>;
+  setImages: (images: Photo[]) => void;
   readonly limit: Ref<number>;
   setLimit: (value: number) => void;
   readonly page: Ref<number>;
