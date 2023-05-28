@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="no-found"
-    v-if="images.images.value && images.images.value.length === 0"
-  >
+  <div class="no-found" v-if="images && images.length === 0">
     <slot></slot>
   </div>
 </template>
@@ -18,5 +15,5 @@
 </style>
 <script setup lang="ts">
 import { useImages } from "@/composables/useImages";
-const images = useImages();
+const { images } = useImages();
 </script>

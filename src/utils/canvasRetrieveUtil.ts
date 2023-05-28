@@ -1,25 +1,20 @@
-import { storage } from "@/firebase";
-import {
-  ListResult,
-  getDownloadURL,
-  getMetadata,
-  listAll,
-  ref,
-} from "@firebase/storage";
+import { getDownloadURL, getMetadata } from "@firebase/storage";
 import { Photo } from "@/types/interfaces/photoInterface";
 import { useToast } from "@/composables/useToast";
 import { useImages } from "@/composables/useImages";
+import { useFirebase } from "@/composables/useFirebase";
 const toast = useToast();
 const images = useImages();
+const { firebaseGetAllItems } = useFirebase();
 export const retrieveCanvas = async (
   page: number,
   limit: number,
   filter?: string[]
 ): Promise<Photo[]> => {
-  const storageRef = ref(storage, "gs://innowise-paint-98316.appspot.com");
-
   try {
-    const res: ListResult = await listAll(storageRef);
+    const res = await firebaseGetAllItems(
+      "gs://innowise-paint-userver.appspot.com"
+    );
     const items = res.items || [];
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;

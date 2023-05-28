@@ -7,6 +7,7 @@ import {
   arrayUnion,
 } from "firebase/firestore/lite";
 import { db } from "@/firebase";
+
 export async function getItems(path: string) {
   const itemsCol = collection(db, path);
   const itemSnapshot = await getDocs(itemsCol);
