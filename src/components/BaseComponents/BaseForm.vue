@@ -4,10 +4,10 @@
       v-for="(field, index) in props.formData"
       :key="index"
       :onChange="handleChange"
-      :model="field.model"
       :type="field.type"
       :placeholder="field.placeholder"
       :error="props.error"
+      :model="field.model"
     />
   </form>
 </template>

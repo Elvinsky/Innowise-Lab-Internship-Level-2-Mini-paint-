@@ -29,9 +29,9 @@
 import { useImages } from "@/composables/useImages";
 import { defineProps } from "vue";
 const props = defineProps(["image"]);
-const images = useImages();
+const { setCurrentImageData } = useImages();
 const handleParseImgData = () => {
-  images.setCurrentImageData(props.image.metadata.canvasCtx);
+  setCurrentImageData(props.image.metadata.canvasCtx);
 };
 </script>
 

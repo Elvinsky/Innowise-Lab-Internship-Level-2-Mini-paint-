@@ -1,7 +1,7 @@
 <template>
   <div class="image-container">
     <ImageTile
-      v-for="image in images.images.value"
+      v-for="image in images"
       :key="image.downloadUrl"
       :image="image"
     ></ImageTile>
@@ -12,11 +12,11 @@
 import ImageTile from "@/components/ImageComponents/ImageTile.vue";
 import { useImages } from "@/composables/useImages";
 import { fetchCanvasesByCreator } from "@/utils/fetchCanvasUtil";
-const images = useImages();
-images.setLimit(12);
-fetchCanvasesByCreator(images.page.value, images.limit.value).then((data) => {
+const { images, page, limit, setTotalPages, setLimit } = useImages();
+setLimit(12);
+fetchCanvasesByCreator(page.value, limit.value).then((data) => {
   if (data) {
-    images.setTotalPages(data);
+    setTotalPages(data);
   }
 });
 </script>
