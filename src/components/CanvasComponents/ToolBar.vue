@@ -6,7 +6,7 @@
         class="main-img"
         alt="pen"
         @click="handleSetFlag('draw')"
-        :class="canvas.flag.value === 'draw' ? 'active' : ''"
+        :class="flag === 'draw' ? 'active' : ''"
         v-if="isCreator"
       />
       <img
@@ -14,7 +14,7 @@
         alt="line"
         @click="handleSetFlag('line')"
         class="main-img"
-        :class="canvas.flag.value === 'line' ? 'active' : ''"
+        :class="flag === 'line' ? 'active' : ''"
         v-if="isCreator"
       />
       <img
@@ -22,7 +22,7 @@
         alt="square"
         @click="handleSetFlag('square')"
         class="main-img"
-        :class="canvas.flag.value === 'square' ? 'active' : ''"
+        :class="flag === 'square' ? 'active' : ''"
         v-if="isCreator"
       />
       <img
@@ -30,7 +30,7 @@
         alt="circle"
         @click="handleSetFlag('arc')"
         class="main-img"
-        :class="canvas.flag.value === 'arc' ? 'active' : ''"
+        :class="flag === 'arc' ? 'active' : ''"
         v-if="isCreator"
       />
       <img
@@ -38,7 +38,7 @@
         alt="star"
         @click="handleSetFlag('star')"
         class="main-img"
-        :class="canvas.flag.value === 'star' ? 'active' : ''"
+        :class="flag === 'star' ? 'active' : ''"
         v-if="isCreator"
       />
     </div>
@@ -48,7 +48,7 @@
         class="color-pick"
         @input="handleColorPick"
         v-if="isCreator"
-        v-model="canvas.penColor.value"
+        v-model="penColor"
       />
       <div class="width-controller">
         <input
@@ -59,7 +59,7 @@
           step="1"
           class="width-range"
           @change="handleWidthChange"
-          v-model="canvas.penWidth.value"
+          v-model="penWidth"
         />
         <img
           src="@/assets/width.png"
@@ -94,18 +94,16 @@
       />
     </div>
 
-    <BaseToast :type="toast.toastShown.value"></BaseToast>
+    <BaseToast :type="toastShown"></BaseToast>
   </aside>
   <div class="save-popup" v-if="isSaving">
     <div class="save-block">
       <input class="name-input" id="save-name" type="text" v-model="fileName" />
       <div class="save-action-block">
-        <BaseButton :class="'cancel'" :onClick="handlePopUpShow"
-          >Cancel</BaseButton
-        >
-        <BaseButton :class="'accept'" :onClick="handleSaveImage"
-          >Save</BaseButton
-        >
+        <BaseButton class="cancel" :onClick="handlePopUpShow">
+          Cancel
+        </BaseButton>
+        <BaseButton class="accept" :onClick="handleSaveImage">Save</BaseButton>
       </div>
     </div>
   </div>
@@ -123,14 +121,22 @@ import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
 import { useRoute } from "vue-router";
 import { useUser } from "@/composables/useUser";
 import BaseButton from "../BaseComponents/BaseButton.vue";
+import { CanvasFlag } from "@/types/literals/literals";
 const route = useRoute();
 const user = useUser();
 const isCreator: boolean =
   route.fullPath === "/editor"
     ? true
     : route.params.user === user.user.value?.email;
-const toast = useToast();
-const canvas: CanvasComposable = useCanvas();
+const { toastShown, showToast } = useToast();
+const {
+  flag,
+  setPenColor,
+  setPenWidth,
+  setFlag,
+  penWidth,
+  penColor,
+}: CanvasComposable = useCanvas();
 const isSaving: Ref<boolean> = ref(false);
 const fileName: Ref<string> = ref(Math.random().toString(36).substring(4));
 const widthShow: Ref<boolean> = ref(false);
@@ -139,25 +145,25 @@ function handlePopUpShow() {
   isSaving.value = !isSaving.value;
 }
 function handleWidthChange(event: InputEvent): void {
-  canvas.setPenWidth((event.target as HTMLInputElement).valueAsNumber);
+  setPenWidth((event.target as HTMLInputElement).valueAsNumber);
 }
 const handleColorPick = (event: InputEvent) => {
-  canvas.setPenColor((event.target as HTMLInputElement).value);
+  setPenColor((event.target as HTMLInputElement).value);
 };
-function handleSetFlag(flag: string): void {
-  if (flag === canvas.flag.value) canvas.flag.value = "";
-  else canvas.flag.value = flag;
+function handleSetFlag(flagData: CanvasFlag): void {
+  if (flagData === flag.value) setFlag("");
+  else setFlag(flagData);
 }
 
 const handleSaveImage = () => {
   firebaseUpload(fileName.value)
     .then(() => {
-      toast.showToast("success");
+      showToast("success");
       isSaving.value = false;
       fileName.value = Math.random().toString(36).substring(4);
     })
     .catch(() => {
-      toast.showToast("error");
+      showToast("error");
       isSaving.value = false;
     });
 };

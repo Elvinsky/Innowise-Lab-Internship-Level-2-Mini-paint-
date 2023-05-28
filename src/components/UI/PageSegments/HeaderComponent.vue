@@ -10,7 +10,7 @@
       />
       <p class="welcoming">Welcome to</p>
       <h1>INNODRAW</h1>
-      <p class="welcoming">{{ user.user.value?.displayName }}</p>
+      <p class="welcoming">{{ user?.displayName }}</p>
       <img
         src="@/assets/user.png"
         alt="log-out"
@@ -26,7 +26,7 @@ import router from "@/router";
 import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-const user: UserDataComposable = useUser();
+const { logOut, user }: UserDataComposable = useUser();
 const route = useRoute();
 const isHome = computed(() => {
   return route.path;
@@ -39,7 +39,7 @@ function handleGoBack() {
   }
 }
 function handleLogOut() {
-  user.logOut();
+  logOut();
 }
 </script>
 <style scoped lang="scss">

@@ -1,12 +1,12 @@
 <template>
   <div
     class="toast-wrapper"
-    :class="toast.toastShown.value"
+    :class="toastShown"
     @click="handleAbortToast"
-    v-if="toast.toastShown.value !== ''"
+    v-if="toastShown !== ''"
   >
-    <img :src="returnIcon(`${toast.toastShown.value}.png`)" alt="status-icon" />
-    <div v-if="toast.toastShown.value === 'error'" class="text">
+    <img :src="returnIcon(`${toastShown}.png`)" alt="status-icon" />
+    <div v-if="toastShown === 'error'" class="text">
       Unexpected error, try again
     </div>
     <div v-else class="text">You are all good, proceeding</div>
@@ -14,12 +14,12 @@
 </template>
 <script setup lang="ts">
 import { useToast } from "@/composables/useToast";
-const toast = useToast();
+const { toastShown, showToast } = useToast();
 const returnIcon = (name: string) => {
   return require(`@/assets/${name}`);
 };
 const handleAbortToast = () => {
-  toast.showToast("");
+  showToast("");
 };
 </script>
 

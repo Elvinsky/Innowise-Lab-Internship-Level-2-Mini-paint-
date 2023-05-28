@@ -16,7 +16,7 @@ export const retrieveCanvas = async (
   limit: number,
   filter?: string[]
 ): Promise<Photo[]> => {
-  const storageRef = ref(storage, "gs://innowise-paint-98316.appspot.com");
+  const storageRef = ref(storage, "gs://innowise-paint-userver.appspot.com");
 
   try {
     const res: ListResult = await listAll(storageRef);

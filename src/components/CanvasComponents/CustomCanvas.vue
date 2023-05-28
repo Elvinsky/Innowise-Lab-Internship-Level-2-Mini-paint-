@@ -14,11 +14,13 @@ import { initCanvas } from "@/utils/initCanvasUtil";
 import { ImagesComposableInterface } from "@/types/interfaces/composableInterfaces";
 import { onMounted } from "vue";
 import { drawnElements } from "@/utils/canvasDrawUtil";
-const images: ImagesComposableInterface = useImages();
+import { useRoute } from "vue-router";
+const { setCurrentImageData }: ImagesComposableInterface = useImages();
+const route = useRoute();
 initCanvas();
 onMounted(() => {
   drawnElements.value = [];
-  images.setCurrentImageData(null);
+  if (route.fullPath === "/editor") setCurrentImageData(null);
 });
 </script>
 

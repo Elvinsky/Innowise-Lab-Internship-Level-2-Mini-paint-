@@ -4,8 +4,8 @@
       <img
         src="@/assets/left.png"
         alt="back"
-        @click="handlePrevPage"
-        v-if="images.page.value > 1"
+        @click="handleScrollPage('back')"
+        v-if="page > 1"
       />
     </div>
     <input
@@ -19,11 +19,8 @@
       <img
         src="@/assets/right.png"
         alt="forward"
-        @click="handleNextPage"
-        v-if="
-          images.images.value &&
-          images.images.value.length === images.limit.value
-        "
+        @click="handleScrollPage('fwd')"
+        v-if="images && images.length === limit"
       />
     </div>
   </div>
@@ -34,31 +31,23 @@ import { debounce } from "@/utils/debouncer";
 import { getKeys } from "@/utils/getKeysUtil";
 import { Ref, ref } from "vue";
 import { useImages } from "@/composables/useImages";
+import { Direction } from "@/types/literals/literals";
 const searchContent: Ref<string> = ref("");
 const keys: Ref<string[]> = ref([]);
-const images = useImages();
-
-const handleNextPage = () => {
-  images.setPage(images.page.value + 1);
+const { images, limit, page, setPage } = useImages();
+const handleScrollPage = (direction: Direction) => {
+  direction === "fwd" ? setPage(page.value + 1) : setPage(page.value - 1);
   if (searchContent.value) {
-    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
+    fetchCanvasesByCreator(page.value, limit.value, keys.value);
   } else {
-    fetchCanvasesByCreator(images.page.value, images.limit.value);
-  }
-};
-const handlePrevPage = () => {
-  images.setPage(images.page.value - 1);
-  if (searchContent.value) {
-    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
-  } else {
-    fetchCanvasesByCreator(images.page.value, images.limit.value);
+    fetchCanvasesByCreator(page.value, limit.value);
   }
 };
 const handleSearch = debounce(() => {
   getKeys(searchContent.value).then((data) => {
     if (!data) return;
     keys.value = data;
-    fetchCanvasesByCreator(images.page.value, images.limit.value, keys.value);
+    fetchCanvasesByCreator(page.value, limit.value, keys.value);
   });
 }, 300);
 </script>
