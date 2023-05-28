@@ -1,17 +1,9 @@
 import { useCanvas } from "@/composables/useCanvas";
-import { useUser } from "@/composables/useUser";
-import { storage } from "@/firebase";
 import { CanvasComposable } from "@/types/interfaces/composableInterfaces";
-import { UserDataComposable } from "@/types/interfaces/composableInterfaces";
-import {
-  StorageReference,
-  UploadMetadata,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
-import { updateItem } from "../FirebaseManipulation/firebaseCRUD";
-const canvas: CanvasComposable = useCanvas();
 
+import { useFirebase } from "@/composables/useFirebase";
+const { canvas }: CanvasComposable = useCanvas();
+const { firebaseBytesUpload } = useFirebase();
 export function dataURLtoBlob(dataURL: string): Blob {
   const parts = dataURL.split(",");
   const contentType = parts[0].split(":")[1];
@@ -27,22 +19,9 @@ export function dataURLtoBlob(dataURL: string): Blob {
 }
 
 export const firebaseUpload = async (fileName: string) => {
-  const user: UserDataComposable = useUser();
-  const canvasBackup = canvas.canvas.value;
-  if (!canvasBackup) return;
-  const imageRef: StorageReference = ref(storage, fileName + ".png");
-  const dataURL = canvasBackup.toDataURL();
+  if (!canvas.value) return;
+  const dataURL = canvas.value.toDataURL();
   const blob = dataURLtoBlob(dataURL);
   const file = new File([blob], fileName);
-  if (!user.user.value || !canvas.canvas.value) return;
-  const metadata: UploadMetadata = {
-    customMetadata: {
-      uploadedBy: user.user.value.email as string,
-      uploadedAt: Math.round(new Date().getTime() / 1000).toString() as string,
-      canvasCtx: canvas.canvas.value.toDataURL(),
-    },
-  };
-  if (!metadata.customMetadata) return;
-  updateItem("users", user.user.value.uid, metadata.customMetadata.uploadedAt);
-  uploadBytes(imageRef, file, metadata);
+  firebaseBytesUpload(file, fileName);
 };

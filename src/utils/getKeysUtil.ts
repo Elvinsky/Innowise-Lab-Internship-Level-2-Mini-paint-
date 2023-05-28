@@ -1,5 +1,6 @@
+import { useToast } from "@/composables/useToast";
 import { getItems } from "../FirebaseManipulation/firebaseCRUD";
-
+const { showToast } = useToast();
 export const getKeys = async (filter: string) => {
   try {
     const data = await getItems("users");
@@ -9,6 +10,6 @@ export const getKeys = async (filter: string) => {
       .forEach((user) => keys.push(...user.images));
     return keys;
   } catch (err) {
-    console.error("err", err);
+    showToast("error");
   }
 };

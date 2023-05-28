@@ -1,9 +1,9 @@
 <template>
-  <RegistrationForm />
+  <AuthForm auth-flag="register" />
 </template>
 
 <script setup lang="ts">
-import RegistrationForm from "@/components/AuthComponents/RegistrationForm.vue";
+import AuthForm from "@/components/AuthComponents/AuthForm.vue";
 </script>
 
 <style scoped lang="scss">

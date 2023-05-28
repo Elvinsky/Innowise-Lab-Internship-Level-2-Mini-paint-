@@ -9,18 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-const props = defineProps({
-  value: String,
-  type: String,
-  error: Boolean,
-  placeholder: String,
-  model: String,
-});
-const emit = defineEmits(["change"]);
+import { defineProps } from "vue";
+const props = defineProps(["value", "type", "error", "placeholder", "model"]);
 const handleChange = (event: Event) => {
   const newValue = (event.target as HTMLInputElement).value;
-  emit("change", newValue, props.model);
+  props.model(newValue);
 };
 </script>
 
