@@ -1,14 +1,22 @@
 <template>
-  <button @click="handleClick()" :class="props.class"><slot></slot></button>
+  <button @click="handleClick()" :class="props.class" :disabled="disabled">
+    <slot></slot>
+  </button>
 </template>
 <script setup lang="ts">
-import { defineEmits, defineProps } from "vue";
+import { Ref, defineEmits, defineProps, ref } from "vue";
+const disabled: Ref<boolean> = ref(false);
 const props = defineProps({
   class: String,
 });
+
 const emit = defineEmits(["click"]);
 const handleClick = () => {
   emit("click");
+  disabled.value = true;
+  setTimeout(() => {
+    disabled.value = false;
+  }, 800);
 };
 </script>
 <style scoped lang="scss">

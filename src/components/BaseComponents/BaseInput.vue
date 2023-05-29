@@ -5,12 +5,20 @@
     :type="props.type"
     :placeholder="props.placeholder"
     :class="props.error ? 'error' : ''"
+    :readonly="props.disabled"
   />
 </template>
 
 <script setup lang="ts">
 import { defineProps } from "vue";
-const props = defineProps(["value", "type", "error", "placeholder", "model"]);
+const props = defineProps([
+  "value",
+  "type",
+  "error",
+  "placeholder",
+  "model",
+  "disabled",
+]);
 const handleChange = (event: Event) => {
   const newValue = (event.target as HTMLInputElement).value;
   props.model(newValue);

@@ -12,6 +12,7 @@
           : formFields
       "
       :error="authError"
+      :disabled="disabled"
     />
 
     <div class="actions">
@@ -47,6 +48,7 @@ const userFormData: Ref<UserData> = ref({
   password: "",
   passwordConfirm: "",
 });
+const disabled: Ref<boolean> = ref(false);
 const formFields = [
   {
     type: "text",
@@ -79,6 +81,8 @@ const formFields = [
 ];
 
 const handleAuth = () => {
+  disabled.value = true;
+  setTimeout(() => (disabled.value = false), 700);
   if (props.authFlag === "register") {
     if (userFormData.value.password !== userFormData.value.passwordConfirm) {
       showToast("error");
