@@ -8,6 +8,7 @@
       :placeholder="field.placeholder"
       :error="props.error"
       :model="field.model"
+      :disabled="props.disabled"
     />
   </form>
 </template>
@@ -15,7 +16,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
 import BaseInput from "./BaseInput.vue";
-const props = defineProps(["formData", "error"]);
+const props = defineProps(["formData", "error", "disabled"]);
 const emit = defineEmits(["userInput"]);
 const handleChange = (value: string, model: string) => {
   emit("userInput", value, model);
